@@ -1,6 +1,8 @@
+import { StationCountInterface } from "@/interfaces/station";
+import { stationApi } from "@/services/station-api";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -8,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 // import MapView from "react-native-map-clustering";
 
 const INITIAL_REGION = {
@@ -20,6 +22,21 @@ const INITIAL_REGION = {
 
 export default function TabOneScreen() {
   const mapRef = useRef<MapView | undefined>();
+  const [stations, setStations] = useState<StationCountInterface[]>();
+  const [selectedListing, setSelectedListing] =
+    useState<StationCountInterface | null>(null);
+  useEffect(() => {
+    getStations();
+  }, []);
+  const getStations = async () => {
+    let res = await stationApi.getCountOfCycingAtStation();
+    setStations(res.data);
+  };
+
+  const onMarkerSelected = (event: StationCountInterface) => {
+    setSelectedListing(event);
+    console.log(event.station.name);
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -29,7 +46,23 @@ export default function TabOneScreen() {
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton
-      />
+      >
+        {stations?.map((item: StationCountInterface) => (
+          <Marker
+            key={item.station._id}
+            onPress={() => onMarkerSelected(item)}
+            coordinate={{
+              latitude: +item.station.latitude,
+              longitude: +item.station.longitude,
+            }}
+          >
+            <View style={styles.marker}>
+              <Text style={styles.markerText}>{item.count}</Text>
+            </View>
+          </Marker>
+        ))}
+      </MapView>
+
       <View style={styles.absoluteSearch}>
         <Link href={"/search"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
@@ -78,5 +111,24 @@ const styles = StyleSheet.create({
       width: 1,
       height: 1,
     },
+  },
+  marker: {
+    padding: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    elevation: 5,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: {
+      width: 1,
+      height: 10,
+    },
+  },
+  markerText: {
+    fontSize: 14,
+    fontFamily: "mon-sb",
   },
 });
