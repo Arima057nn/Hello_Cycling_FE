@@ -4,10 +4,10 @@ export const stationApi = {
   getStations() {
     return axiosClient.get(`/station`);
   },
-  getCountOfCycingAtStation() {
+  getCountOfCyclingAtStation() {
     return axiosClient.get(`/station/count`);
   },
-  getCycingsAtStation(stationId: string | undefined) {
+  getCyclingsAtStation(stationId: string | undefined) {
     return axiosClient.get(`/station/info?stationId=${stationId}`);
   },
 };

@@ -1,4 +1,4 @@
-interface CycingInterface {
+interface CyclingInterface {
   _id: string;
   name: string;
   code: string;
@@ -10,11 +10,11 @@ interface CycingInterface {
   __v: number;
 }
 
-export interface CycingAtStationInterface {
+export interface CyclingAtStationInterface {
   count: number;
   _id: string;
   stationId: string;
-  cycingId: CycingInterface;
+  cyclingId: CyclingInterface;
   createdAt: string;
   updatedAt: string;
   __v: number;
