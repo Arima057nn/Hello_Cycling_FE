@@ -15,15 +15,16 @@ export const defaultStyles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   btn: {
-    backgroundColor: Colors.primary,
-    height: 50,
-    borderRadius: 8,
+    backgroundColor: Colors.secondary,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
   },
   btnText: {
-    color: "#fff",
-    fontSize: 16,
+    color: Colors.grey,
+    fontSize: 12,
     fontFamily: "mon-b",
   },
   btnIcon: {

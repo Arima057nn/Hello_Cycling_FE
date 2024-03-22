@@ -15,3 +15,10 @@ export interface StationCountInterface {
   count: number;
   station: StationInterface;
 }
+
+export interface StationCountAndDistanceInterface {
+  station: StationInterface;
+  distance: string;
+  duration: string;
+  countOfCycling: number;
+}

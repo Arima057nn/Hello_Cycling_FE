@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
 import Animated from "react-native-reanimated";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { StationCountInterface } from "@/interfaces/station";
 import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
+import { defaultStyles } from "@/constants/Styles";
 
 interface Props {
   station: StationCountInterface | null;
@@ -33,16 +34,91 @@ const StationDetailCycling = ({ station }: Props) => {
         }}
         style={styles.image}
       />
-      <Text>{memoizedStation?.station.name}</Text>
-      <Animated.ScrollView>
-        <View style={styles.infoContainer}>
-          {Array.isArray(cyclings) &&
-            cyclings.map((cycling: CyclingAtStationInterface) => (
-              <View key={cycling.cyclingId._id}>
-                <Text style={styles.name}>{cycling.cyclingId.name}</Text>
-              </View>
-            ))}
+      <View style={styles.dragArea}>
+        <View style={styles.dragHandle}></View>
+      </View>
+      <Animated.View style={styles.infoContainer}>
+        <Text style={styles.code}>St No.{memoizedStation?.station.code}</Text>
+        <Text style={styles.name}>{memoizedStation?.station.name}</Text>
+        <View
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
+        >
+          <Ionicons name="location" size={16} color={Colors.blue} />
+          <Text style={styles.location}>
+            {memoizedStation?.station.position}
+          </Text>
         </View>
+      </Animated.View>
+      <View></View>
+      <Animated.ScrollView style={styles.containerCycling}>
+        {Array.isArray(cyclings) &&
+          cyclings.map((cycling: CyclingAtStationInterface) => (
+            <View style={styles.cycling}>
+              <Image
+                style={styles.cyclingImage}
+                source={{
+                  uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "mon",
+                    color: Colors.grey,
+                    fontSize: 12,
+                  }}
+                >
+                  10$/30min
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "mon",
+                    color: Colors.grey,
+                    fontSize: 10,
+                    marginVertical: 4,
+                  }}
+                >
+                  (+1$/15min)
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "mon",
+                    color: Colors.grey,
+                    fontSize: 12,
+                  }}
+                >
+                  30$/1day
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: Colors.grey,
+                    fontFamily: "mon-sb",
+                    marginBottom: 6,
+                  }}
+                >
+                  {cycling.cyclingId.code}
+                </Text>
+                <TouchableOpacity
+                  style={[defaultStyles.btn]}
+                  activeOpacity={0.6}
+                >
+                  <Text style={defaultStyles.btnText}>Select</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
       </Animated.ScrollView>
     </View>
   );
@@ -61,68 +137,65 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
   },
   infoContainer: {
-    padding: 24,
+    padding: 16,
+    paddingTop: 2,
+    marginBottom: 16,
     backgroundColor: "#fff",
   },
+  code: {
+    fontSize: 12,
+    color: Colors.grey,
+    fontFamily: "mon",
+    marginBottom: 4,
+  },
   name: {
-    fontSize: 26,
+    fontSize: 18,
     fontWeight: "bold",
     fontFamily: "mon-sb",
+    color: Colors.lightGrey,
   },
   location: {
-    fontSize: 18,
-    marginTop: 10,
+    fontSize: 12,
+    marginLeft: 4,
+    color: Colors.blue,
     fontFamily: "mon-sb",
   },
-  rooms: {
-    fontSize: 16,
-    color: Colors.grey,
-    marginVertical: 4,
-    fontFamily: "mon",
-  },
-  ratings: {
-    fontSize: 16,
-    fontFamily: "mon-sb",
-  },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.grey,
-    marginVertical: 16,
-  },
-  host: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    backgroundColor: Colors.grey,
-  },
-  hostView: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  footerText: {
-    height: "100%",
+  dragArea: {
+    width: 100,
+    height: 32,
+    alignSelf: "center",
     justifyContent: "center",
-    flexDirection: "row",
     alignItems: "center",
-    gap: 4,
   },
-  footerPrice: {
-    fontSize: 18,
+  dragHandle: {
+    width: 48,
+    height: 6,
+    backgroundColor: Colors.grey,
+    borderRadius: 10,
+  },
+  containerCycling: {
+    backgroundColor: Colors.Gray100,
+    padding: 16,
+  },
+  cycling: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    backgroundColor: Colors.light,
+    borderRadius: 4,
+    marginBottom: 16,
+  },
+  cyclingImage: {
+    width: 100,
+    height: 100,
+  },
+  cyclingInfo: {
+    fontSize: 16,
     fontFamily: "mon-sb",
   },
-  roundButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    color: Colors.primary,
-  },
-  description: {
+  cyclingBooking: {
     fontSize: 16,
-    marginTop: 10,
-    fontFamily: "mon",
+    fontFamily: "mon-sb",
   },
 });

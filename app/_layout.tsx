@@ -60,7 +60,15 @@ function RootLayoutNav() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="search"
-            options={{ headerShown: true, presentation: "card" }}
+            options={{
+              headerShown: false,
+              presentation: "modal",
+              headerBackTitle: "Back",
+              headerStyle: {
+                backgroundColor: "#fff",
+              },
+              headerTitle: "Search",
+            }}
           />
         </Stack>
       </GestureHandlerRootView>

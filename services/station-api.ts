@@ -10,4 +10,7 @@ export const stationApi = {
   getCyclingsAtStation(stationId: string | undefined) {
     return axiosClient.get(`/station/info?stationId=${stationId}`);
   },
+  getCountOfAllCyclingAtStation(myLocation: string) {
+    return axiosClient.post(`/station/cycling`, { origin: myLocation });
+  },
 };

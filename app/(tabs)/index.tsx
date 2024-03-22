@@ -15,6 +15,7 @@ import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import CustomHandle from "@/components/CustomHandle";
 import StationDetailCycling from "@/components/StationDetailCycling";
+import Colors from "@/constants/Colors";
 
 const INITIAL_REGION = {
   latitude: 21,
@@ -27,11 +28,9 @@ export default function TabOneScreen() {
   const mapRef = useRef<MapView | undefined>();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
-
   const [stations, setStations] = useState<StationCountInterface[]>();
   const [selectedListing, setSelectedListing] =
     useState<StationCountInterface | null>(null);
-
   useEffect(() => {
     getStations();
   }, []);
@@ -85,9 +84,11 @@ export default function TabOneScreen() {
         <Link href={"/search"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.searchBtn}>
-              <Ionicons name="search" size={24} />
+              <Ionicons name="search" size={24} color={Colors.lightGrey} />
               <View>
-                <Text style={{ fontFamily: "mon-sb" }}>Where to?</Text>
+                <Text style={{ fontFamily: "mon-sb", color: Colors.lightGrey }}>
+                  Where to?
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
