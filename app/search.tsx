@@ -5,6 +5,8 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
+  Animated,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
@@ -54,11 +56,38 @@ const Search = () => {
             <Ionicons name="search" size={20} color="gray" strokeWidth={3} />
           </View>
         </View>
-        <View>
+        <Animated.ScrollView>
           {StationInfo.map((station: StationCountAndDistanceInterface) => (
-            <Text key={station.station._id}>{station.station.name}</Text>
+            <TouchableOpacity activeOpacity={0.4}>
+              <View style={styles.itemSearch}>
+                <View style={styles.locationIcon}>
+                  <Ionicons name="location" size={20} color={Colors.Gray600} />
+                </View>
+                <View
+                  style={{
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                    flex: 1,
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ flex: 6 }}>
+                    <Text style={{ fontFamily: "mon-sb" }}>
+                      {station.station.code} - {station.station.name}
+                    </Text>
+                    <Text style={{ fontSize: 10, paddingVertical: 2 }}>
+                      {station.station.position}
+                    </Text>
+                  </View>
+                  <Text style={{ fontSize: 12, fontFamily: "mon", flex: 1 }}>
+                    {station.distance}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           ))}
-        </View>
+          <View style={styles.itemSearch} />
+        </Animated.ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -84,14 +113,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Gray100, // Màu nền trắng nhạt
     paddingHorizontal: 12,
     paddingVertical: 12,
+    marginBottom: 12,
   },
   input: {
     flex: 1,
     fontSize: 14,
     marginLeft: 8,
     letterSpacing: 1,
-    color: Colors.grey,
-    fontFamily: "mon",
+    color: Colors.Gray600,
+    fontFamily: "mon-sb",
   },
   dragArea: {
     width: 100,
@@ -105,5 +135,20 @@ const styles = StyleSheet.create({
     height: 6,
     backgroundColor: Colors.grey,
     borderRadius: 10,
+  },
+  itemSearch: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.Gray100,
+  },
+  locationIcon: {
+    padding: 4,
+    backgroundColor: Colors.secondary,
+    borderRadius: 16,
+    marginRight: 16,
   },
 });
