@@ -15,12 +15,14 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { stationApi } from "@/services/station-api";
 import { StationCountAndDistanceInterface } from "@/interfaces/station";
+import { useRouter } from "expo-router";
 
 const Search = () => {
   const [myLocation, setMyLocation] = useState<any>(null);
   const [StationInfo, setStationInfo] = useState<
     StationCountAndDistanceInterface[]
   >([]);
+  const router = useRouter();
   useEffect(() => {
     getLocationPermission();
   }, []);
@@ -39,6 +41,7 @@ const Search = () => {
     );
     setStationInfo(res.data);
   };
+
   return (
     <SafeAreaView style={defaultStyles.container}>
       <View style={styles.container}>
@@ -58,7 +61,19 @@ const Search = () => {
         </View>
         <Animated.ScrollView>
           {StationInfo.map((station: StationCountAndDistanceInterface) => (
-            <TouchableOpacity activeOpacity={0.4}>
+            <TouchableOpacity
+              activeOpacity={0.4}
+              key={station.station._id}
+              onPress={() =>
+                router.push({
+                  pathname: "/",
+                  params: {
+                    latitude: station.station.latitude,
+                    longitude: station.station.longitude,
+                  },
+                })
+              }
+            >
               <View style={styles.itemSearch}>
                 <View style={styles.locationIcon}>
                   <Ionicons name="location" size={20} color={Colors.Gray600} />

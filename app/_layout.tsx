@@ -61,7 +61,7 @@ function RootLayoutNav() {
             name="search"
             options={{
               headerShown: false,
-              presentation: "modal",
+              // presentation: "modal",
               headerBackTitle: "Back",
               headerStyle: {
                 backgroundColor: "#fff",

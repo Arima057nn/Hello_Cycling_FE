@@ -53,7 +53,7 @@ const StationDetailCycling = ({ station }: Props) => {
       <Animated.ScrollView style={styles.containerCycling}>
         {Array.isArray(cyclings) &&
           cyclings.map((cycling: CyclingAtStationInterface) => (
-            <View style={styles.cycling}>
+            <View style={styles.cycling} key={cycling.cyclingId._id}>
               <Image
                 style={styles.cyclingImage}
                 source={{

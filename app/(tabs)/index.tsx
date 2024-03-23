@@ -11,26 +11,32 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import MapView from "react-native-map-clustering";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+// import MapView from "react-native-map-clustering";
 import CustomHandle from "@/components/CustomHandle";
 import StationDetailCycling from "@/components/StationDetailCycling";
 import Colors from "@/constants/Colors";
+import { useLocalSearchParams } from "expo-router";
 
 const INITIAL_REGION = {
-  latitude: 21,
-  longitude: 105,
-  latitudeDelta: 2,
-  longitudeDelta: 2,
+  latitude: 21.03,
+  longitude: 105.78,
+  latitudeDelta: 0.02,
+  longitudeDelta: 0.02,
 };
 
 export default function TabOneScreen() {
-  const mapRef = useRef<MapView | undefined>();
+  const mapRef = useRef<MapView>();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
   const [stations, setStations] = useState<StationCountInterface[]>();
   const [selectedListing, setSelectedListing] =
     useState<StationCountInterface | null>(null);
+  const { latitude, longitude } = useLocalSearchParams<{
+    latitude: string;
+    longitude: string;
+  }>();
+
   useEffect(() => {
     getStations();
   }, []);
@@ -38,11 +44,29 @@ export default function TabOneScreen() {
     let res = await stationApi.getCountOfCyclingAtStation();
     setStations(res.data);
   };
-
   const onMarkerSelected = (event: StationCountInterface) => {
     setSelectedListing(event);
     setBottomSheetIndex(0); // Step 4: Open BottomSheet to 50%
   };
+  async function moveToLocation(latitude: number, longitude: number) {
+    if (mapRef.current) {
+      const newRegion = {
+        latitude,
+        longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      };
+      mapRef.current.animateToRegion(newRegion);
+    }
+  }
+  useEffect(() => {
+    if (latitude !== undefined && longitude !== undefined) {
+      moveToLocation(+latitude, +longitude);
+      setTimeout(() => {
+        moveToLocation(+latitude, +longitude).then(() => {});
+      }, 50);
+    }
+  }, [latitude, longitude]);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -52,6 +76,8 @@ export default function TabOneScreen() {
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton
+        followsUserLocation
+        ref={mapRef as React.RefObject<MapView>}
       >
         {stations?.map((item: StationCountInterface) => (
           <Marker
@@ -78,7 +104,7 @@ export default function TabOneScreen() {
         onChange={setBottomSheetIndex} // Step 2: Update state on change
         handleComponent={CustomHandle}
       >
-        <StationDetailCycling station={selectedListing} />
+        {selectedListing && <StationDetailCycling station={selectedListing} />}
       </BottomSheet>
       <View style={styles.absoluteSearch}>
         <Link href={"/search"} asChild>
