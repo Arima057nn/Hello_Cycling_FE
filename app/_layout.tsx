@@ -7,9 +7,10 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Colors from "@/constants/Colors";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,23 +55,25 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="search"
-            options={{
-              headerShown: false,
-              // presentation: "modal",
-              headerBackTitle: "Back",
-              headerStyle: {
-                backgroundColor: "#fff",
-              },
-              headerTitle: "Search",
-            }}
-          />
-        </Stack>
-      </GestureHandlerRootView>
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="search"
+              options={{
+                headerShown: false,
+                // presentation: "modal",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                headerTitle: "Search",
+              }}
+            />
+          </Stack>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

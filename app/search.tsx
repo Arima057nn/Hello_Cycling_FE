@@ -3,9 +3,7 @@ import {
   Text,
   StatusBar,
   StyleSheet,
-  SafeAreaView,
   TextInput,
-  Animated,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -16,6 +14,8 @@ import * as Location from "expo-location";
 import { stationApi } from "@/services/station-api";
 import { StationCountAndDistanceInterface } from "@/interfaces/station";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Animated from "react-native-reanimated";
 
 const Search = () => {
   const [myLocation, setMyLocation] = useState<any>(null);
@@ -27,6 +27,7 @@ const Search = () => {
     getLocationPermission();
   }, []);
   async function getLocationPermission() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
     let location = await Location.getCurrentPositionAsync({});
     const currentLocation = {
       latitude: location.coords.latitude,
@@ -39,7 +40,7 @@ const Search = () => {
     let res = await stationApi.getCountOfAllCyclingAtStation(
       `${latitude},${longitude}`
     );
-    setStationInfo(res.data);
+    setStationInfo(res?.data || []);
   };
 
   return (
@@ -59,8 +60,9 @@ const Search = () => {
             <Ionicons name="search" size={20} color="gray" strokeWidth={3} />
           </View>
         </View>
+
         <Animated.ScrollView>
-          {StationInfo.map((station: StationCountAndDistanceInterface) => (
+          {StationInfo?.map((station: StationCountAndDistanceInterface) => (
             <TouchableOpacity
               activeOpacity={0.4}
               key={station.station._id}

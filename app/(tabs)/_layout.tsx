@@ -50,6 +50,10 @@ export default function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="menu" size={size} color={color} />
           ),
+          headerStyle: {
+            backgroundColor: Colors.secondary,
+          },
+          headerTintColor: Colors.lightGrey,
         }}
       />
     </Tabs>
