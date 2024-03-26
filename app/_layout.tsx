@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Colors from "@/constants/Colors";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,12 +63,32 @@ function RootLayoutNav() {
               name="search"
               options={{
                 headerShown: false,
-                // presentation: "modal",
                 headerBackTitle: "Back",
                 headerStyle: {
-                  backgroundColor: "#fff",
+                  backgroundColor: Colors.light,
                 },
                 headerTitle: "Search",
+              }}
+            />
+            <Stack.Screen
+              name="welcome"
+              options={{
+                headerShown: false,
+                headerBackTitle: "Back",
+              }}
+            />
+            <Stack.Screen
+              name="login"
+              options={{
+                headerShown: false,
+                headerBackTitle: "Back",
+              }}
+            />
+            <Stack.Screen
+              name="register"
+              options={{
+                headerShown: false,
+                headerBackTitle: "Back",
               }}
             />
           </Stack>

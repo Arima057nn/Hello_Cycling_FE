@@ -1,6 +1,7 @@
 import Colors from "@/constants/Colors";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export default function Menu() {
   return (
@@ -38,7 +39,10 @@ export default function Menu() {
         </TouchableOpacity>
       </View>
       <View>
-        <TouchableOpacity activeOpacity={0.5}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/login")}
+        >
           <View style={styles.logoutContainer}>
             <Text
               style={{
