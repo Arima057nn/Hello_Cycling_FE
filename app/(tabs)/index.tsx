@@ -42,7 +42,7 @@ export default function TabOneScreen() {
   }, []);
   const getStations = async () => {
     let res = await stationApi.getCountOfCyclingAtStation();
-    setStations(res.data);
+    setStations(res?.data);
   };
   const onMarkerSelected = (event: StationCountInterface) => {
     setSelectedListing(event);

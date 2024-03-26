@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Colors from "@/constants/Colors";
 
 export {
   // Catch any errors thrown by the Layout component.

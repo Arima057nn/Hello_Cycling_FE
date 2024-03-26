@@ -46,63 +46,84 @@ const Search = () => {
   return (
     <SafeAreaView style={defaultStyles.container}>
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" animated={true} />
-        <View style={styles.dragArea}>
+        <StatusBar barStyle="dark-content" animated={true} />
+        {/* <View style={styles.dragArea}>
           <View style={styles.dragHandle}></View>
-        </View>
-        <View style={styles.containerSearch}>
-          <TextInput
-            placeholder="Search"
-            style={styles.input}
-            placeholderTextColor={Colors.lightGrey}
-          />
-          <View>
-            <Ionicons name="search" size={20} color="gray" strokeWidth={3} />
+        </View> */}
+
+        <View style={styles.containerHeader}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={{ marginRight: 8 }}
+            onPress={() => router.back()}
+          >
+            <Ionicons
+              name="arrow-back-circle"
+              size={30}
+              color="gray"
+              strokeWidth={3}
+            />
+          </TouchableOpacity>
+          <View style={styles.containerSearch}>
+            <TextInput
+              placeholder="Search"
+              style={styles.input}
+              placeholderTextColor={Colors.lightGrey}
+            />
+            <View>
+              <Ionicons name="search" size={20} color="gray" strokeWidth={3} />
+            </View>
           </View>
         </View>
 
         <Animated.ScrollView>
-          {StationInfo?.map((station: StationCountAndDistanceInterface) => (
-            <TouchableOpacity
-              activeOpacity={0.4}
-              key={station.station._id}
-              onPress={() =>
-                router.push({
-                  pathname: "/",
-                  params: {
-                    latitude: station.station.latitude,
-                    longitude: station.station.longitude,
-                  },
-                })
-              }
-            >
-              <View style={styles.itemSearch}>
-                <View style={styles.locationIcon}>
-                  <Ionicons name="location" size={20} color={Colors.Gray600} />
-                </View>
-                <View
-                  style={{
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                    flex: 1,
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={{ flex: 6 }}>
-                    <Text style={{ fontFamily: "mon-sb" }}>
-                      {station.station.code} - {station.station.name}
-                    </Text>
-                    <Text style={{ fontSize: 10, paddingVertical: 2 }}>
-                      {station.station.position}
+          {Array.isArray(StationInfo) &&
+            StationInfo?.map((station: StationCountAndDistanceInterface) => (
+              <TouchableOpacity
+                activeOpacity={0.4}
+                key={station.station._id}
+                onPress={() =>
+                  router.push({
+                    pathname: "/",
+                    params: {
+                      latitude: station.station.latitude,
+                      longitude: station.station.longitude,
+                    },
+                  })
+                }
+              >
+                <View style={styles.itemSearch}>
+                  <View style={styles.locationIcon}>
+                    <Ionicons
+                      name="location"
+                      size={20}
+                      color={Colors.Gray600}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ flex: 6 }}>
+                      <Text style={{ fontFamily: "mon-sb" }}>
+                        {station.station.code} - {station.station.name}
+                      </Text>
+                      <Text style={{ fontSize: 10, paddingVertical: 2 }}>
+                        {station.station.position}
+                      </Text>
+                    </View>
+                    <Text style={{ fontSize: 12, fontFamily: "mon", flex: 1 }}>
+                      {station.distance}
                     </Text>
                   </View>
-                  <Text style={{ fontSize: 12, fontFamily: "mon", flex: 1 }}>
-                    {station.distance}
-                  </Text>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            ))}
+
           <View style={styles.itemSearch} />
         </Animated.ScrollView>
       </View>
@@ -122,15 +143,20 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
+  containerHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
   containerSearch: {
-    marginHorizontal: 16,
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 16,
-    backgroundColor: Colors.Gray100, // Màu nền trắng nhạt
+    backgroundColor: Colors.Gray100,
     paddingHorizontal: 12,
     paddingVertical: 12,
-    marginBottom: 12,
   },
   input: {
     flex: 1,
