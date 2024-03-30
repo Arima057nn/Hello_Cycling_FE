@@ -25,7 +25,7 @@ const INITIAL_REGION = {
   longitudeDelta: 0.02,
 };
 
-export default function TabOneScreen() {
+export default function Home() {
   const mapRef = useRef<MapView>();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { BASE_API_URL } from "@env";
+
 export const axiosClient = axios.create({
-  baseURL: "http://192.168.2.65:3030/api",
+  baseURL: process.env?.EXPO_PUBLIC_BASE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -18,11 +18,6 @@ axiosClient.interceptors.response.use(
 
 axiosClient.interceptors.request.use(
   (config) => {
-    // const user = JSON.parse((localStorage as any).getItem("user") || {});
-    // const token = user?.accessToken;
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
     return config;
   },
   function (error) {
