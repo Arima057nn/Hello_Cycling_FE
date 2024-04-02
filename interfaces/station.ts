@@ -1,3 +1,5 @@
+import { CyclingInterface } from "./cycling";
+
 export interface StationInterface {
   _id: string;
   name: string;
@@ -21,4 +23,13 @@ export interface StationCountAndDistanceInterface {
   distance: string;
   duration: string;
   countOfCycling: number;
+}
+
+export interface CyclingStationInterface {
+  _id: string;
+  stationId: StationInterface;
+  cyclingId: CyclingInterface;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }

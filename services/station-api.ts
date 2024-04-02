@@ -13,4 +13,7 @@ export const stationApi = {
   getCountOfAllCyclingAtStation(myLocation: string) {
     return axiosClient.post(`/station/cycling`, { origin: myLocation });
   },
+  findCyclingAtStation(cyclingId: string) {
+    return axiosClient.get(`/station/find?cyclingId=${cyclingId}`);
+  },
 };

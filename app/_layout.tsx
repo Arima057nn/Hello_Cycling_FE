@@ -78,6 +78,18 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="cycling"
+              options={{
+                presentation: "modal",
+                headerShown: true,
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.lightGrey,
+              }}
+            />
+            <Stack.Screen
               name="login"
               options={{
                 headerShown: false,

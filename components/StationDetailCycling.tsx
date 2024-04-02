@@ -7,6 +7,7 @@ import { StationCountInterface } from "@/interfaces/station";
 import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
 import { defaultStyles } from "@/constants/Styles";
+import { router } from "expo-router";
 
 interface Props {
   station: StationCountInterface | null;
@@ -113,6 +114,15 @@ const StationDetailCycling = ({ station }: Props) => {
                 <TouchableOpacity
                   style={[defaultStyles.btn]}
                   activeOpacity={0.6}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/cycling",
+                      params: {
+                        code: cycling.cyclingId.code,
+                        cyclingId: cycling.cyclingId._id,
+                      },
+                    });
+                  }}
                 >
                   <Text style={defaultStyles.btnText}>Select</Text>
                 </TouchableOpacity>
