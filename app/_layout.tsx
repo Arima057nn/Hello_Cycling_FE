@@ -4,13 +4,15 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Colors from "@/constants/Colors";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -82,11 +84,17 @@ function RootLayoutNav() {
               options={{
                 presentation: "modal",
                 headerShown: true,
+                title: "Cycling",
                 headerBackTitle: "Back",
+                headerRight: () => (
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <Ionicons name="chevron-down" size={22} />
+                  </TouchableOpacity>
+                ),
                 headerStyle: {
                   backgroundColor: Colors.secondary,
                 },
-                headerTintColor: Colors.lightGrey,
+                headerTintColor: Colors.dark,
               }}
             />
             <Stack.Screen
