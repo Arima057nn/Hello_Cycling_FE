@@ -1,4 +1,4 @@
-interface CyclingInterface {
+export interface CyclingInterface {
   _id: string;
   name: string;
   code: string;
