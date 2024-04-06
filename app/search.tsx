@@ -10,32 +10,26 @@ import React, { useEffect, useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import * as Location from "expo-location";
 import { stationApi } from "@/services/station-api";
 import { StationCountAndDistanceInterface } from "@/interfaces/station";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated from "react-native-reanimated";
+import { useLocation } from "@/contexts/locationContext";
 
 const Search = () => {
-  const [myLocation, setMyLocation] = useState<any>(null);
+  const { coordinate } = useLocation();
   const [StationInfo, setStationInfo] = useState<
     StationCountAndDistanceInterface[]
   >([]);
   const router = useRouter();
+
   useEffect(() => {
-    getLocationPermission();
-  }, []);
-  async function getLocationPermission() {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    let location = await Location.getCurrentPositionAsync({});
-    const currentLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    console.log(`${currentLocation.latitude},${currentLocation.longitude}`);
-    getCyclingsAtStation(currentLocation.latitude, currentLocation.longitude);
-  }
+    if (coordinate) {
+      console.log("coord", coordinate.latitude, coordinate.longitude);
+      getCyclingsAtStation(+coordinate.latitude, +coordinate.longitude);
+    }
+  }, [coordinate]);
   const getCyclingsAtStation = async (latitude: number, longitude: number) => {
     let res = await stationApi.getCountOfAllCyclingAtStation(
       `${latitude},${longitude}`
