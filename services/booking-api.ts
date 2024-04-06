@@ -2,6 +2,19 @@ import { axiosClient } from "./axios-cilent";
 import { CoordinateInterface } from "@/interfaces/coordinate";
 
 export const bookingApi = {
+  createBooking(
+    userId: string,
+    cyclingId: string,
+    startStation: string,
+    status: number
+  ) {
+    return axiosClient.post(`/booking/create`, {
+      userId,
+      cyclingId,
+      startStation,
+      status,
+    });
+  },
   createTripDetail(
     bookingId: string,
     endStation: string,

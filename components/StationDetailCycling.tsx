@@ -23,7 +23,11 @@ const StationDetailCycling = ({ station }: Props) => {
 
   const getCyclings = async () => {
     let res = await stationApi.getCyclingsAtStation(station?.station._id);
-    setCyclings(res?.data);
+    setCyclings(
+      res?.data.filter(
+        (cycling: CyclingAtStationInterface) => cycling.cyclingId.status === 0
+      ) || []
+    );
   };
 
   const memoizedStation = useMemo(() => station, [station]);

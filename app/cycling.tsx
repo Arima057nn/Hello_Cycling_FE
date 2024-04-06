@@ -4,18 +4,23 @@ import {
   StatusBar,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { stationApi } from "@/services/station-api";
 import { CyclingStationInterface } from "@/interfaces/station";
 import Animated from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { defaultStyles } from "@/constants/Styles";
+import { bookingApi } from "@/services/booking-api";
+import { useTrips } from "@/contexts/tripsContext";
+import { BOOKING_STATUS } from "@/constants/Status";
 
 const Cycling = () => {
   const [cycling, setCycling] = useState<CyclingStationInterface>();
+  const { onStartTrip } = useTrips();
   const { code, cyclingId } = useLocalSearchParams<{
     code: string;
     cyclingId: string;
@@ -30,7 +35,25 @@ const Cycling = () => {
     setCycling(res.data);
   };
 
-  // Animated.ScrollView
+  const handleBooking = async () => {
+    const res = await bookingApi.createBooking(
+      "6607ae8023585f763aff9260",
+      cyclingId,
+      cycling?.stationId._id || "",
+      BOOKING_STATUS.ACTIVE
+    );
+    if (res.status === 200) {
+      if (onStartTrip !== undefined)
+        onStartTrip(
+          res.data._id,
+          cyclingId,
+          cycling?.stationId._id || "",
+          BOOKING_STATUS.ACTIVE
+        );
+      Alert.alert("Chuyến đi đã bắt đầu");
+      router.push("/myTrip");
+    } else Alert.alert("Đặt xe thất bại");
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" animated={true} />
@@ -135,6 +158,9 @@ const Cycling = () => {
             <Text style={styles.footerPrice}>Bạn đã sẵn sàng chưa?</Text>
           </View>
           <TouchableOpacity
+            onPress={() => {
+              handleBooking();
+            }}
             activeOpacity={0.8}
             style={{
               padding: 16,

@@ -11,9 +11,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Colors from "@/constants/Colors";
-import { TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LocationProvider } from "@/contexts/locationContext";
+import { TripsProvider, useTrips } from "@/contexts/tripsContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,13 +53,20 @@ export default function RootLayout() {
 
   return (
     <LocationProvider>
-      <RootLayoutNav />
+      <TripsProvider>
+        <RootLayoutNav />
+      </TripsProvider>
     </LocationProvider>
   );
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { tripState } = useTrips();
+  const onShowTrip = () => {
+    router.push("/myTrip");
+  };
+
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
@@ -102,6 +110,24 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="myTrip"
+              options={{
+                presentation: "modal",
+                headerShown: true,
+                title: "My Trip",
+                headerBackTitle: "Back",
+                headerRight: () => (
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <Ionicons name="chevron-down" size={22} />
+                  </TouchableOpacity>
+                ),
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
               name="login"
               options={{
                 headerShown: false,
@@ -116,8 +142,44 @@ function RootLayoutNav() {
               }}
             />
           </Stack>
+          {tripState?.onTrip && (
+            <View style={styles.absoluteView}>
+              <TouchableOpacity
+                style={styles.btn}
+                activeOpacity={0.6}
+                onPress={() => {
+                  onShowTrip();
+                }}
+              >
+                <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
+                  My Trip
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+  },
+  absoluteView: {
+    position: "absolute",
+    bottom: 100,
+    width: "100%",
+    alignItems: "center",
+  },
+  btn: {
+    backgroundColor: Colors.dark,
+    padding: 14,
+    height: 50,
+    borderRadius: 30,
+    flexDirection: "row",
+    marginHorizontal: "auto",
+    alignItems: "center",
+  },
+});

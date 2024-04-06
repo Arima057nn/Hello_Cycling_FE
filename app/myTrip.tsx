@@ -1,4 +1,7 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React from "react";
+import { useTrips } from "@/contexts/tripsContext";
+import { router } from "expo-router";
 import * as Location from "expo-location";
 import { LocationSubscription } from "expo-location";
 import Colors from "@/constants/Colors";
@@ -9,7 +12,8 @@ import { BOOKING_STATUS } from "@/constants/Status";
 
 let watchId: LocationSubscription;
 
-export default function Booking() {
+const MyTrip = () => {
+  const { onEndTrip, tripState } = useTrips();
   const coordsRef = useRef<CoordinateInterface[]>([]);
   const startWatchingLocation = async () => {
     try {
@@ -46,16 +50,43 @@ export default function Booking() {
 
   const createTripDetail = async () => {
     const res = await bookingApi.createTripDetail(
-      "6607afaf9ed275d7705ccf1a",
-      "65fbf1da35e7132ec24403b2",
+      tripState?.bookingId || "",
+      "65fbeea240b7773e46da92be",
       BOOKING_STATUS.CLOSED,
       coordsRef.current
     );
-    console.log("Create trip detail:", res.data);
   };
 
+  const handleEndTrip = () => {
+    onEndTrip && onEndTrip();
+    Alert.alert("Chuyến đi đã kết thúc");
+    router.back();
+  };
   return (
     <View style={styles.container}>
+      <Text>MyTrip</Text>
+
+      <TouchableOpacity
+        onPress={() => {
+          handleEndTrip();
+        }}
+        activeOpacity={0.8}
+        style={{
+          padding: 16,
+          borderRadius: 12,
+          backgroundColor: Colors.secondary,
+        }}
+      >
+        <Text
+          style={{
+            color: Colors.lightGrey,
+            fontFamily: "mon-sb",
+            textAlign: "center",
+          }}
+        >
+          Kết thúc chuyến đi
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
@@ -94,17 +125,13 @@ export default function Booking() {
       </TouchableOpacity>
     </View>
   );
-}
+};
+
+export default MyTrip;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: Colors.light,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
 });
