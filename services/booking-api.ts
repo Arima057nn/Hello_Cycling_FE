@@ -28,4 +28,7 @@ export const bookingApi = {
       tripHistory,
     });
   },
+  getTripDetail(bookingId: string) {
+    return axiosClient.get(`/booking/tripDetail/?bookingId=${bookingId}`);
+  },
 };

@@ -51,7 +51,7 @@ const MyTrip = () => {
   const createTripDetail = async () => {
     const res = await bookingApi.createTripDetail(
       tripState?.bookingId || "",
-      "65fbeea240b7773e46da92be",
+      "65fbf25d35e7132ec24403b7",
       BOOKING_STATUS.CLOSED,
       coordsRef.current
     );

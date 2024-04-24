@@ -11,7 +11,10 @@ export default function Menu() {
         <Text style={styles.accountName}>Pham Tien Dung</Text>
       </View>
       <View style={styles.actionContainer}>
-        <TouchableOpacity activeOpacity={0.5}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/history")}
+        >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Ionicons name="timer-outline" size={24} />
