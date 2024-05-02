@@ -32,12 +32,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="booking"
-        options={{
-          title: "Booking",
-        }}
-      />
-      <Tabs.Screen
         name="qrcode"
         options={{
           title: "Qrcode",

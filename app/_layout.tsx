@@ -15,6 +15,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LocationProvider } from "@/contexts/locationContext";
 import { TripsProvider, useTrips } from "@/contexts/tripsContext";
+import { bookingApi } from "@/services/booking-api";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,11 +63,27 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { tripState } = useTrips();
+  const { tripState, onStartTrip } = useTrips();
   const onShowTrip = () => {
     router.push("/myTrip");
   };
 
+  useEffect(() => {
+    findTrip();
+  }, []);
+  const findTrip = async () => {
+    const res = await bookingApi.findTrip("6607ae8023585f763aff9260");
+    if (res.status === 200) {
+      if (onStartTrip) {
+        onStartTrip(
+          res.data._id,
+          res.data.cyclingId,
+          res.data.startStation,
+          res.data.status
+        );
+      }
+    }
+  };
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>

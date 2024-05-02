@@ -1,5 +1,4 @@
 import { axiosClient } from "./axios-cilent";
-import { CoordinateInterface } from "@/interfaces/coordinate";
 
 export const bookingApi = {
   createBooking(
@@ -15,20 +14,17 @@ export const bookingApi = {
       status,
     });
   },
-  createTripDetail(
-    bookingId: string,
-    endStation: string,
-    status: number,
-    tripHistory: CoordinateInterface[]
-  ) {
+  createTripDetail(bookingId: string, endStation: string, status: number) {
     return axiosClient.post(`/booking/tripDetail`, {
       bookingId,
       endStation,
       status,
-      tripHistory,
     });
   },
   getTripDetail(bookingId: string) {
     return axiosClient.get(`/booking/tripDetail/?bookingId=${bookingId}`);
+  },
+  findTrip(userId: string) {
+    return axiosClient.get(`/booking/findTrip/?userId=${userId}`);
   },
 };
