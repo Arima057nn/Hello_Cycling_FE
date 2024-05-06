@@ -79,7 +79,7 @@ const Login = () => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => router.push("/register")}
+            onPress={() => router.push("/(auth)/register")}
           >
             <Text style={{ fontFamily: "mon-sb", color: Colors.yellow }}>
               Sign Up

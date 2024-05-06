@@ -44,7 +44,7 @@ export default function Menu() {
       <View>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => router.push("/login")}
+          onPress={() => router.push("/(auth)/login")}
         >
           <View style={styles.logoutContainer}>
             <Text

@@ -78,7 +78,7 @@ const Register = () => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => router.push("/login")}
+            onPress={() => router.push("/(auth)/login")}
           >
             <Text style={{ fontFamily: "mon-sb", color: Colors.yellow }}>
               Log in

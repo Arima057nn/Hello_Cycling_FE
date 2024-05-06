@@ -145,14 +145,14 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
-              name="login"
+              name="(auth)/login"
               options={{
                 headerShown: false,
                 headerBackTitle: "Back",
               }}
             />
             <Stack.Screen
-              name="register"
+              name="(auth)/register"
               options={{
                 headerShown: false,
                 headerBackTitle: "Back",
