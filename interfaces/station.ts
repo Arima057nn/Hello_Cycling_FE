@@ -21,6 +21,7 @@ export interface StationCountInterface {
 export interface StationCountAndDistanceInterface {
   station: StationInterface;
   distance: string;
+  value: number;
   duration: string;
   countOfCycling: number;
 }

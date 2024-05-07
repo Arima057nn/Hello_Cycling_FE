@@ -35,7 +35,7 @@ export const TripsProvider = ({ children }: any) => {
     bookingId: "",
     cyclingId: "",
     startStation: "",
-    status: 0,
+    status: -1,
   });
   const onStart = (
     bookingId: string,
@@ -57,7 +57,7 @@ export const TripsProvider = ({ children }: any) => {
       bookingId: "",
       cyclingId: "",
       startStation: "",
-      status: 0,
+      status: -1,
     });
   };
   const value = {

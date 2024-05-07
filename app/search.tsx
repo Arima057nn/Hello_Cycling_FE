@@ -29,7 +29,7 @@ const Search = () => {
       console.log("coord", coordinate.latitude, coordinate.longitude);
       getCyclingsAtStation(+coordinate.latitude, +coordinate.longitude);
     }
-  }, [coordinate]);
+  }, []);
   const getCyclingsAtStation = async (latitude: number, longitude: number) => {
     let res = await stationApi.getCountOfAllCyclingAtStation(
       `${latitude},${longitude}`
