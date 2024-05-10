@@ -26,6 +26,8 @@ const INITIAL_REGION = {
 };
 
 export default function Home() {
+  const apiUrl = process.env.EXPO_PUBLIC_BASE_API_URL;
+  console.log("apiURL", apiUrl);
   const mapRef = useRef<MapView>();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
