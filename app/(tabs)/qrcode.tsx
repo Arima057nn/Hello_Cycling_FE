@@ -2,7 +2,7 @@ import { cyclingApi } from "@/services/cycling-api";
 import { CameraView, useCameraPermissions } from "expo-camera/next";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, StatusBar, StyleSheet, View } from "react-native";
+import { Alert, Button, StatusBar, StyleSheet, Text, View } from "react-native";
 
 export default function Qrcode() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -10,6 +10,11 @@ export default function Qrcode() {
   const [processing, setProcessing] = useState(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    if (!permission?.granted) return;
+    requestPermission();
+  }, [permission]);
+  
   const handleBarCodeScanned = async ({
     type,
     data,
