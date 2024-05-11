@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LocationProvider } from "@/contexts/locationContext";
 import { TripsProvider, useTrips } from "@/contexts/tripsContext";
 import { bookingApi } from "@/services/booking-api";
+import { AuthProvider } from "@/contexts/authContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,9 +55,11 @@ export default function RootLayout() {
 
   return (
     <LocationProvider>
-      <TripsProvider>
-        <RootLayoutNav />
-      </TripsProvider>
+      <AuthProvider>
+        <TripsProvider>
+          <RootLayoutNav />
+        </TripsProvider>
+      </AuthProvider>
     </LocationProvider>
   );
 }

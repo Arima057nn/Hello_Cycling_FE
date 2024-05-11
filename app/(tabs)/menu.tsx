@@ -2,8 +2,17 @@ import Colors from "@/constants/Colors";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import auth from "@react-native-firebase/auth";
 
 export default function Menu() {
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      router.replace("/login");
+    } catch (error) {
+      console.log("Error signing out", error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.accountUser}>
@@ -42,10 +51,7 @@ export default function Menu() {
         </TouchableOpacity>
       </View>
       <View>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.push("/(auth)/login")}
-        >
+        <TouchableOpacity activeOpacity={0.5} onPress={handleLogout}>
           <View style={styles.logoutContainer}>
             <Text
               style={{

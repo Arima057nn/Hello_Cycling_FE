@@ -7,13 +7,49 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import auth from "@react-native-firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const Register = () => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [code, setCode] = useState("");
+  const [confirm, setConfirm] =
+    useState<FirebaseAuthTypes.ConfirmationResult>();
+
+  const signInWithPhoneNumber = async () => {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      console.log("confirmation", confirmation);
+      setConfirm(confirmation);
+    } catch (error) {
+      console.log("Error sending code", error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((userAuth) => {
+      if (userAuth) {
+        router.push("/(tabs)");
+        return;
+      }
+    });
+    return unsubscribe; // Unsubscribe when component unmounts
+  }, []);
+  const confirmCode = async () => {
+    try {
+      const userCredential = await confirm?.confirm(code);
+      const user = userCredential?.user;
+      console.log("User credential", userCredential);
+      router.push("/");
+    } catch (error) {
+      console.log("Invalid code", error);
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -22,6 +58,7 @@ const Register = () => {
           style={{
             flexDirection: "row",
             justifyContent: "center",
+            marginVertical: 24,
           }}
         >
           <Image
@@ -33,30 +70,63 @@ const Register = () => {
         </View>
       </SafeAreaView>
       <View style={styles.inputContainer}>
-        <Text style={styles.titleAuth}>Email Address</Text>
-        <TextInput
-          placeholder="Enter your email address"
-          value="dungpt@gmail.com"
-          style={styles.inputAuth}
-        ></TextInput>
-        <Text style={styles.titleAuth}>Password</Text>
-        <TextInput
-          placeholder="Enter your password"
-          secureTextEntry
-          style={styles.inputAuth}
-        ></TextInput>
+        {!confirm ? (
+          <View>
+            <Text style={styles.titleAuth}>Phone Number</Text>
+            <TextInput
+              placeholder="e.g., +1234567890"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              style={styles.inputAuth}
+            ></TextInput>
 
-        <TouchableOpacity activeOpacity={0.5} style={styles.btnAuth}>
-          <Text
-            style={{
-              textAlign: "center",
-              fontFamily: "mon-b",
-              fontSize: 16,
-            }}
-          >
-            Register
-          </Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.btnAuth}
+              onPress={signInWithPhoneNumber}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "mon-b",
+                  fontSize: 16,
+                }}
+              >
+                Send Code
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            <Text style={styles.titleAuth}>
+              Enter the code sent to your phone
+            </Text>
+            <TextInput
+              placeholder="e.g., +1234567890"
+              value={code}
+              onChangeText={setCode}
+              style={styles.inputAuth}
+            ></TextInput>
+
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.btnAuth}
+              onPress={confirmCode}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "mon-b",
+                  fontSize: 16,
+                }}
+              >
+                Confirm Code
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* ----------------------------------------------------- */}
         <Text
           style={{
             fontFamily: "mon-b",
@@ -74,14 +144,14 @@ const Register = () => {
         </View>
         <View style={styles.actionContainer}>
           <Text style={{ fontFamily: "mon-sb", color: Colors.lightGrey }}>
-            Already have an account?{" "}
+            Don't have an account?{" "}
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => router.push("/(auth)/login")}
+            onPress={() => router.push("/login")}
           >
             <Text style={{ fontFamily: "mon-sb", color: Colors.yellow }}>
-              Log in
+              Login
             </Text>
           </TouchableOpacity>
         </View>
@@ -97,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.secondary,
   },
-  imageLogo: { width: 240, height: 240, borderRadius: 20 },
+  imageLogo: { width: 200, height: 200, borderRadius: 20 },
   inputContainer: {
     flex: 1,
     backgroundColor: Colors.light,
@@ -141,4 +211,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 24,
   },
+  forgotPassword: {},
 });
