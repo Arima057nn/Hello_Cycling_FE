@@ -2,7 +2,7 @@ import { cyclingApi } from "@/services/cycling-api";
 import { CameraView, useCameraPermissions } from "expo-camera/next";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Button, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Alert, StatusBar, StyleSheet, View } from "react-native";
 
 export default function Qrcode() {
   const [permission, requestPermission] = useCameraPermissions();
