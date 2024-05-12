@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { router } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -29,6 +30,14 @@ export const AuthProvider = ({ children }: any) => {
     token: null,
   });
 
+  const storeData = async (token: string) => {
+    try {
+      await AsyncStorage.setItem("token", token);
+    } catch (e) {
+      // saving error
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (userAuth) => {
       if (!userAuth) {
@@ -37,6 +46,7 @@ export const AuthProvider = ({ children }: any) => {
       }
       const idToken = await userAuth.getIdToken();
       console.log("idToken", idToken);
+      storeData(idToken);
       login(userAuth, idToken);
     });
     return unsubscribe; // Unsubscribe when component unmounts
