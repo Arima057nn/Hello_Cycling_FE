@@ -7,13 +7,14 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { userApi } from "@/services/user-api";
 
 const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -31,21 +32,21 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged((userAuth) => {
-      if (userAuth) {
-        router.push("/(tabs)");
-        return;
-      }
-    });
-    return unsubscribe; // Unsubscribe when component unmounts
-  }, []);
+  const register = async () => {
+    const res = await userApi.register();
+  };
+
   const confirmCode = async () => {
     try {
       const userCredential = await confirm?.confirm(code);
       const user = userCredential?.user;
-      console.log("User credential", userCredential);
-      router.push("/");
+      if (userCredential?.additionalUserInfo?.isNewUser) {
+        register();
+        router.push("/(auth)/newUser");
+      } else {
+        console.log("User credential", userCredential);
+        router.push("/");
+      }
     } catch (error) {
       console.log("Invalid code", error);
     }
@@ -141,19 +142,6 @@ const Register = () => {
           <View style={styles.iconBtn}>
             <Ionicons name="logo-facebook" size={30} />
           </View>
-        </View>
-        <View style={styles.actionContainer}>
-          <Text style={{ fontFamily: "mon-sb", color: Colors.lightGrey }}>
-            Don't have an account?{" "}
-          </Text>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => router.push("/login")}
-          >
-            <Text style={{ fontFamily: "mon-sb", color: Colors.yellow }}>
-              Login
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     </View>

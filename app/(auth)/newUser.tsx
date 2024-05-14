@@ -6,14 +6,26 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { userApi } from "@/services/user-api";
 
-const Login = () => {
+const NewUser = () => {
+  const [name, setName] = useState("");
+  const SetNameForUser = async () => {
+    try {
+      const res = await userApi.createName(name);
+      Alert.alert("Success", "Name has been set");
+      router.push("/");
+    } catch (error) {
+      console.log("Error setting name", error);
+      Alert.alert("Error", "Error setting name");
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -22,6 +34,7 @@ const Login = () => {
           style={{
             flexDirection: "row",
             justifyContent: "center",
+            marginBottom: 24,
           }}
         >
           <Image
@@ -33,56 +46,44 @@ const Login = () => {
         </View>
       </SafeAreaView>
       <View style={styles.inputContainer}>
-        <Text style={styles.titleAuth}>Email Address</Text>
-        <TextInput
-          placeholder="Enter your email address"
-          value="dungpt@gmail.com"
-          style={styles.inputAuth}
-        ></TextInput>
-        <Text style={styles.titleAuth}>Password</Text>
-        <TextInput
-          placeholder="Enter your password"
-          secureTextEntry
-          style={styles.inputAuth}
-        ></TextInput>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-
-        <TouchableOpacity activeOpacity={0.5} style={styles.btnAuth}>
-          <Text
-            style={{
-              textAlign: "center",
-              fontFamily: "mon-b",
-              fontSize: 16,
-            }}
-          >
-            Login
-          </Text>
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontFamily: "mon-b",
-            color: Colors.lightGrey,
-            textAlign: "center",
-            fontSize: 18,
-          }}
-        >
-          Or
-        </Text>
-        <View style={styles.iconContainer}>
-          <View style={styles.iconBtn}>
-            <Ionicons name="logo-facebook" size={30} />
-          </View>
-        </View>
-        <View style={styles.actionContainer}>
-          <Text style={{ fontFamily: "mon-sb", color: Colors.lightGrey }}>
-            Don't have an account?{" "}
-          </Text>
+        <View>
+          <Text style={styles.titleAuth}>Your Name</Text>
+          <TextInput
+            placeholder="Enter your name"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={styles.inputAuth}
+          ></TextInput>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => router.push("/(auth)/register")}
+            style={styles.btnAuth}
+            onPress={() => SetNameForUser()}
           >
-            <Text style={{ fontFamily: "mon-sb", color: Colors.yellow }}>
-              Sign Up
+            <Text
+              style={{
+                textAlign: "center",
+                fontFamily: "mon-b",
+                fontSize: 16,
+              }}
+            >
+              Start
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.actionContainer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/")}
+          >
+            <Text
+              style={{
+                fontFamily: "mon-sb",
+                color: Colors.lightGrey,
+                fontSize: 16,
+              }}
+            >
+              Skip
             </Text>
           </TouchableOpacity>
         </View>
@@ -91,7 +92,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default NewUser;
 
 const styles = StyleSheet.create({
   container: {
@@ -105,16 +106,12 @@ const styles = StyleSheet.create({
     padding: 30,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
+    justifyContent: "space-between",
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 24,
-  },
-  iconBtn: {
-    padding: 8,
-    backgroundColor: Colors.Gray100,
-    borderRadius: 18,
   },
   btnAuth: {
     backgroundColor: Colors.yellow,
@@ -138,9 +135,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   actionContainer: {
-    justifyContent: "center",
+    justifyContent: "flex-end",
     flexDirection: "row",
     marginTop: 24,
   },
-  forgotPassword: {},
 });

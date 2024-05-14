@@ -8,7 +8,7 @@ export default function Menu() {
   const handleLogout = async () => {
     try {
       await auth().signOut();
-      router.replace("/login");
+      router.replace("/register");
     } catch (error) {
       console.log("Error signing out", error);
     }
@@ -36,7 +36,10 @@ export default function Menu() {
             <Ionicons name="chevron-forward" size={24} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/(auth)/newUser")}
+        >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Ionicons name="card-outline" size={24} />

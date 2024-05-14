@@ -18,6 +18,7 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontFamily: "mon-sb",
           fontSize: 12,
+          marginBottom: 6,
         },
       }}
     >

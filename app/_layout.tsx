@@ -76,7 +76,7 @@ function RootLayoutNav() {
   }, []);
   const findTrip = async () => {
     const res = await bookingApi.findTrip("6607ae8023585f763aff9260");
-    if (res.status === 200) {
+    if (res?.status === 200) {
       if (onStartTrip) {
         onStartTrip(
           res.data._id,
@@ -148,7 +148,7 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
-              name="(auth)/login"
+              name="(auth)/newUser"
               options={{
                 headerShown: false,
                 headerBackTitle: "Back",
