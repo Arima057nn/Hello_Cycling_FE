@@ -75,7 +75,7 @@ function RootLayoutNav() {
     findTrip();
   }, []);
   const findTrip = async () => {
-    const res = await bookingApi.findTrip("6607ae8023585f763aff9260");
+    const res = await bookingApi.findTrip();
     if (res?.status === 200) {
       if (onStartTrip) {
         onStartTrip(

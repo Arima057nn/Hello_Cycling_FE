@@ -42,9 +42,13 @@ const MyTrip = () => {
         stationId,
         BOOKING_STATUS.CLOSED
       );
-      onEndTrip && onEndTrip();
-      Alert.alert("Chuyến đi đã kết thúc");
-      router.back();
+      if (res.status !== 200) {
+        Alert.alert(res.data);
+      } else {
+        onEndTrip && onEndTrip();
+        Alert.alert("Chuyến đi đã kết thúc");
+        router.back();
+      }
     } catch (error) {
       console.error("Error ending trip:", error);
       Alert.alert("Đã xảy ra lỗi khi kết thúc chuyến đi");

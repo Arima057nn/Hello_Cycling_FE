@@ -37,10 +37,8 @@ const Cycling = () => {
 
   const handleBooking = async () => {
     const res = await bookingApi.createBooking(
-      "6607ae8023585f763aff9260",
       cyclingId,
-      cycling?.stationId._id || "",
-      BOOKING_STATUS.ACTIVE
+      cycling?.stationId._id || ""
     );
     if (res.status === 200) {
       if (onStartTrip !== undefined)
@@ -52,7 +50,7 @@ const Cycling = () => {
         );
       Alert.alert("Chuyến đi đã bắt đầu");
       router.push("/myTrip");
-    } else Alert.alert("Đặt xe thất bại");
+    } else Alert.alert("Đặt xe thất bại", res.data);
   };
   return (
     <View style={styles.container}>
