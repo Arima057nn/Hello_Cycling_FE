@@ -7,10 +7,7 @@ import { Alert } from "react-native";
 let watchId: LocationSubscription;
 
 interface LocationContextProps {
-  coordinate: {
-    latitude: string;
-    longitude: string;
-  };
+  coordinate: CoordinateInterface;
 }
 
 export const LocationContext = createContext<Partial<LocationContextProps>>({});
@@ -20,10 +17,7 @@ export const useLocation = () => {
 };
 
 export const LocationProvider = ({ children }: any) => {
-  const [coordinate, setCoordinate] = useState<CoordinateInterface>({
-    latitude: "",
-    longitude: "",
-  });
+  const [coordinate, setCoordinate] = useState<CoordinateInterface>();
 
   useEffect(() => {
     startWatchingLocation();
@@ -37,8 +31,8 @@ export const LocationProvider = ({ children }: any) => {
     }
     let location = await Location.getCurrentPositionAsync({});
     const currentLocation = {
-      latitude: location.coords.latitude.toString(),
-      longitude: location.coords.longitude.toString(),
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     };
     setCoordinate(currentLocation);
   }
@@ -55,8 +49,8 @@ export const LocationProvider = ({ children }: any) => {
         (location) => {
           const { latitude, longitude } = location.coords;
           setCoordinate({
-            latitude: latitude.toString(),
-            longitude: longitude.toString(),
+            latitude: latitude,
+            longitude: longitude,
           });
         }
       );
