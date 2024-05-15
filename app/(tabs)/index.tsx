@@ -17,6 +17,7 @@ import CustomHandle from "@/components/CustomHandle";
 import StationDetailCycling from "@/components/StationDetailCycling";
 import Colors from "@/constants/Colors";
 import { useLocalSearchParams } from "expo-router";
+import { useLocation } from "@/contexts/locationContext";
 
 const INITIAL_REGION = {
   latitude: 21.03,
@@ -27,6 +28,7 @@ const INITIAL_REGION = {
 
 export default function Home() {
   const mapRef = useRef<MapView>();
+  const { coordinate } = useLocation();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
   const [stations, setStations] = useState<StationCountInterface[]>();
@@ -75,8 +77,7 @@ export default function Home() {
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
         showsUserLocation
-        showsMyLocationButton
-        followsUserLocation
+        showsMyLocationButton={false}
         ref={mapRef as React.RefObject<MapView>}
       >
         {stations?.map((item: StationCountInterface) => (
@@ -106,6 +107,19 @@ export default function Home() {
       >
         {selectedListing && <StationDetailCycling station={selectedListing} />}
       </BottomSheet>
+      <View>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={{ ...styles.locationBtn, bottom: 50 }}
+          onPress={() => {
+            if (coordinate?.latitude && coordinate?.longitude) {
+              moveToLocation(coordinate.latitude, coordinate.longitude);
+            }
+          }}
+        >
+          <Ionicons name="locate" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.absoluteSearch}>
         <Link href={"/search"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
@@ -187,6 +201,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     // borderTopLeftRadius: 16,
     // borderTopRightRadius: 16,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+  },
+  locationBtn: {
+    position: "absolute",
+    right: 20,
+    backgroundColor: Colors.light,
+    padding: 10,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.32,
+    shadowRadius: 8,
     shadowOffset: {
       width: 1,
       height: 1,
