@@ -6,5 +6,8 @@ export const userApi = {
   },
   register(){
     return axiosClient.post(`/user/register`);
+  },
+  getInfoUser() {
+    return axiosClient.get(`/user/info`);
   }
 };

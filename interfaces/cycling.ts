@@ -4,7 +4,7 @@ export interface CyclingInterface {
   code: string;
   password: string;
   status: number;
-  category: number;
+  category: CyclingTypeInterface;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -15,6 +15,16 @@ export interface CyclingAtStationInterface {
   _id: string;
   stationId: string;
   cyclingId: CyclingInterface;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface CyclingTypeInterface {
+  _id: string;
+  name: string;
+  description: string;
+  value: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

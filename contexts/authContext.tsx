@@ -1,3 +1,5 @@
+import { UserLoggedInterface } from "@/interfaces/user";
+import { userApi } from "@/services/user-api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { router } from "expo-router";
@@ -9,6 +11,7 @@ interface AuthContextProps {
     user: FirebaseAuthTypes.User | null;
     token: string | null;
   };
+  userLogged: UserLoggedInterface | null;
   onLogin: (user: FirebaseAuthTypes.User, token: string) => void;
   onLogout: () => void;
 }
@@ -30,6 +33,7 @@ export const AuthProvider = ({ children }: any) => {
     token: null,
   });
 
+  const [userLogged, setUserLogged] = useState<UserLoggedInterface | null>();
   const storeData = async (token: string) => {
     try {
       await AsyncStorage.setItem("token", token);
@@ -44,6 +48,7 @@ export const AuthProvider = ({ children }: any) => {
         router.replace("/register");
         return;
       }
+      getInfoUser();
       const idToken = await userAuth.getIdToken();
       console.log("idToken", idToken);
       storeData(idToken);
@@ -57,9 +62,17 @@ export const AuthProvider = ({ children }: any) => {
   };
   const logout = () => {
     setAuthState({ authenticated: false, user: null, token: null });
+    setUserLogged(null);
   };
 
+  const getInfoUser = async () => {
+    const res = await userApi.getInfoUser();
+    if (res?.status === 200) {
+      setUserLogged(res?.data);
+    }
+  };
   const value = {
+    userLogged,
     authState,
     onLogin: login,
     onLogout: logout,

@@ -3,8 +3,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
+import { useAuth } from "@/contexts/authContext";
 
 export default function Menu() {
+  const { userLogged } = useAuth();
   const handleLogout = async () => {
     try {
       await auth().signOut();
@@ -16,8 +18,8 @@ export default function Menu() {
   return (
     <View style={styles.container}>
       <View style={styles.accountUser}>
-        <Text style={styles.accountId}>User ID : 123456</Text>
-        <Text style={styles.accountName}>Pham Tien Dung</Text>
+        <Text style={styles.accountId}>Phone: {userLogged?.phone}</Text>
+        <Text style={styles.accountName}>{userLogged?.name}</Text>
       </View>
       <View style={styles.actionContainer}>
         <TouchableOpacity
