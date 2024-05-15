@@ -158,10 +158,12 @@ const styles = StyleSheet.create({
     },
   },
   marker: {
-    padding: 8,
+    // paddingVertical: 8,
+    paddingHorizontal: 4,
+
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.secondary,
     elevation: 5,
     borderRadius: 12,
     shadowColor: "#000",
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
   markerText: {
     fontSize: 14,
     fontFamily: "mon-sb",
+    color: Colors.light,
   },
   sheetContainer: {
     // backgroundColor: "#333",

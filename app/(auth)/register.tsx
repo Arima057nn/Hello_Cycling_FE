@@ -153,7 +153,7 @@ export default Register;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.purple,
   },
   imageLogo: { width: 200, height: 200, borderRadius: 20 },
   inputContainer: {

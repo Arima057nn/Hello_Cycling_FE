@@ -97,7 +97,7 @@ export default NewUser;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.purple,
   },
   imageLogo: { width: 240, height: 240, borderRadius: 20 },
   inputContainer: {

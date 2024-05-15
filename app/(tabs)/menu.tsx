@@ -22,6 +22,22 @@ export default function Menu() {
       <View style={styles.actionContainer}>
         <TouchableOpacity
           activeOpacity={0.5}
+          // onPress={() => router.push("/(auth)/newUser")}
+        >
+          <View style={styles.actionItem}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="ticket-outline" size={24} />
+              <Text
+                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+              >
+                Buy Ticket
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={24} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
           onPress={() => router.push("/history")}
         >
           <View style={styles.actionItem}>
@@ -36,6 +52,7 @@ export default function Menu() {
             <Ionicons name="chevron-forward" size={24} />
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => router.push("/(auth)/newUser")}

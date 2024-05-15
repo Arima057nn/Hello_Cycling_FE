@@ -8,6 +8,7 @@ export default {
   Gray600: "#4b5563",
   lightGrey: "#333333",
   blue: "#378CE7",
-  secondary: "#836FFF",
+  secondary: "#FFC700",
   yellow: "#FFC700",
+  purple:'#836FFF'
 };
