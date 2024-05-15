@@ -161,12 +161,6 @@ function RootLayoutNav() {
                 headerBackTitle: "Back",
               }}
             />
-            <Stack.Screen
-              name="history"
-              options={{
-                headerBackTitle: "Back",
-              }}
-            />
           </Stack>
           {tripState?.onTrip && (
             <View style={styles.absoluteView}>
