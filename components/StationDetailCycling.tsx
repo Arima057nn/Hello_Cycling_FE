@@ -8,6 +8,7 @@ import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
 import { defaultStyles } from "@/constants/Styles";
 import { router } from "expo-router";
+import { TICKET_TYPE } from "@/constants/Status";
 
 interface Props {
   station: StationCountInterface | null;
@@ -16,7 +17,8 @@ interface Props {
 const IMG_HEIGHT = 200;
 const StationDetailCycling = ({ station }: Props) => {
   console.log("station", station?.station.name);
-  const [cyclings, setCyclings] = useState<CyclingAtStationInterface[]>();
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [cyclings, setCyclings] = useState<CyclingAtStationInterface[]>([]);
   useEffect(() => {
     getCyclings();
   }, [station]);
@@ -29,6 +31,15 @@ const StationDetailCycling = ({ station }: Props) => {
       ) || []
     );
   };
+
+  const handleCategoryPress = (index: number) => {
+    setSelectedCategory(index);
+  };
+  const filteredCyclings = cyclings.filter(
+    (cycling) =>
+      selectedCategory === 0 ||
+      cycling.cyclingId.category.value === selectedCategory
+  );
 
   const memoizedStation = useMemo(() => station, [station]);
   return (
@@ -54,10 +65,37 @@ const StationDetailCycling = ({ station }: Props) => {
           </Text>
         </View>
       </Animated.View>
-      <View></View>
+      <View style={styles.category}>
+        {TICKET_TYPE.map((item) => (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            key={item.type}
+            style={[
+              styles.categoryItem,
+              selectedCategory === item.type && {
+                backgroundColor: Colors.Gray100,
+                borderTopColor: Colors.secondary,
+                borderTopWidth: 4,
+              },
+            ]}
+            onPress={() => handleCategoryPress(item.type)}
+          >
+            <Text style={{ fontFamily: "mon-sb", padding: 2 }}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <Animated.ScrollView style={styles.containerCycling}>
-        {Array.isArray(cyclings) &&
-          cyclings.map((cycling: CyclingAtStationInterface) => (
+        {filteredCyclings.length === 0 ? (
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={{ color: Colors.dark, fontFamily: "mon" }}>
+              Hiện tại không có xe nào !
+            </Text>
+          </View>
+        ) : (
+          filteredCyclings.map((cycling: CyclingAtStationInterface) => (
             <View style={styles.cycling} key={cycling.cyclingId._id}>
               <Image
                 style={styles.cyclingImage}
@@ -132,7 +170,8 @@ const StationDetailCycling = ({ station }: Props) => {
                 </TouchableOpacity>
               </View>
             </View>
-          ))}
+          ))
+        )}
       </Animated.ScrollView>
     </View>
   );
@@ -211,5 +250,12 @@ const styles = StyleSheet.create({
   cyclingBooking: {
     fontSize: 16,
     fontFamily: "mon-sb",
+  },
+  category: { flexDirection: "row", justifyContent: "space-between" },
+  categoryItem: {
+    flex: 1,
+    alignItems: "center",
+    borderTopRightRadius: 4,
+    borderTopLeftRadius: 4,
   },
 });
