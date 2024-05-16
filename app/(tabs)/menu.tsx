@@ -24,7 +24,7 @@ export default function Menu() {
       <View style={styles.actionContainer}>
         <TouchableOpacity
           activeOpacity={0.5}
-          // onPress={() => router.push("/(auth)/newUser")}
+          onPress={() => router.push("/ticket")}
         >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>

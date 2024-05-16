@@ -4,7 +4,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, router } from "expo-router";
+import { Stack, router, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -67,8 +67,12 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const { tripState, onStartTrip } = useTrips();
+  const currentPath = usePathname();
+
   const onShowTrip = () => {
-    router.push("/myTrip");
+    if (currentPath !== "/myTrip") {
+      router.push("/myTrip");
+    }
   };
 
   useEffect(() => {
@@ -136,11 +140,7 @@ function RootLayoutNav() {
                 headerShown: true,
                 title: "My Trip",
                 headerBackTitle: "Back",
-                headerRight: () => (
-                  <TouchableOpacity onPress={() => router.back()}>
-                    <Ionicons name="chevron-down" size={22} />
-                  </TouchableOpacity>
-                ),
+
                 headerStyle: {
                   backgroundColor: Colors.secondary,
                 },
@@ -161,8 +161,20 @@ function RootLayoutNav() {
                 headerBackTitle: "Back",
               }}
             />
+            <Stack.Screen
+              name="ticket"
+              options={{
+                headerShown: true,
+                title: "Ticket",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
           </Stack>
-          {tripState?.onTrip && (
+          {!currentPath.includes("/myTrip") && tripState?.onTrip && (
             <View style={styles.absoluteView}>
               <TouchableOpacity
                 style={styles.btn}
