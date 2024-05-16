@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-// import MapView from "react-native-map-clustering";
+import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView from "react-native-map-clustering";
 import CustomHandle from "@/components/CustomHandle";
 import StationDetailCycling from "@/components/StationDetailCycling";
 import Colors from "@/constants/Colors";
@@ -31,6 +31,7 @@ export default function Home() {
   const { coordinate } = useLocation();
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
+  const [showLocateButton, setShowLocateButton] = useState(true);
   const [stations, setStations] = useState<StationCountInterface[]>();
   const [selectedListing, setSelectedListing] =
     useState<StationCountInterface | null>(null);
@@ -42,6 +43,10 @@ export default function Home() {
   useEffect(() => {
     getStations();
   }, []);
+  useEffect(() => {
+    setShowLocateButton(bottomSheetIndex === -1); // Ẩn nút khi bottom sheet mở
+  }, [bottomSheetIndex]);
+
   const getStations = async () => {
     let res = await stationApi.getCountOfCyclingAtStation();
     setStations(res?.data);
@@ -90,7 +95,7 @@ export default function Home() {
             }}
           >
             <View style={styles.marker}>
-              <Text style={styles.markerText}>{item.count}</Text>
+              <Ionicons name="bicycle-outline" size={24} />
             </View>
           </Marker>
         ))}
@@ -107,19 +112,21 @@ export default function Home() {
       >
         {selectedListing && <StationDetailCycling station={selectedListing} />}
       </BottomSheet>
-      <View>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={{ ...styles.locationBtn, bottom: 50 }}
-          onPress={() => {
-            if (coordinate?.latitude && coordinate?.longitude) {
-              moveToLocation(coordinate.latitude, coordinate.longitude);
-            }
-          }}
-        >
-          <Ionicons name="locate" size={24} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
+      {showLocateButton && (
+        <View>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={{ ...styles.locationBtn, bottom: 70 }}
+            onPress={() => {
+              if (coordinate?.latitude && coordinate?.longitude) {
+                moveToLocation(coordinate.latitude, coordinate.longitude);
+              }
+            }}
+          >
+            <Ionicons name="locate" size={24} color={Colors.grey} />
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.absoluteSearch}>
         <Link href={"/search"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
@@ -172,14 +179,15 @@ const styles = StyleSheet.create({
     },
   },
   marker: {
-    // paddingVertical: 8,
-    paddingHorizontal: 4,
-
+    paddingVertical: 2,
+    paddingHorizontal: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.light,
     elevation: 5,
-    borderRadius: 12,
+    borderRadius: 24,
+    borderWidth: 4,
+    borderColor: Colors.secondary,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,

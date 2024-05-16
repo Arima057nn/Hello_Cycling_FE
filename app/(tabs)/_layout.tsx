@@ -1,8 +1,8 @@
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
@@ -14,6 +14,9 @@ export default function TabLayout() {
         tabBarInactiveTintColor: "#333",
         tabBarStyle: {
           backgroundColor: Colors.light,
+          height: 60,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderColor: "#c2c2c2",
         },
         tabBarLabelStyle: {
           fontFamily: "mon-sb",
