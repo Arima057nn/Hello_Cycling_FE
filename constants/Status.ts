@@ -24,3 +24,9 @@ export const CYCLING_TYPE = [
     name: "Electric Bike",
   },
 ];
+
+export const TICKET_TYPE = {
+  DEFAULT: 0,
+  DAY: 1,
+  MONTHLY: 2,
+};

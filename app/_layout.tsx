@@ -169,6 +169,18 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="myTicket"
+              options={{
+                headerShown: true,
+                title: "My Ticket",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
               name="history"
               options={{
                 headerShown: true,

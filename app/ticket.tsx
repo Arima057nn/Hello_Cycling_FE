@@ -4,6 +4,7 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -11,7 +12,7 @@ import { defaultStyles } from "@/constants/Styles";
 import Animated from "react-native-reanimated";
 import { ticketApi } from "@/services/ticket-api";
 import { TicketInterface } from "@/interfaces/ticket";
-import { CYCLING_TYPE } from "@/constants/Status";
+import { CYCLING_TYPE, TICKET_TYPE } from "@/constants/Status";
 import { Ionicons } from "@expo/vector-icons";
 
 const Ticket = () => {
@@ -32,6 +33,16 @@ const Ticket = () => {
   const filteredTickets = tickets.filter(
     (ticket) => ticket.categoryId.value === selectedCategory
   );
+
+  const handleBuyTicket = async (ticket: string) => {
+    const res = await ticketApi.buyTicket(ticket);
+    console.log("res", res.data);
+    if (res.status === 200) {
+      Alert.alert(res.data.message);
+    } else {
+      Alert.alert(res.data.error);
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -58,24 +69,25 @@ const Ticket = () => {
       <Animated.ScrollView>
         {filteredTickets?.map((ticket) => (
           <View key={ticket._id} style={styles.ticketContainer}>
-            <View style={{ width: 80 }}>
+            <View style={styles.locationIcon}>
+              <Ionicons name="ticket" size={20} color={Colors.Gray600} />
+            </View>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start",
+                width: 200,
+              }}
+            >
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: "bold",
                   color: Colors.lightGrey,
                 }}
               >
                 {ticket.name}
               </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-                width: 160,
-              }}
-            >
               <Text
                 style={{
                   fontFamily: "mon",
@@ -109,13 +121,24 @@ const Ticket = () => {
                     fontSize: 12,
                   }}
                 >
-                  {ticket.expiration}
+                  HSD trong {ticket.expiration} giờ
                 </Text>
               </View>
             </View>
-            <TouchableOpacity style={defaultStyles.btn} activeOpacity={0.6}>
-              <Text style={defaultStyles.btnText}>Mua</Text>
-            </TouchableOpacity>
+
+            {ticket.type.value !== TICKET_TYPE.DEFAULT ? (
+              <TouchableOpacity
+                style={defaultStyles.btn}
+                activeOpacity={0.6}
+                onPress={() => handleBuyTicket(ticket._id)}
+              >
+                <Text style={defaultStyles.btnText}>Mua</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={[defaultStyles.btn, { opacity: 0.2 }]}>
+                <Text style={defaultStyles.btnText}>Mua</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </Animated.ScrollView>
@@ -161,5 +184,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "mon-sb",
     color: Colors.lightGrey,
+  },
+  locationIcon: {
+    padding: 4,
+    backgroundColor: Colors.light,
+    borderRadius: 16,
+    borderColor: Colors.secondary,
+    borderWidth: 2,
+    marginRight: 16,
   },
 });

@@ -25,3 +25,15 @@ export interface TicketTypeInterface {
   updatedAt: string;
   __v: number;
 }
+
+export interface UserTicketInterface {
+  _id: string;
+  userId: string;
+  ticketId: TicketInterface;
+  status: number;
+  usage: number;
+  dateEnd: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
