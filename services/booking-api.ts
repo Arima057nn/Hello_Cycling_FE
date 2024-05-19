@@ -1,10 +1,7 @@
 import { axiosClient } from "./axios-cilent";
 
 export const bookingApi = {
-  createBooking(
-    cyclingId: string,
-    startStation: string,
-  ) {
+  createBooking(cyclingId: string, startStation: string) {
     return axiosClient.post(`/booking/create`, {
       cyclingId,
       startStation,
@@ -22,5 +19,8 @@ export const bookingApi = {
   },
   findTrip() {
     return axiosClient.get(`/booking/findTrip/`);
+  },
+  getTripHistory() {
+    return axiosClient.get(`/booking/history`);
   },
 };

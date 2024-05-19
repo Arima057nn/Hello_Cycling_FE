@@ -11,7 +11,7 @@ import { defaultStyles } from "@/constants/Styles";
 import Animated from "react-native-reanimated";
 import { ticketApi } from "@/services/ticket-api";
 import { TicketInterface } from "@/interfaces/ticket";
-import { TICKET_TYPE } from "@/constants/Status";
+import { CYCLING_TYPE } from "@/constants/Status";
 import { Ionicons } from "@expo/vector-icons";
 
 const Ticket = () => {
@@ -37,7 +37,7 @@ const Ticket = () => {
       <StatusBar barStyle="dark-content" animated={true} />
       <Text style={styles.title}>Danh sách vé</Text>
       <View style={styles.category}>
-        {TICKET_TYPE.map(
+        {CYCLING_TYPE.map(
           (item) =>
             item.type !== 0 && (
               <TouchableOpacity

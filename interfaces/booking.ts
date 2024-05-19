@@ -8,3 +8,20 @@ export interface BookingInterface {
   updatedAt: string;
   __v: number;
 }
+
+export interface TripHistoryInterface {
+  _id: string;
+  bookingId: BookingInterface;
+  endStation: string;
+  total: number;
+  tripHistory: TripHistory[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  uid: string;
+}
+
+export interface TripHistory {
+  latitude: string;
+  longitude: string;
+}

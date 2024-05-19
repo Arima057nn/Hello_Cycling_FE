@@ -8,7 +8,7 @@ import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
 import { defaultStyles } from "@/constants/Styles";
 import { router } from "expo-router";
-import { TICKET_TYPE } from "@/constants/Status";
+import { CYCLING_TYPE } from "@/constants/Status";
 
 interface Props {
   station: StationCountInterface | null;
@@ -66,7 +66,7 @@ const StationDetailCycling = ({ station }: Props) => {
         </View>
       </Animated.View>
       <View style={styles.category}>
-        {TICKET_TYPE.map((item) => (
+        {CYCLING_TYPE.map((item) => (
           <TouchableOpacity
             activeOpacity={0.6}
             key={item.type}

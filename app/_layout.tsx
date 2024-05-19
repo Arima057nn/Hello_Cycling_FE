@@ -122,11 +122,6 @@ function RootLayoutNav() {
                 headerShown: true,
                 title: "Cycling",
                 headerBackTitle: "Back",
-                headerRight: () => (
-                  <TouchableOpacity onPress={() => router.back()}>
-                    <Ionicons name="chevron-down" size={22} />
-                  </TouchableOpacity>
-                ),
                 headerStyle: {
                   backgroundColor: Colors.secondary,
                 },
@@ -166,6 +161,18 @@ function RootLayoutNav() {
               options={{
                 headerShown: true,
                 title: "Ticket",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
+              name="history"
+              options={{
+                headerShown: true,
+                title: "History",
                 headerBackTitle: "Back",
                 headerStyle: {
                   backgroundColor: Colors.secondary,

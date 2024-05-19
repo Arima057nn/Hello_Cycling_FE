@@ -50,7 +50,7 @@ const Cycling = () => {
         );
       Alert.alert("Chuyến đi đã bắt đầu");
       router.push("/myTrip");
-    } else Alert.alert("Đặt xe thất bại", res.data);
+    } else Alert.alert("Đặt xe thất bại", res.data.error);
   };
   return (
     <View style={styles.container}>

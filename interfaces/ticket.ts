@@ -11,6 +11,16 @@ export interface TicketInterface {
   categoryId: CyclingTypeInterface;
   expiration: number;
   condition: number;
+  type: TicketTypeInterface;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface TicketTypeInterface {
+  _id: string;
+  name: string;
+  value: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

@@ -10,7 +10,7 @@ export const BOOKING_STATUS = {
   CLOSED: 2,
 };
 
-export const TICKET_TYPE = [
+export const CYCLING_TYPE = [
   {
     type: 0,
     name: "All",
