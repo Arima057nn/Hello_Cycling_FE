@@ -32,58 +32,59 @@ const History = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
       <Text style={styles.title}>Lịch sử chuyến đi</Text>
-      <View style={styles.actionContainer}>
-        {Array.isArray(history) &&
-          history.map((item) => (
-            <TouchableOpacity activeOpacity={0.5} key={item._id}>
-              <View style={styles.actionItem}>
-                <View style={styles.locationIcon}>
-                  <Ionicons
-                    name="bicycle-outline"
-                    size={20}
-                    color={Colors.Gray600}
-                  />
-                </View>
-                <View
-                  style={{
-                    alignItems: "flex-start",
-                    width: "80%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "mon-sb",
-                      fontSize: 16,
-                    }}
-                  >
-                    {convertDate(item.bookingId.createdAt)}
-                  </Text>
+      <Animated.ScrollView>
+        <View style={styles.actionContainer}>
+          {Array.isArray(history) &&
+            history.map((item) => (
+              <TouchableOpacity activeOpacity={0.5} key={item._id}>
+                <View style={styles.actionItem}>
+                  <View style={styles.locationIcon}>
+                    <Ionicons
+                      name="bicycle-outline"
+                      size={20}
+                      color={Colors.Gray600}
+                    />
+                  </View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginLeft: 8,
-                      marginTop: 4,
+                      alignItems: "flex-start",
+                      width: "80%",
                     }}
                   >
-                    <Ionicons name="time-outline" size={16} />
                     <Text
                       style={{
-                        fontSize: 12,
-                        color: Colors.Gray600,
-                        marginLeft: 4,
+                        fontFamily: "mon-sb",
+                        fontSize: 16,
                       }}
                     >
-                      {item.total} phút
+                      {convertDate(item.bookingId.createdAt)}
                     </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginLeft: 8,
+                        marginTop: 4,
+                      }}
+                    >
+                      <Ionicons name="time-outline" size={16} />
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: Colors.Gray600,
+                          marginLeft: 4,
+                        }}
+                      >
+                        {item.total} phút
+                      </Text>
+                    </View>
                   </View>
+                  <Ionicons name="chevron-forward" size={20} />
                 </View>
-                <Ionicons name="chevron-forward" size={20} />
-              </View>
-            </TouchableOpacity>
-          ))}
-      </View>
-      <Animated.ScrollView></Animated.ScrollView>
+              </TouchableOpacity>
+            ))}
+        </View>
+      </Animated.ScrollView>
     </View>
   );
 };

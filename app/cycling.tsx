@@ -32,25 +32,31 @@ const Cycling = () => {
 
   const findCyclingAtStation = async () => {
     const res = await stationApi.findCyclingAtStation(cyclingId);
-    setCycling(res.data);
+    if (res.status === 200) setCycling(res.data);
   };
 
   const handleBooking = async () => {
-    const res = await bookingApi.createBooking(
-      cyclingId,
-      cycling?.stationId._id || ""
-    );
-    if (res.status === 200) {
-      if (onStartTrip !== undefined)
-        onStartTrip(
-          res.data._id,
-          cyclingId,
-          cycling?.stationId._id || "",
-          BOOKING_STATUS.ACTIVE
-        );
-      Alert.alert("Chuyến đi đã bắt đầu");
-      router.push("/myTrip");
-    } else Alert.alert("Đặt xe thất bại", res.data.error);
+    if (cycling) {
+      const res = await bookingApi.createBooking(
+        cyclingId,
+        cycling.stationId._id
+      );
+      if (res.status === 200) {
+        if (onStartTrip !== undefined) {
+          onStartTrip(
+            res.data._id,
+            cyclingId,
+            cycling.stationId._id,
+            BOOKING_STATUS.ACTIVE
+          );
+        }
+
+        Alert.alert("Chuyến đi đã bắt đầu");
+        router.push("/myTrip");
+      } else Alert.alert("Đặt xe thất bại", res.data.error);
+    } else {
+      Alert.alert("Đã xảy ra lỗi, vui lòng thử lại sau");
+    }
   };
   return (
     <View style={styles.container}>

@@ -65,7 +65,7 @@ const MyTrip = () => {
         BOOKING_STATUS.CLOSED
       );
       if (res.status !== 200) {
-        Alert.alert(res.data);
+        Alert.alert(res.data.error);
       } else {
         onEndTrip && onEndTrip();
         Alert.alert("Chuyến đi đã kết thúc");
