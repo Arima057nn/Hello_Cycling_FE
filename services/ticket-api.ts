@@ -10,4 +10,10 @@ export const ticketApi = {
   buyTicket(ticketId: string) {
     return axiosClient.post(`/ticket/buy`, { ticketId });
   },
+  selectTicket(cyclingId: string) {
+    return axiosClient.get(`/ticket/select?cyclingId=${cyclingId}`);
+  },
+  cancelTicket(bookingId: string) {
+    return axiosClient.post(`/ticket/cancel`, { bookingId });
+  },
 };

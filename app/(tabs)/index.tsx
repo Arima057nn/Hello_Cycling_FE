@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import MapView from "react-native-map-clustering";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+// import MapView from "react-native-map-clustering";
 import CustomHandle from "@/components/CustomHandle";
 import StationDetailCycling from "@/components/StationDetailCycling";
 import Colors from "@/constants/Colors";
@@ -83,6 +83,8 @@ export default function Home() {
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton={false}
+        showsCompass={false}
+        toolbarEnabled={false}
         ref={mapRef as React.RefObject<MapView>}
       >
         {stations?.map((item: StationCountInterface) => (

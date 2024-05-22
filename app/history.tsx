@@ -57,7 +57,8 @@ const History = () => {
                         fontSize: 16,
                       }}
                     >
-                      {convertDate(item.bookingId.createdAt)}
+                      {item.bookingId?.createdAt &&
+                        convertDate(item.bookingId?.createdAt)}
                     </Text>
                     <View
                       style={{

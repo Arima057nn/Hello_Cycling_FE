@@ -1,4 +1,3 @@
-
 export interface UserLoggedInterface {
   _id: string;
   name: string;
@@ -10,7 +9,5 @@ export interface UserLoggedInterface {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  balance: number;
 }
-
-
-

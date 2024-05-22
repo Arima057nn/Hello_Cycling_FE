@@ -4,6 +4,7 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -35,6 +36,14 @@ const MyTicket = () => {
   const filteredTickets = tickets.filter(
     (ticket) => ticket.ticketId.categoryId.value === selectedCategory
   );
+
+  const cancelTicket = async (bookingId: string) => {
+    const res = await ticketApi.cancelTicket(bookingId);
+    if (res.status === 200) {
+      getAllTicket();
+      Alert.alert("Hủy vé thành công");
+    } else Alert.alert("Hủy vé thất bại");
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -111,7 +120,7 @@ const MyTicket = () => {
                   }}
                 >
                   <Ionicons name="time-outline" size={20} />
-                  {ticket.ticketId.expiration - ticket.usage > 0 ? (
+                  {ticket.ticketId.timer - ticket.usage > 0 ? (
                     <Text
                       style={{
                         fontFamily: "mon",
@@ -135,7 +144,11 @@ const MyTicket = () => {
                   )}
                 </View>
               </View>
-              <TouchableOpacity style={defaultStyles.btn} activeOpacity={0.6}>
+              <TouchableOpacity
+                style={defaultStyles.btn}
+                activeOpacity={0.6}
+                onPress={() => cancelTicket(ticket._id)}
+              >
                 <Text style={defaultStyles.btnText}>Hủy</Text>
               </TouchableOpacity>
             </View>
