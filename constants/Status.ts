@@ -30,3 +30,12 @@ export const TICKET_TYPE = {
   DAY: 1,
   MONTHLY: 2,
 };
+export const TRANSACTION_TYPE = {
+  ADD: 0,
+  MINUS: 1,
+};
+export const TRANSACTION_STATUS = {
+  PENDING: 0,
+  SUCCESS: 1,
+  FAILED: 2,
+};
