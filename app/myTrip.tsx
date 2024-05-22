@@ -88,6 +88,8 @@ const MyTrip = () => {
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton={false}
+        showsCompass={false}
+        toolbarEnabled={false}
         ref={mapRef as React.RefObject<MapView>}
       ></MapView>
 

@@ -20,7 +20,20 @@ export const bookingApi = {
   findTrip() {
     return axiosClient.get(`/booking/findTrip/`);
   },
+  findTripById(bookingId: string) {
+    return axiosClient.get(`/booking/findTripById/?bookingId=${bookingId}`);
+  },
   getTripHistory() {
     return axiosClient.get(`/booking/history`);
+  },
+  createKeeping(cyclingId: string, startStation: string, ticketId: string) {
+    return axiosClient.post(`/booking/createKeep`, {
+      cyclingId,
+      startStation,
+      ticketId,
+    });
+  },
+  cancelKeeping(bookingId: string, category: string) {
+    return axiosClient.post(`/booking/cancel`, { bookingId, category });
   },
 };

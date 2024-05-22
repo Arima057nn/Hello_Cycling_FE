@@ -17,22 +17,29 @@ import { defaultStyles } from "@/constants/Styles";
 import { bookingApi } from "@/services/booking-api";
 import { useTrips } from "@/contexts/tripsContext";
 import { BOOKING_STATUS } from "@/constants/Status";
+import { ticketApi } from "@/services/ticket-api";
+import { TicketInterface } from "@/interfaces/ticket";
 
 const Cycling = () => {
   const [cycling, setCycling] = useState<CyclingStationInterface>();
+  const [ticket, setTicket] = useState<TicketInterface>();
   const { onStartTrip } = useTrips();
   const { code, cyclingId } = useLocalSearchParams<{
     code: string;
     cyclingId: string;
   }>();
-
   useEffect(() => {
     findCyclingAtStation();
+    selectTicketToUse();
   }, []);
 
   const findCyclingAtStation = async () => {
     const res = await stationApi.findCyclingAtStation(cyclingId);
     if (res.status === 200) setCycling(res.data);
+  };
+  const selectTicketToUse = async () => {
+    const res = await ticketApi.selectTicket(cyclingId);
+    setTicket(res.data);
   };
 
   const handleBooking = async () => {
@@ -53,6 +60,29 @@ const Cycling = () => {
 
         Alert.alert("Chuyến đi đã bắt đầu");
         router.push("/myTrip");
+      } else Alert.alert("Đặt xe thất bại", res.data.error);
+    } else {
+      Alert.alert("Đã xảy ra lỗi, vui lòng thử lại sau");
+    }
+  };
+  const handleCreateKeeping = async () => {
+    if (cycling && ticket) {
+      const res = await bookingApi.createKeeping(
+        cyclingId,
+        cycling.stationId._id,
+        ticket._id
+      );
+      if (res.status === 200) {
+        if (onStartTrip) {
+          onStartTrip(
+            res.data._id,
+            cyclingId,
+            cycling.stationId._id,
+            res.data.status
+          );
+        }
+        Alert.alert("Đặt giữ xe thành công");
+        router.push("/myKeeping");
       } else Alert.alert("Đặt xe thất bại", res.data.error);
     } else {
       Alert.alert("Đã xảy ra lỗi, vui lòng thử lại sau");
@@ -149,6 +179,34 @@ const Cycling = () => {
             </View>
           </View>
         </View>
+        <View
+          style={{
+            justifyContent: "center",
+            width: "100%",
+            paddingHorizontal: 24,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => handleCreateKeeping()}
+            activeOpacity={0.8}
+            style={{
+              padding: 16,
+              borderRadius: 12,
+              backgroundColor: Colors.secondary,
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.lightGrey,
+                fontFamily: "mon-sb",
+                textAlign: "center",
+              }}
+            >
+              Đặt vé trước 1 giờ
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={{ color: Colors.dark }}>Ve su dung : {ticket?.name}</Text>
       </Animated.ScrollView>
       <Animated.View style={defaultStyles.footer}>
         <View

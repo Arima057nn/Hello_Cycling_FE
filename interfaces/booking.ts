@@ -1,3 +1,6 @@
+import { CyclingInterface } from "./cycling";
+import { StationInterface } from "./station";
+
 export interface BookingInterface {
   _id: string;
   userId: string;
@@ -24,4 +27,15 @@ export interface TripHistoryInterface {
 export interface TripHistory {
   latitude: string;
   longitude: string;
+}
+
+export interface BookingOnKeepingInterface {
+  _id: string;
+  userId: string;
+  cyclingId: CyclingInterface;
+  startStation: StationInterface;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }

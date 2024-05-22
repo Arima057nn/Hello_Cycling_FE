@@ -12,11 +12,11 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Colors from "@/constants/Colors";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { LocationProvider } from "@/contexts/locationContext";
 import { TripsProvider, useTrips } from "@/contexts/tripsContext";
 import { bookingApi } from "@/services/booking-api";
 import { AuthProvider } from "@/contexts/authContext";
+import { BOOKING_STATUS } from "@/constants/Status";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -71,7 +71,11 @@ function RootLayoutNav() {
 
   const onShowTrip = () => {
     if (currentPath !== "/myTrip") {
-      router.push("/myTrip");
+      if (tripState?.status === BOOKING_STATUS.ACTIVE) router.push("/myTrip");
+    }
+    if (currentPath !== "/myKeeping") {
+      if (tripState?.status === BOOKING_STATUS.KEEPING)
+        router.push("/myKeeping");
     }
   };
 
@@ -143,6 +147,20 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="myKeeping"
+              options={{
+                presentation: "modal",
+                headerShown: true,
+                title: "My keeping",
+                headerBackTitle: "Back",
+
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
               name="(auth)/newUser"
               options={{
                 headerShown: false,
@@ -192,22 +210,50 @@ function RootLayoutNav() {
                 headerTintColor: Colors.dark,
               }}
             />
+            <Stack.Screen
+              name="transaction"
+              options={{
+                headerShown: true,
+                title: "Transaction",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
           </Stack>
-          {!currentPath.includes("/myTrip") && tripState?.onTrip && (
-            <View style={styles.absoluteView}>
-              <TouchableOpacity
-                style={styles.btn}
-                activeOpacity={0.6}
-                onPress={() => {
-                  onShowTrip();
-                }}
-              >
-                <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
-                  My Trip
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {!currentPath.includes("/myTrip") &&
+            !currentPath.includes("/myKeeping") &&
+            tripState?.onTrip && (
+              <View style={styles.absoluteView}>
+                {tripState?.status === BOOKING_STATUS.ACTIVE ? (
+                  <TouchableOpacity
+                    style={styles.btn}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                      onShowTrip();
+                    }}
+                  >
+                    <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
+                      My Trip
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.btn}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                      onShowTrip();
+                    }}
+                  >
+                    <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
+                      My Keeping
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </ThemeProvider>
