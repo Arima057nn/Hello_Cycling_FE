@@ -43,4 +43,14 @@ export const defaultStyles = StyleSheet.create({
     borderTopColor: Colors.Gray300,
     borderTopWidth: 1,
   },
+  textOK: {
+    fontWeight: "500",
+    fontSize: 16,
+    color: Colors.blue,
+  },
+  containerTextOK: {
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

@@ -4,7 +4,6 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -15,10 +14,24 @@ import { ticketApi } from "@/services/ticket-api";
 import { TicketInterface } from "@/interfaces/ticket";
 import { CYCLING_TYPE, TICKET_TYPE } from "@/constants/Status";
 import { Ionicons } from "@expo/vector-icons";
+import { ModalInterface } from "@/interfaces/modal";
+import IsLoadingModal from "@/components/isLoadingModal";
+import AnswerModal from "@/components/answerModal";
+import Modal from "@/components/modal";
 
 const Ticket = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isShow, setIsShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedTicket, setSelectedTicket] = useState<TicketInterface | null>(
+    null
+  );
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   const [tickets, setTickets] = useState<TicketInterface[]>([]);
   const handleCategoryPress = (index: number) => {
     setSelectedCategory(index);
@@ -38,17 +51,56 @@ const Ticket = () => {
     (ticket) => ticket.categoryId.value === selectedCategory
   );
 
-  const handleBuyTicket = async (ticket: string) => {
-    const res = await ticketApi.buyTicket(ticket);
+  const handleBuyTicket = async () => {
+    if (!selectedTicket) return;
+    setIsShow(false);
+    setLoading(true);
+    const res = await ticketApi.buyTicket(selectedTicket._id);
+    setLoading(false);
     if (res.status === 200) {
-      Alert.alert(res.data.message);
+      setModalContent({
+        isOpen: true,
+        title: res.data.message,
+        description: "",
+      });
     } else {
-      Alert.alert(res.data.error);
+      setModalContent({
+        isOpen: true,
+        title: "Lỗi",
+        description: res.data.error,
+      });
     }
   };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
+      {loading && <IsLoadingModal />}
+      <Modal
+        title={modalContent.title}
+        description={modalContent.description}
+        isOpen={modalContent.isOpen}
+        onRequestClose={() => {
+          setModalContent((prevState) => ({
+            ...prevState,
+            isOpen: false,
+          }));
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={defaultStyles.textOK}>OK</Text>
+        </TouchableOpacity>
+      </Modal>
       <Text style={styles.title}>Danh sách vé</Text>
       <View style={styles.category}>
         {CYCLING_TYPE.map(
@@ -79,6 +131,30 @@ const Ticket = () => {
         <Animated.ScrollView>
           {filteredTickets?.map((ticket) => (
             <View key={ticket._id} style={styles.ticketContainer}>
+              <AnswerModal
+                title="Mua vé"
+                description="Bạn chắc chắn muốn mua vé này ?"
+                isOpen={isShow && selectedTicket?._id === ticket._id}
+                onRequestClose={() => setIsShow(false)}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={defaultStyles.containerTextOK}>
+                    <TouchableOpacity onPress={() => setIsShow(false)}>
+                      <Text style={{ fontSize: 16 }}>Hủy bỏ</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={defaultStyles.containerTextOK}>
+                    <TouchableOpacity onPress={handleBuyTicket}>
+                      <Text style={defaultStyles.textOK}>Đồng ý</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </AnswerModal>
               <View style={styles.locationIcon}>
                 <Ionicons name="ticket" size={20} color={Colors.Gray600} />
               </View>
@@ -140,7 +216,10 @@ const Ticket = () => {
                 <TouchableOpacity
                   style={defaultStyles.btn}
                   activeOpacity={0.6}
-                  onPress={() => handleBuyTicket(ticket._id)}
+                  onPress={() => {
+                    setSelectedTicket(ticket);
+                    setIsShow(true);
+                  }}
                 >
                   <Text style={defaultStyles.btnText}>Mua</Text>
                 </TouchableOpacity>

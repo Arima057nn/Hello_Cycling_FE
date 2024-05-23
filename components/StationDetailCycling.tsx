@@ -88,7 +88,7 @@ const StationDetailCycling = ({ station }: Props) => {
       </View>
 
       <Animated.ScrollView style={styles.containerCycling}>
-        {filteredCyclings.length === 0 ? (
+        {Array.isArray(filteredCyclings) && filteredCyclings.length === 0 ? (
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text style={{ color: Colors.dark, fontFamily: "mon" }}>
               Hiện tại không có xe nào !
