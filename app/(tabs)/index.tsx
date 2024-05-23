@@ -32,7 +32,7 @@ export default function Home() {
   const sheetRef = useRef<BottomSheet>(null);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
   const [showLocateButton, setShowLocateButton] = useState(true);
-  const [stations, setStations] = useState<StationCountInterface[]>();
+  const [stations, setStations] = useState<StationCountInterface[]>([]);
   const [selectedListing, setSelectedListing] =
     useState<StationCountInterface | null>(null);
   const { latitude, longitude } = useLocalSearchParams<{
@@ -49,7 +49,7 @@ export default function Home() {
 
   const getStations = async () => {
     let res = await stationApi.getCountOfCyclingAtStation();
-    setStations(res?.data);
+    if (res.status === 200) setStations(res.data);
   };
   const onMarkerSelected = (event: StationCountInterface) => {
     setSelectedListing(event);
@@ -87,20 +87,21 @@ export default function Home() {
         toolbarEnabled={false}
         ref={mapRef as React.RefObject<MapView>}
       >
-        {stations?.map((item: StationCountInterface) => (
-          <Marker
-            key={item.station._id}
-            onPress={() => onMarkerSelected(item)}
-            coordinate={{
-              latitude: +item.station.latitude,
-              longitude: +item.station.longitude,
-            }}
-          >
-            <View style={styles.marker}>
-              <Ionicons name="bicycle-outline" size={24} />
-            </View>
-          </Marker>
-        ))}
+        {Array.isArray(stations) &&
+          stations?.map((item: StationCountInterface) => (
+            <Marker
+              key={item.station._id}
+              onPress={() => onMarkerSelected(item)}
+              coordinate={{
+                latitude: +item.station.latitude,
+                longitude: +item.station.longitude,
+              }}
+            >
+              <View style={styles.marker}>
+                <Ionicons name="bicycle-outline" size={24} />
+              </View>
+            </Marker>
+          ))}
       </MapView>
 
       <BottomSheet
