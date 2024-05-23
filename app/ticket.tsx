@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -16,6 +17,7 @@ import { CYCLING_TYPE, TICKET_TYPE } from "@/constants/Status";
 import { Ionicons } from "@expo/vector-icons";
 
 const Ticket = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [tickets, setTickets] = useState<TicketInterface[]>([]);
   const handleCategoryPress = (index: number) => {
@@ -26,8 +28,10 @@ const Ticket = () => {
     getAllTicket();
   }, []);
   const getAllTicket = async () => {
+    setIsLoading(true);
     const res = await ticketApi.getTickets();
-    setTickets(res?.data);
+    if (res.status === 200) setTickets(res.data);
+    setIsLoading(false);
   };
 
   const filteredTickets = tickets.filter(
@@ -36,7 +40,6 @@ const Ticket = () => {
 
   const handleBuyTicket = async (ticket: string) => {
     const res = await ticketApi.buyTicket(ticket);
-    console.log("res", res.data);
     if (res.status === 200) {
       Alert.alert(res.data.message);
     } else {
@@ -66,82 +69,90 @@ const Ticket = () => {
             )
         )}
       </View>
-      <Animated.ScrollView>
-        {filteredTickets?.map((ticket) => (
-          <View key={ticket._id} style={styles.ticketContainer}>
-            <View style={styles.locationIcon}>
-              <Ionicons name="ticket" size={20} color={Colors.Gray600} />
-            </View>
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-                width: 200,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  color: Colors.lightGrey,
-                }}
-              >
-                {ticket.name}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "mon",
-                  color: Colors.grey,
-                  fontSize: 14,
-                }}
-              >
-                {ticket.price}đ / {ticket.timer} phút
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "mon",
-                  color: Colors.grey,
-                  fontSize: 12,
-                  marginVertical: 4,
-                }}
-              >
-                (+{ticket.overduePrice}đ / {ticket.duration}phút)
-              </Text>
+      {isLoading ? (
+        <ActivityIndicator
+          size={"large"}
+          color={Colors.secondary}
+          style={{ marginTop: 20 }}
+        />
+      ) : (
+        <Animated.ScrollView>
+          {filteredTickets?.map((ticket) => (
+            <View key={ticket._id} style={styles.ticketContainer}>
+              <View style={styles.locationIcon}>
+                <Ionicons name="ticket" size={20} color={Colors.Gray600} />
+              </View>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  width: 200,
                 }}
               >
-                <Ionicons name="time-outline" size={20} />
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    color: Colors.lightGrey,
+                  }}
+                >
+                  {ticket.name}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "mon",
+                    color: Colors.grey,
+                    fontSize: 14,
+                  }}
+                >
+                  {ticket.price}đ / {ticket.timer} phút
+                </Text>
                 <Text
                   style={{
                     fontFamily: "mon",
                     color: Colors.grey,
                     fontSize: 12,
+                    marginVertical: 4,
                   }}
                 >
-                  HSD trong {ticket.expiration} giờ
+                  (+{ticket.overduePrice}đ / {ticket.duration}phút)
                 </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons name="time-outline" size={20} />
+                  <Text
+                    style={{
+                      fontFamily: "mon",
+                      color: Colors.grey,
+                      fontSize: 12,
+                    }}
+                  >
+                    HSD trong {ticket.expiration} giờ
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            {ticket.type.value !== TICKET_TYPE.DEFAULT ? (
-              <TouchableOpacity
-                style={defaultStyles.btn}
-                activeOpacity={0.6}
-                onPress={() => handleBuyTicket(ticket._id)}
-              >
-                <Text style={defaultStyles.btnText}>Mua</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity style={[defaultStyles.btn, { opacity: 0.2 }]}>
-                <Text style={defaultStyles.btnText}>Mua</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        ))}
-      </Animated.ScrollView>
+              {ticket.type.value !== TICKET_TYPE.DEFAULT ? (
+                <TouchableOpacity
+                  style={defaultStyles.btn}
+                  activeOpacity={0.6}
+                  onPress={() => handleBuyTicket(ticket._id)}
+                >
+                  <Text style={defaultStyles.btnText}>Mua</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={[defaultStyles.btn, { opacity: 0.2 }]}>
+                  <Text style={defaultStyles.btnText}>Mua</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+        </Animated.ScrollView>
+      )}
     </View>
   );
 };

@@ -4,8 +4,9 @@ import {
   StyleSheet,
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { bookingApi } from "@/services/booking-api";
 import Animated from "react-native-reanimated";
@@ -20,10 +21,13 @@ const INITIAL_REGION = {
 };
 
 const History = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState<TripHistoryInterface[]>([]);
   const getTripDetail = async () => {
+    setIsLoading(true);
     const res = await bookingApi.getTripHistory();
-    setHistory(res.data);
+    if (res.status === 200) setHistory(res.data);
+    setIsLoading(false);
   };
   useEffect(() => {
     getTripDetail();
@@ -33,58 +37,81 @@ const History = () => {
       <StatusBar barStyle="dark-content" animated={true} />
       <Text style={styles.title}>Lịch sử chuyến đi</Text>
       <Animated.ScrollView>
-        <View style={styles.actionContainer}>
-          {Array.isArray(history) &&
-            history.map((item) => (
-              <TouchableOpacity activeOpacity={0.5} key={item._id}>
-                <View style={styles.actionItem}>
-                  <View style={styles.locationIcon}>
-                    <Ionicons
-                      name="bicycle-outline"
-                      size={20}
-                      color={Colors.Gray600}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      alignItems: "flex-start",
-                      width: "80%",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "mon-sb",
-                        fontSize: 16,
-                      }}
-                    >
-                      {item.bookingId?.createdAt &&
-                        convertDate(item.bookingId?.createdAt)}
-                    </Text>
+        {isLoading ? (
+          <ActivityIndicator
+            size={"large"}
+            color={Colors.secondary}
+            style={{ marginTop: 20 }}
+          />
+        ) : (
+          <View style={styles.actionContainer}>
+            {Array.isArray(history) && history.length > 0 ? (
+              history.map((item) => (
+                <TouchableOpacity activeOpacity={0.5} key={item._id}>
+                  <View style={styles.actionItem}>
+                    <View style={styles.locationIcon}>
+                      <Ionicons
+                        name="bicycle-outline"
+                        size={20}
+                        color={Colors.Gray600}
+                      />
+                    </View>
                     <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginLeft: 8,
-                        marginTop: 4,
+                        alignItems: "flex-start",
+                        width: "80%",
                       }}
                     >
-                      <Ionicons name="time-outline" size={16} />
                       <Text
                         style={{
-                          fontSize: 12,
-                          color: Colors.Gray600,
-                          marginLeft: 4,
+                          fontFamily: "mon-sb",
+                          fontSize: 16,
                         }}
                       >
-                        {item.total} phút
+                        {item.bookingId?.createdAt &&
+                          convertDate(item.bookingId?.createdAt)}
                       </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginLeft: 8,
+                          marginTop: 4,
+                        }}
+                      >
+                        <Ionicons name="time-outline" size={16} />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: Colors.Gray600,
+                            marginLeft: 4,
+                          }}
+                        >
+                          {item.total} phút
+                        </Text>
+                      </View>
                     </View>
+                    <Ionicons name="chevron-forward" size={20} />
                   </View>
-                  <Ionicons name="chevron-forward" size={20} />
-                </View>
-              </TouchableOpacity>
-            ))}
-        </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View
+                style={{ flex: 1, alignItems: "center", marginVertical: 20 }}
+              >
+                <Text
+                  style={{
+                    color: Colors.dark,
+                    fontFamily: "mon",
+                    fontSize: 16,
+                  }}
+                >
+                  Trống !
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
       </Animated.ScrollView>
     </View>
   );
