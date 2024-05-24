@@ -19,8 +19,19 @@ import { useTrips } from "@/contexts/tripsContext";
 import { BOOKING_STATUS } from "@/constants/Status";
 import { ticketApi } from "@/services/ticket-api";
 import { TicketInterface } from "@/interfaces/ticket";
+import { ModalInterface } from "@/interfaces/modal";
+import IsLoadingModal from "@/components/isLoadingModal";
+import Modal from "@/components/modal";
+import AnswerModal from "@/components/answerModal";
 
 const Cycling = () => {
+  const [loading, setLoading] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   const [cycling, setCycling] = useState<CyclingStationInterface>();
   const [ticket, setTicket] = useState<TicketInterface>();
   const { onStartTrip } = useTrips();
@@ -44,10 +55,13 @@ const Cycling = () => {
 
   const handleBooking = async () => {
     if (cycling) {
+      setIsShow(false);
+      setLoading(true);
       const res = await bookingApi.createBooking(
         cyclingId,
         cycling.stationId._id
       );
+      setLoading(false);
       if (res.status === 200) {
         if (onStartTrip !== undefined) {
           onStartTrip(
@@ -57,12 +71,24 @@ const Cycling = () => {
             BOOKING_STATUS.ACTIVE
           );
         }
-
-        Alert.alert("Chuyến đi đã bắt đầu");
+        setModalContent({
+          isOpen: true,
+          title: "Thành công",
+          description: "Chuyến đi đã bắt đầu",
+        });
         router.push("/myTrip");
-      } else Alert.alert("Đặt xe thất bại", res.data.error);
+      } else
+        setModalContent({
+          isOpen: true,
+          title: "Thất bại",
+          description: res.data.error,
+        });
     } else {
-      Alert.alert("Đã xảy ra lỗi, vui lòng thử lại sau");
+      setModalContent({
+        isOpen: true,
+        title: "Lỗi",
+        description: "Đã xảy ra lỗi, vui lòng thử lại sau",
+      });
     }
   };
   const handleCreateKeeping = async () => {
@@ -91,6 +117,33 @@ const Cycling = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" animated={true} />
+      {loading && <IsLoadingModal />}
+      <Modal
+        title={modalContent.title}
+        description={modalContent.description}
+        isOpen={modalContent.isOpen}
+        onRequestClose={() => {
+          setModalContent((prevState) => ({
+            ...prevState,
+            isOpen: false,
+          }));
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={defaultStyles.textOK}>OK</Text>
+        </TouchableOpacity>
+      </Modal>
       <Animated.ScrollView>
         <View style={styles.infoContainer}>
           <Animated.Image
@@ -221,7 +274,7 @@ const Cycling = () => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              handleBooking();
+              setIsShow(true);
             }}
             activeOpacity={0.8}
             style={{
@@ -242,6 +295,30 @@ const Cycling = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        <AnswerModal
+          title="Đặt xe"
+          description="Bắt đầu chuyến đi ?"
+          isOpen={isShow}
+          onRequestClose={() => setIsShow(false)}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={defaultStyles.containerTextOK}>
+              <TouchableOpacity onPress={() => setIsShow(false)}>
+                <Text style={{ fontSize: 16 }}>Hủy bỏ</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={defaultStyles.containerTextOK}>
+              <TouchableOpacity onPress={handleBooking}>
+                <Text style={defaultStyles.textOK}>Đồng ý</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </AnswerModal>
       </Animated.View>
     </View>
   );

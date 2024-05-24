@@ -66,7 +66,7 @@ const Ticket = () => {
     } else {
       setModalContent({
         isOpen: true,
-        title: "Lỗi",
+        title: "Thất bại",
         description: res.data.error,
       });
     }
