@@ -35,9 +35,10 @@ const Cycling = () => {
   const [cycling, setCycling] = useState<CyclingStationInterface>();
   const [ticket, setTicket] = useState<TicketInterface>();
   const { onStartTrip } = useTrips();
-  const { code, cyclingId } = useLocalSearchParams<{
+  const { code, cyclingId, stationId } = useLocalSearchParams<{
     code: string;
     cyclingId: string;
+    stationId: string;
   }>();
   useEffect(() => {
     findCyclingAtStation();
@@ -57,10 +58,7 @@ const Cycling = () => {
     if (cycling) {
       setIsShow(false);
       setLoading(true);
-      const res = await bookingApi.createBooking(
-        cyclingId,
-        cycling.stationId._id
-      );
+      const res = await bookingApi.createBooking(cyclingId, stationId);
       setLoading(false);
       if (res.status === 200) {
         if (onStartTrip !== undefined) {
@@ -95,7 +93,7 @@ const Cycling = () => {
     if (cycling && ticket) {
       const res = await bookingApi.createKeeping(
         cyclingId,
-        cycling.stationId._id,
+        stationId,
         ticket._id
       );
       if (res.status === 200) {

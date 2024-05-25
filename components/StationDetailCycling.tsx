@@ -157,13 +157,16 @@ const StationDetailCycling = ({ station }: Props) => {
                   style={[defaultStyles.btn]}
                   activeOpacity={0.6}
                   onPress={() => {
-                    router.push({
-                      pathname: "/cycling",
-                      params: {
-                        code: cycling.cyclingId.code,
-                        cyclingId: cycling.cyclingId._id,
-                      },
-                    });
+                    if (station) {
+                      router.push({
+                        pathname: "/cycling",
+                        params: {
+                          code: cycling.cyclingId.code,
+                          cyclingId: cycling.cyclingId._id,
+                          stationId: station?.station._id,
+                        },
+                      });
+                    }
                   }}
                 >
                   <Text style={defaultStyles.btnText}>Select</Text>
