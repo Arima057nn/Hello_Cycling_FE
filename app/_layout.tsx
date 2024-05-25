@@ -222,6 +222,18 @@ function RootLayoutNav() {
                 headerTintColor: Colors.dark,
               }}
             />
+            <Stack.Screen
+              name="payment"
+              options={{
+                headerShown: true,
+                title: "Nạp điểm",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
           </Stack>
           {!currentPath.includes("/myTrip") &&
             !currentPath.includes("/myKeeping") &&
