@@ -4,9 +4,32 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
 import { useAuth } from "@/contexts/authContext";
+import { useState } from "react";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
+import { userApi } from "@/services/user-api";
+import { UserLoggedInterface } from "@/interfaces/user";
 
 export default function Menu() {
   const { userLogged } = useAuth();
+  const [user, setUser] = useState<UserLoggedInterface | null | undefined>(
+    userLogged
+  );
+  const [refresh, setRefresh] = useState(false);
+
+  const pullMe = () => {
+    setRefresh(true);
+    setTimeout(() => {
+      RefreshInfoUser();
+      setRefresh(false);
+    }, 500);
+  };
+
+  const RefreshInfoUser = async () => {
+    const res = await userApi.getInfoUser();
+    if (res?.status === 200) {
+      setUser(res?.data);
+    }
+  };
   const handleLogout = async () => {
     try {
       await auth().signOut();
@@ -17,34 +40,45 @@ export default function Menu() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.accountUser}>
-        <View>
-          <Text style={styles.accountName}>
-            {userLogged?.name} {userLogged?.balance}
-          </Text>
-        </View>
-        <View
-          style={{
-            marginVertical: 8,
-            borderBottomWidth: 1,
-            borderBottomColor: Colors.Gray300,
-          }}
-        ></View>
-        <TouchableOpacity>
+      <ScrollView
+        style={{
+          height: "auto",
+          // backgroundColor: Colors.green,
+          maxHeight: 136,
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={() => pullMe()} />
+        }
+      >
+        <View style={styles.accountUser}>
+          <View>
+            <Text style={styles.accountName}>
+              {user?.name} {user?.balance}
+            </Text>
+          </View>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              alignItems: "center",
+              marginVertical: 8,
+              borderBottomWidth: 1,
+              borderBottomColor: Colors.Gray300,
             }}
-          >
-            <Text style={{ fontSize: 14, fontFamily: "mon" }}>
-              Thông tin chi tiết
-            </Text>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
-      </View>
+          ></View>
+          <TouchableOpacity>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontSize: 14, fontFamily: "mon" }}>
+                Thông tin chi tiết
+              </Text>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
       <View style={styles.actionContainer}>
         <TouchableOpacity
           activeOpacity={0.5}

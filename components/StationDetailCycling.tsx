@@ -9,6 +9,7 @@ import { CyclingAtStationInterface } from "@/interfaces/cycling";
 import { defaultStyles } from "@/constants/Styles";
 import { router } from "expo-router";
 import { CYCLING_TYPE } from "@/constants/Status";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   station: StationCountInterface | null;
@@ -87,95 +88,97 @@ const StationDetailCycling = ({ station }: Props) => {
         ))}
       </View>
 
-      <Animated.ScrollView style={styles.containerCycling}>
-        {Array.isArray(filteredCyclings) && filteredCyclings.length === 0 ? (
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ color: Colors.dark, fontFamily: "mon" }}>
-              Hiện tại không có xe nào !
-            </Text>
-          </View>
-        ) : (
-          filteredCyclings.map((cycling: CyclingAtStationInterface) => (
-            <View style={styles.cycling} key={cycling.cyclingId._id}>
-              <Image
-                style={styles.cyclingImage}
-                source={{
-                  uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "mon",
-                    color: Colors.grey,
-                    fontSize: 12,
-                  }}
-                >
-                  10$/30min
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "mon",
-                    color: Colors.grey,
-                    fontSize: 10,
-                    marginVertical: 4,
-                  }}
-                >
-                  (+1$/15min)
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "mon",
-                    color: Colors.grey,
-                    fontSize: 12,
-                  }}
-                >
-                  30$/1day
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    color: Colors.grey,
-                    fontFamily: "mon-sb",
-                    marginBottom: 6,
-                  }}
-                >
-                  {cycling.cyclingId.code}
-                </Text>
-                <TouchableOpacity
-                  style={[defaultStyles.btn]}
-                  activeOpacity={0.6}
-                  onPress={() => {
-                    if (station) {
-                      router.push({
-                        pathname: "/cycling",
-                        params: {
-                          code: cycling.cyclingId.code,
-                          cyclingId: cycling.cyclingId._id,
-                          stationId: station?.station._id,
-                        },
-                      });
-                    }
-                  }}
-                >
-                  <Text style={defaultStyles.btnText}>Select</Text>
-                </TouchableOpacity>
-              </View>
+      <Animated.View style={styles.containerCycling}>
+        <ScrollView style={{ height: 400 }}>
+          {Array.isArray(filteredCyclings) && filteredCyclings.length === 0 ? (
+            <View style={{ flex: 1, alignItems: "center" }}>
+              <Text style={{ color: Colors.dark, fontFamily: "mon" }}>
+                Hiện tại không có xe nào !
+              </Text>
             </View>
-          ))
-        )}
-      </Animated.ScrollView>
+          ) : (
+            filteredCyclings.map((cycling: CyclingAtStationInterface) => (
+              <View style={styles.cycling} key={cycling.cyclingId._id}>
+                <Image
+                  style={styles.cyclingImage}
+                  source={{
+                    uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
+                  }}
+                />
+                <View
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "mon",
+                      color: Colors.grey,
+                      fontSize: 12,
+                    }}
+                  >
+                    10$/30min
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "mon",
+                      color: Colors.grey,
+                      fontSize: 10,
+                      marginVertical: 4,
+                    }}
+                  >
+                    (+1$/15min)
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "mon",
+                      color: Colors.grey,
+                      fontSize: 12,
+                    }}
+                  >
+                    30$/1day
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: Colors.grey,
+                      fontFamily: "mon-sb",
+                      marginBottom: 6,
+                    }}
+                  >
+                    {cycling.cyclingId.code}
+                  </Text>
+                  <TouchableOpacity
+                    style={[defaultStyles.btn]}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                      if (station) {
+                        router.push({
+                          pathname: "/cycling",
+                          params: {
+                            code: cycling.cyclingId.code,
+                            cyclingId: cycling.cyclingId._id,
+                            stationId: station?.station._id,
+                          },
+                        });
+                      }
+                    }}
+                  >
+                    <Text style={defaultStyles.btnText}>Select</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+          )}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
 };
