@@ -18,24 +18,64 @@ export default function Menu() {
   return (
     <View style={styles.container}>
       <View style={styles.accountUser}>
-        <Text style={styles.accountId}>Phone: {userLogged?.phone}</Text>
-        <Text style={styles.accountName}>{userLogged?.name}</Text>
+        <View>
+          <Text style={styles.accountName}>
+            {userLogged?.name} {userLogged?.balance}
+          </Text>
+        </View>
+        <View
+          style={{
+            marginVertical: 8,
+            borderBottomWidth: 1,
+            borderBottomColor: Colors.Gray300,
+          }}
+        ></View>
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 14, fontFamily: "mon" }}>
+              Thông tin chi tiết
+            </Text>
+            <Ionicons name="chevron-forward" size={20} />
+          </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.actionContainer}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/myTicket")}
+        >
+          <View style={styles.actionItem}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="ticket-outline" size={20} />
+              <Text
+                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+              >
+                My Ticket
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => router.push("/ticket")}
         >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="ticket-outline" size={24} />
+              <Ionicons name="ticket-outline" size={20} />
               <Text
                 style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
               >
                 Buy Ticket
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} />
+            <Ionicons name="chevron-forward" size={20} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -44,31 +84,62 @@ export default function Menu() {
         >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="timer-outline" size={24} />
+              <Ionicons name="timer-outline" size={20} />
               <Text
                 style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
               >
                 History
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} />
+            <Ionicons name="chevron-forward" size={20} />
           </View>
         </TouchableOpacity>
-
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/transaction")}
+        >
+          <View style={styles.actionItem}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="card-outline" size={20} />
+              <Text
+                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+              >
+                Transaction
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => router.push("/(auth)/newUser")}
         >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="card-outline" size={24} />
+              <Ionicons name="card-outline" size={20} />
+              <Text
+                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+              >
+                Profile
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => router.push("/payment")}
+        >
+          <View style={styles.actionItem}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="card-outline" size={20} />
               <Text
                 style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
               >
                 Payment
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} />
+            <Ionicons name="chevron-forward" size={20} />
           </View>
         </TouchableOpacity>
       </View>
@@ -85,7 +156,7 @@ export default function Menu() {
             >
               Logout
             </Text>
-            <Ionicons name="log-out-outline" size={24} />
+            <Ionicons name="log-out-outline" size={20} />
           </View>
         </TouchableOpacity>
       </View>
