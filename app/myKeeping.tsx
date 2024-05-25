@@ -6,9 +6,10 @@ import { useTrips } from "@/contexts/tripsContext";
 import { bookingApi } from "@/services/booking-api";
 import { BookingOnKeepingInterface } from "@/interfaces/booking";
 import { router } from "expo-router";
+import { BOOKING_STATUS } from "@/constants/Status";
 
 const MyKeeping = () => {
-  const { tripState, onEndTrip } = useTrips();
+  const { tripState, onEndTrip, onStartTrip } = useTrips();
   const [trip, setTrip] = useState<BookingOnKeepingInterface>();
 
   const findTripById = async () => {
@@ -17,6 +18,25 @@ const MyKeeping = () => {
       if (res.status === 200) {
         setTrip(res.data);
       }
+    }
+  };
+
+  const handleCreateKeeping = async () => {
+    if (tripState && trip) {
+      const res = await bookingApi.startFromKeeping(tripState?.bookingId);
+      if (res.status === 200) {
+        console.log("res.status", res.data);
+        if (onStartTrip !== undefined) {
+          onStartTrip(
+            res.data._id,
+            res.data.cyclingId,
+            res.data.startStation,
+            BOOKING_STATUS.ACTIVE
+          );
+        }
+        Alert.alert("Bắt đầu chuyến đi thành công");
+        router.push("/myTrip");
+      } else Alert.alert("Bắt đầu chuyến đi thất bại", res.data.error);
     }
   };
 
@@ -51,7 +71,7 @@ const MyKeeping = () => {
         }}
       >
         <TouchableOpacity
-          // onPress={() => handleCreateKeeping()}
+          onPress={() => handleCreateKeeping()}
           activeOpacity={0.8}
           style={{
             padding: 16,

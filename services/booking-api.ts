@@ -36,4 +36,7 @@ export const bookingApi = {
   cancelKeeping(bookingId: string, category: string) {
     return axiosClient.post(`/booking/cancel`, { bookingId, category });
   },
+  startFromKeeping(bookingId: string) {
+    return axiosClient.post(`/booking/start`, { bookingId });
+  },
 };
