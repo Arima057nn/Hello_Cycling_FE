@@ -23,6 +23,7 @@ import { ModalInterface } from "@/interfaces/modal";
 import IsLoadingModal from "@/components/isLoadingModal";
 import Modal from "@/components/modal";
 import AnswerModal from "@/components/answerModal";
+import RadioTicket from "@/components/radioTicket";
 
 const Cycling = () => {
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,8 @@ const Cycling = () => {
     description: "",
   });
   const [cycling, setCycling] = useState<CyclingStationInterface>();
-  const [ticket, setTicket] = useState<TicketInterface>();
+  const [tickets, setTickets] = useState<TicketInterface[]>([]);
+  const [checkedticket, setCheckedTicket] = useState("");
   const { onStartTrip } = useTrips();
   const { code, cyclingId, stationId } = useLocalSearchParams<{
     code: string;
@@ -51,17 +53,17 @@ const Cycling = () => {
   };
   const selectTicketToUse = async () => {
     const res = await ticketApi.selectTicket(cyclingId);
-    setTicket(res.data);
+    if (res.status === 200) setTickets(res.data);
   };
 
   const handleBooking = async () => {
-    if (cycling && ticket) {
+    if (cycling && checkedticket) {
       setIsShow(false);
       setLoading(true);
       const res = await bookingApi.createBooking(
         cyclingId,
         stationId,
-        ticket._id
+        checkedticket
       );
       setLoading(false);
       if (res.status === 200) {
@@ -86,19 +88,22 @@ const Cycling = () => {
           description: res.data.error,
         });
     } else {
+      setLoading(true);
+      setIsShow(false);
+      setLoading(false);
       setModalContent({
         isOpen: true,
         title: "Lỗi",
-        description: "Đã xảy ra lỗi, vui lòng thử lại sau",
+        description: "Vui lòng chọn vé trước khi đặt xe",
       });
     }
   };
   const handleCreateKeeping = async () => {
-    if (cycling && ticket) {
+    if (cycling && checkedticket) {
       const res = await bookingApi.createKeeping(
         cyclingId,
         stationId,
-        ticket._id
+        checkedticket
       );
       if (res.status === 200) {
         if (onStartTrip) {
@@ -113,7 +118,7 @@ const Cycling = () => {
         router.push("/myKeeping");
       } else Alert.alert("Đặt xe thất bại", res.data.error);
     } else {
-      Alert.alert("Đã xảy ra lỗi, vui lòng thử lại sau");
+      Alert.alert("Vui lòng chọn vé trước khi đặt xe");
     }
   };
   return (
@@ -261,7 +266,11 @@ const Cycling = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={{ color: Colors.dark }}>Ve su dung : {ticket?.name}</Text>
+        <RadioTicket
+          options={tickets}
+          onChange={setCheckedTicket}
+          checkedValue={checkedticket}
+        />
       </Animated.ScrollView>
       <Animated.View style={defaultStyles.footer}>
         <View
