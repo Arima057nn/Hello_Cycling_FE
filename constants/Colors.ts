@@ -2,8 +2,9 @@ export default {
   primary: "#FF385C",
   grey: "#5E5D5E",
   dark: "#1A1A1A",
-  light: "#FFFFFF",
-  Gray100: "#F3F4F6",
+  light: "#FEFEFE",
+  Gray100: "#F3F4F6", //F3F4F6
+  Gray200: "#E5E7EB",
   Gray300: "#d1d5db",
   Gray400: "#9ca3af",
   Gray600: "#4b5563",

@@ -19,11 +19,11 @@ const RadioTicket = ({ options, onChange, checkedValue }: PROPS) => {
           <TouchableOpacity
             onPress={() => onChange(option._id)}
             key={option._id}
-            activeOpacity={0.5}
+            activeOpacity={0.8}
             style={active ? [styles.radio, styles.activeRadio] : styles.radio}
           >
             <Ionicons
-              name={active ? "radio-button-on" : "radio-button-off"}
+              name={active ? "checkmark-circle" : "radio-button-off"}
               size={20}
               style={active ? styles.iconActive : styles.icon}
             />
@@ -40,21 +40,23 @@ export default RadioTicket;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    padding: 16,
+    paddingHorizontal: 28,
+    paddingVertical: 8,
   },
   radio: {
-    height: 60,
+    height: 48,
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: Colors.Gray300,
     backgroundColor: Colors.Gray100,
   },
   activeRadio: {
+    borderWidth: 2,
     backgroundColor: Colors.yellow,
     borderColor: Colors.secondary,
   },
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     color: Colors.Gray600,
   },
   iconActive: {
-    color: Colors.secondary,
+    color: Colors.blue,
   },
   activeText: {
     color: Colors.secondary,

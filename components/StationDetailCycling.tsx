@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 2,
     marginBottom: 16,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.light,
   },
   code: {
     fontSize: 12,
@@ -244,6 +244,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light,
     borderRadius: 4,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: Colors.Gray200,
   },
   cyclingImage: {
     width: 100,

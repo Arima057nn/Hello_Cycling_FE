@@ -24,6 +24,7 @@ import IsLoadingModal from "@/components/isLoadingModal";
 import Modal from "@/components/modal";
 import AnswerModal from "@/components/answerModal";
 import RadioTicket from "@/components/radioTicket";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Cycling = () => {
   const [loading, setLoading] = useState(false);
@@ -151,127 +152,130 @@ const Cycling = () => {
           <Text style={defaultStyles.textOK}>OK</Text>
         </TouchableOpacity>
       </Modal>
-      <Animated.ScrollView>
-        <View style={styles.infoContainer}>
-          <Animated.Image
-            source={{
-              uri: cycling?.stationId.imgae,
-            }}
-            style={styles.imageStation}
-          />
-          <View style={styles.stationContainer}>
-            <Text style={styles.name}>{cycling?.stationId.name}</Text>
-            <Text style={styles.location}>{cycling?.stationId.position}</Text>
+      <Animated.View>
+        <ScrollView style={{ height: 650 }}>
+          <View style={styles.infoContainer}>
+            <Animated.Image
+              source={{
+                uri: cycling?.stationId.imgae,
+              }}
+              style={styles.imageStation}
+            />
+            <View style={styles.stationContainer}>
+              <Text style={styles.name}>{cycling?.stationId.name}</Text>
+              <Text style={styles.location}>{cycling?.stationId.position}</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.cyclingContainer}>
-          <View>
-            <View style={styles.header}>
-              <Ionicons name="bicycle" size={24} />
+          <View style={styles.cyclingContainer}>
+            <View>
+              <View style={styles.header}>
+                <Ionicons name="bicycle" size={24} />
+                <Text
+                  style={{
+                    color: Colors.lightGrey,
+                    fontSize: 16,
+                    fontFamily: "mon",
+                    marginLeft: 8,
+                  }}
+                >
+                  {cycling?.cyclingId.code}
+                </Text>
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 2,
+                  borderBottomColor: Colors.Gray100,
+                  borderRightWidth: 2,
+                  borderRightColor: Colors.Gray100,
+                  borderLeftWidth: 2,
+                  borderLeftColor: Colors.Gray100,
+                  alignItems: "center",
+                }}
+              >
+                <Animated.Image
+                  source={{
+                    uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
+                  }}
+                  style={styles.imageCycling}
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomWidth: 2,
+                  borderBottomColor: Colors.Gray100,
+                  borderRightWidth: 2,
+                  borderRightColor: Colors.Gray100,
+                  borderLeftWidth: 2,
+                  borderLeftColor: Colors.Gray100,
+                  flexDirection: "row",
+                }}
+              >
+                <View
+                  style={{
+                    borderRightWidth: 2,
+                    borderRightColor: Colors.Gray100,
+                    paddingHorizontal: 16,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ fontFamily: "mon-b", fontSize: 16 }}>Giá</Text>
+                </View>
+                <View style={{ flexDirection: "column", flex: 1 }}>
+                  <View>
+                    <Text style={styles.price}>10$ / 30min</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: 2,
+                      borderBottomColor: Colors.Gray100,
+                      borderTopWidth: 2,
+                      borderTopColor: Colors.Gray100,
+                    }}
+                  >
+                    <Text style={styles.price}>+1$ / 15min </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.price}>30$ / 1day</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+          <Text style={styles.title}>Chọn vé sử dụng</Text>
+          <RadioTicket
+            options={tickets}
+            onChange={setCheckedTicket}
+            checkedValue={checkedticket}
+          />
+          <View
+            style={{
+              justifyContent: "center",
+              width: "100%",
+              paddingHorizontal: 24,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => handleCreateKeeping()}
+              activeOpacity={0.8}
+              style={{
+                padding: 16,
+                borderRadius: 12,
+                backgroundColor: Colors.secondary,
+              }}
+            >
               <Text
                 style={{
                   color: Colors.lightGrey,
-                  fontSize: 16,
-                  fontFamily: "mon",
-                  marginLeft: 8,
+                  fontFamily: "mon-sb",
+                  textAlign: "center",
                 }}
               >
-                {cycling?.cyclingId.code}
+                Đặt vé trước 1 giờ
               </Text>
-            </View>
-            <View
-              style={{
-                borderBottomWidth: 2,
-                borderBottomColor: Colors.Gray100,
-                borderRightWidth: 2,
-                borderRightColor: Colors.Gray100,
-                borderLeftWidth: 2,
-                borderLeftColor: Colors.Gray100,
-                alignItems: "center",
-              }}
-            >
-              <Animated.Image
-                source={{
-                  uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
-                }}
-                style={styles.imageCycling}
-              />
-            </View>
-            <View
-              style={{
-                borderBottomWidth: 2,
-                borderBottomColor: Colors.Gray100,
-                borderRightWidth: 2,
-                borderRightColor: Colors.Gray100,
-                borderLeftWidth: 2,
-                borderLeftColor: Colors.Gray100,
-                flexDirection: "row",
-              }}
-            >
-              <View
-                style={{
-                  borderRightWidth: 2,
-                  borderRightColor: Colors.Gray100,
-                  paddingHorizontal: 16,
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ fontFamily: "mon-b", fontSize: 16 }}>Giá</Text>
-              </View>
-              <View style={{ flexDirection: "column", flex: 1 }}>
-                <View>
-                  <Text style={styles.price}>10$ / 30min</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomWidth: 2,
-                    borderBottomColor: Colors.Gray100,
-                    borderTopWidth: 2,
-                    borderTopColor: Colors.Gray100,
-                  }}
-                >
-                  <Text style={styles.price}>+1$ / 15min </Text>
-                </View>
-                <View>
-                  <Text style={styles.price}>30$ / 1day</Text>
-                </View>
-              </View>
-            </View>
+            </TouchableOpacity>
           </View>
-        </View>
-        <View
-          style={{
-            justifyContent: "center",
-            width: "100%",
-            paddingHorizontal: 24,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => handleCreateKeeping()}
-            activeOpacity={0.8}
-            style={{
-              padding: 16,
-              borderRadius: 12,
-              backgroundColor: Colors.secondary,
-            }}
-          >
-            <Text
-              style={{
-                color: Colors.lightGrey,
-                fontFamily: "mon-sb",
-                textAlign: "center",
-              }}
-            >
-              Đặt vé trước 1 giờ
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <RadioTicket
-          options={tickets}
-          onChange={setCheckedTicket}
-          checkedValue={checkedticket}
-        />
-      </Animated.ScrollView>
+        </ScrollView>
+      </Animated.View>
       <Animated.View style={defaultStyles.footer}>
         <View
           style={{
@@ -347,12 +351,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.Gray100,
+    borderBottomColor: Colors.Gray200,
   },
   imageStation: {
     width: 100,
     height: 100,
   },
+
   stationContainer: {
     flexDirection: "column",
     flex: 1,
@@ -409,5 +414,11 @@ const styles = StyleSheet.create({
   footerPrice: {
     fontSize: 16,
     fontFamily: "mon-sb",
+  },
+  title: {
+    marginHorizontal: 16,
+    fontSize: 16,
+    marginTop: 4,
+    fontWeight: "500",
   },
 });
