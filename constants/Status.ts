@@ -39,3 +39,9 @@ export const TRANSACTION_STATUS = {
   SUCCESS: 1,
   FAILED: 2,
 };
+
+export const USER_TICKET_STATUS = {
+  READY: 0,
+  ACTIVE: 1,
+  KEEPING: 2,
+};

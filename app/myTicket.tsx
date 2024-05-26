@@ -19,6 +19,7 @@ import { ModalInterface } from "@/interfaces/modal";
 import Modal from "@/components/modal";
 import IsLoadingModal from "@/components/isLoadingModal";
 import AnswerModal from "@/components/answerModal";
+import { checkUserTicketStatus } from "@/utils/checkUserTicketStatus";
 
 const MyTicket = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -175,6 +176,7 @@ const MyTicket = () => {
                       fontSize: 18,
                       fontWeight: "bold",
                       color: Colors.lightGrey,
+                      marginRight: 8,
                     }}
                   >
                     {ticket.ticketId.name}
@@ -218,7 +220,10 @@ const MyTicket = () => {
                           marginLeft: 4,
                         }}
                       >
-                        Còn {ticket.ticketId.timer - ticket.usage} phút
+                        Còn {ticket.ticketId.timer - ticket.usage} phút -{" "}
+                        <Text style={{ color: Colors.green }}>
+                          {checkUserTicketStatus(ticket.status)}
+                        </Text>
                       </Text>
                     ) : (
                       <Text
