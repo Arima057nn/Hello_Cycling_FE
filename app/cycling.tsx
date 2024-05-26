@@ -55,10 +55,14 @@ const Cycling = () => {
   };
 
   const handleBooking = async () => {
-    if (cycling) {
+    if (cycling && ticket) {
       setIsShow(false);
       setLoading(true);
-      const res = await bookingApi.createBooking(cyclingId, stationId);
+      const res = await bookingApi.createBooking(
+        cyclingId,
+        stationId,
+        ticket._id
+      );
       setLoading(false);
       if (res.status === 200) {
         if (onStartTrip !== undefined) {
