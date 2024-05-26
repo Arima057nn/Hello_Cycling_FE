@@ -20,7 +20,7 @@ const NewUser = () => {
     try {
       const res = await userApi.createName(name);
       Alert.alert("Success", "Name has been set");
-      router.push("/");
+      router.navigate("/");
     } catch (error) {
       console.log("Error setting name", error);
       Alert.alert("Error", "Error setting name");
@@ -74,7 +74,7 @@ const NewUser = () => {
         <View style={styles.actionContainer}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => router.push("/")}
+            onPress={() => router.navigate("/")}
           >
             <Text
               style={{

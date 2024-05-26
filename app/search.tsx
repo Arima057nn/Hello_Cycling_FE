@@ -77,7 +77,7 @@ const Search = () => {
                 activeOpacity={0.4}
                 key={station.station._id}
                 onPress={() =>
-                  router.push({
+                  router.navigate({
                     pathname: "/",
                     params: {
                       latitude: station.station.latitude,

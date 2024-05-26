@@ -146,7 +146,7 @@ export default function Menu() {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => router.push("/(auth)/newUser")}
+          onPress={() => router.navigate("/(auth)/newUser")}
         >
           <View style={styles.actionItem}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>

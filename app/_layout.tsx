@@ -71,11 +71,12 @@ function RootLayoutNav() {
 
   const onShowTrip = () => {
     if (currentPath !== "/myTrip") {
-      if (tripState?.status === BOOKING_STATUS.ACTIVE) router.push("/myTrip");
+      if (tripState?.status === BOOKING_STATUS.ACTIVE)
+        router.navigate("/myTrip");
     }
     if (currentPath !== "/myKeeping") {
       if (tripState?.status === BOOKING_STATUS.KEEPING)
-        router.push("/myKeeping");
+        router.navigate("/myKeeping");
     }
   };
 

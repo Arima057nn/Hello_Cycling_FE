@@ -42,10 +42,10 @@ const Register = () => {
       const user = userCredential?.user;
       if (userCredential?.additionalUserInfo?.isNewUser) {
         register();
-        router.push("/(auth)/newUser");
+        router.navigate("/(auth)/newUser");
       } else {
         console.log("User credential", userCredential);
-        router.push("/");
+        router.navigate("/");
       }
     } catch (error) {
       console.log("Invalid code", error);
