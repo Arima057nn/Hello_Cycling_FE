@@ -8,11 +8,10 @@ export const bookingApi = {
       ticketId,
     });
   },
-  createTripDetail(bookingId: string, endStation: string, status: number) {
+  createTripDetail(bookingId: string, endStation: string) {
     return axiosClient.post(`/booking/tripDetail`, {
       bookingId,
       endStation,
-      status,
     });
   },
   getTripDetail(bookingId: string) {
@@ -39,5 +38,8 @@ export const bookingApi = {
   },
   startFromKeeping(bookingId: string) {
     return axiosClient.post(`/booking/start`, { bookingId });
+  },
+  getTripsCurrent() {
+    return axiosClient.get(`/booking/trips`);
   },
 };

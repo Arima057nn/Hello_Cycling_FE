@@ -162,6 +162,22 @@ export default function Menu() {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
+          onPress={() => router.push("/trips")}
+        >
+          <View style={styles.actionItem}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="card-outline" size={20} />
+              <Text
+                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+              >
+                Trips
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
           onPress={() => router.push("/payment")}
         >
           <View style={styles.actionItem}>

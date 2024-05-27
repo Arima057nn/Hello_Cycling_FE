@@ -8,15 +8,13 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { stationApi } from "@/services/station-api";
 import { CyclingStationInterface } from "@/interfaces/station";
 import Animated from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { defaultStyles } from "@/constants/Styles";
 import { bookingApi } from "@/services/booking-api";
-import { useTrips } from "@/contexts/tripsContext";
-import { BOOKING_STATUS } from "@/constants/Status";
 import { ticketApi } from "@/services/ticket-api";
 import { TicketInterface } from "@/interfaces/ticket";
 import { ModalInterface } from "@/interfaces/modal";
@@ -37,7 +35,6 @@ const Cycling = () => {
   const [cycling, setCycling] = useState<CyclingStationInterface>();
   const [tickets, setTickets] = useState<TicketInterface[]>([]);
   const [checkedticket, setCheckedTicket] = useState("");
-  const { onStartTrip } = useTrips();
   const { code, cyclingId, stationId } = useLocalSearchParams<{
     code: string;
     cyclingId: string;
@@ -68,20 +65,11 @@ const Cycling = () => {
       );
       setLoading(false);
       if (res.status === 200) {
-        if (onStartTrip !== undefined) {
-          onStartTrip(
-            res.data._id,
-            cyclingId,
-            cycling.stationId._id,
-            BOOKING_STATUS.ACTIVE
-          );
-        }
         setModalContent({
           isOpen: true,
           title: "Thành công",
           description: "Chuyến đi đã bắt đầu",
         });
-        router.push("/myTrip");
       } else
         setModalContent({
           isOpen: true,
@@ -107,16 +95,7 @@ const Cycling = () => {
         checkedticket
       );
       if (res.status === 200) {
-        if (onStartTrip) {
-          onStartTrip(
-            res.data._id,
-            cyclingId,
-            cycling.stationId._id,
-            res.data.status
-          );
-        }
         Alert.alert("Đặt giữ xe thành công");
-        router.push("/myKeeping");
       } else Alert.alert("Đặt xe thất bại", res.data.error);
     } else {
       Alert.alert("Vui lòng chọn vé trước khi đặt xe");

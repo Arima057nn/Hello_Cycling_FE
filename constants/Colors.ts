@@ -3,7 +3,7 @@ export default {
   grey: "#5E5D5E",
   dark: "#1A1A1A",
   light: "#FEFEFE",
-  Gray100: "#F3F4F6", //F3F4F6
+  Gray100: "#F3F4F6", //F2F2F2
   Gray200: "#E5E7EB",
   Gray300: "#d1d5db",
   Gray400: "#9ca3af",
@@ -14,4 +14,5 @@ export default {
   yellow: "#FEF8E6",
   purple: "#836FFF",
   green: "#22c55e",
+  red: "#EE4E4E",
 };
