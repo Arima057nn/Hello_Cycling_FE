@@ -4,7 +4,6 @@ import {
   StatusBar,
   Text,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -29,6 +28,7 @@ const Cycling = () => {
   const { tripState, onTrips } = useTrips();
   const [loading, setLoading] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [isShowKeep, setIsShowKeep] = useState(false);
   const [modalContent, setModalContent] = useState<ModalInterface>({
     isOpen: false,
     title: "",
@@ -92,17 +92,37 @@ const Cycling = () => {
   };
   const handleCreateKeeping = async () => {
     if (cycling && checkedticket) {
+      setIsShowKeep(false);
+      setLoading(true);
       const res = await bookingApi.createKeeping(
         cyclingId,
         stationId,
         checkedticket
       );
+      setLoading(false);
       if (res.status === 200) {
-        Alert.alert("Đặt giữ xe thành công");
+        setModalContent({
+          isOpen: true,
+          title: "Thành công",
+          description: "Đặt giữ xe thành công",
+        });
         if (!tripState) onTrips && onTrips(true);
-      } else Alert.alert("Đặt xe thất bại", res.data.error);
+      } else {
+        setModalContent({
+          isOpen: true,
+          title: "Thất bại",
+          description: res.data.error,
+        });
+      }
     } else {
-      Alert.alert("Vui lòng chọn vé trước khi đặt xe");
+      setLoading(true);
+      setIsShowKeep(false);
+      setLoading(false);
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: "Vui lòng chọn vé trước khi đặt xe",
+      });
     }
   };
   return (
@@ -238,7 +258,7 @@ const Cycling = () => {
             }}
           >
             <TouchableOpacity
-              onPress={() => handleCreateKeeping()}
+              onPress={() => setIsShowKeep(true)}
               activeOpacity={0.8}
               style={{
                 padding: 16,
@@ -312,6 +332,30 @@ const Cycling = () => {
             </View>
             <View style={defaultStyles.containerTextOK}>
               <TouchableOpacity onPress={handleBooking}>
+                <Text style={defaultStyles.textOK}>Đồng ý</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </AnswerModal>
+        <AnswerModal
+          title="Giữ xe"
+          description="Bắt đầu giữ xe trong 1 giờ ?"
+          isOpen={isShowKeep}
+          onRequestClose={() => setIsShowKeep(false)}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={defaultStyles.containerTextOK}>
+              <TouchableOpacity onPress={() => setIsShowKeep(false)}>
+                <Text style={{ fontSize: 16 }}>Hủy bỏ</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={defaultStyles.containerTextOK}>
+              <TouchableOpacity onPress={handleCreateKeeping}>
                 <Text style={defaultStyles.textOK}>Đồng ý</Text>
               </TouchableOpacity>
             </View>
