@@ -39,8 +39,8 @@ export interface TripHistoryInterface {
 }
 
 export interface TripHistory {
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface BookingOnKeepingInterface {

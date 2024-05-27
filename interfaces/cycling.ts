@@ -1,3 +1,5 @@
+import { CoordinateInterface } from "./coordinate";
+
 export interface CyclingInterface {
   _id: string;
   name: string;
@@ -7,6 +9,9 @@ export interface CyclingInterface {
   category: CyclingTypeInterface;
   createdAt: string;
   updatedAt: string;
+  latitude: number;
+  longitude: number;
+  coordinate: CoordinateInterface[];
   __v: number;
 }
 

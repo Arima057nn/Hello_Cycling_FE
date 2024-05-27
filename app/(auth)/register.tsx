@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   btnAuth: {
-    backgroundColor: Colors.yellow,
+    backgroundColor: Colors.secondary,
     borderRadius: 16,
     paddingVertical: 16,
     marginVertical: 24,
