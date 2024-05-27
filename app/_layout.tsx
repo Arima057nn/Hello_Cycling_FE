@@ -66,36 +66,18 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { tripState, onStartTrip } = useTrips();
+  const { tripState, onTrips, noTrip } = useTrips();
   const currentPath = usePathname();
 
-  const onShowTrip = () => {
-    if (currentPath !== "/myTrip") {
-      if (tripState?.status === BOOKING_STATUS.ACTIVE)
-        router.navigate("/myTrip");
-    }
-    if (currentPath !== "/myKeeping") {
-      if (tripState?.status === BOOKING_STATUS.KEEPING)
-        router.navigate("/myKeeping");
-    }
+  const getTripsCurrent = async () => {
+    const res = await bookingApi.getTripsCurrent();
+    if (res.status === 200 && res.data.length > 0) onTrips && onTrips(true);
+    else noTrip && noTrip();
   };
 
   useEffect(() => {
-    findTrip();
+    getTripsCurrent();
   }, []);
-  const findTrip = async () => {
-    const res = await bookingApi.findTrip();
-    if (res?.status === 200) {
-      if (onStartTrip) {
-        onStartTrip(
-          res.data._id,
-          res.data.cyclingId,
-          res.data.startStation,
-          res.data.status
-        );
-      }
-    }
-  };
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
@@ -133,34 +115,7 @@ function RootLayoutNav() {
                 headerTintColor: Colors.dark,
               }}
             />
-            <Stack.Screen
-              name="myTrip"
-              options={{
-                presentation: "modal",
-                headerShown: true,
-                title: "My Trip",
-                headerBackTitle: "Back",
 
-                headerStyle: {
-                  backgroundColor: Colors.secondary,
-                },
-                headerTintColor: Colors.dark,
-              }}
-            />
-            <Stack.Screen
-              name="myKeeping"
-              options={{
-                presentation: "modal",
-                headerShown: true,
-                title: "My keeping",
-                headerBackTitle: "Back",
-
-                headerStyle: {
-                  backgroundColor: Colors.secondary,
-                },
-                headerTintColor: Colors.dark,
-              }}
-            />
             <Stack.Screen
               name="(auth)/newUser"
               options={{
@@ -224,6 +179,18 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="trips"
+              options={{
+                headerShown: true,
+                title: "Trips",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
               name="payment"
               options={{
                 headerShown: true,
@@ -236,37 +203,19 @@ function RootLayoutNav() {
               }}
             />
           </Stack>
-          {!currentPath.includes("/myTrip") &&
-            !currentPath.includes("/myKeeping") &&
-            tripState?.onTrip && (
-              <View style={styles.absoluteView}>
-                {tripState?.status === BOOKING_STATUS.ACTIVE ? (
-                  <TouchableOpacity
-                    style={styles.btn}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                      onShowTrip();
-                    }}
-                  >
-                    <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
-                      My Trip
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.btn}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                      onShowTrip();
-                    }}
-                  >
-                    <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>
-                      My Keeping
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
+          {!currentPath.includes("/trips") && tripState && (
+            <View style={styles.absoluteView}>
+              <TouchableOpacity
+                style={styles.btn}
+                activeOpacity={0.6}
+                onPress={() => router.navigate("/trips")}
+              >
+                <Text style={{ fontFamily: "mon-sb", color: Colors.light }}>
+                  On Trips
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </ThemeProvider>

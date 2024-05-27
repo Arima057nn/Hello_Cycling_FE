@@ -5,13 +5,18 @@ import { bookingApi } from "@/services/booking-api";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { BOOKING_STATUS } from "@/constants/Status";
+import { useTrips } from "@/contexts/tripsContext";
 
 const Trips = () => {
   const [trips, setTrips] = useState<TripInterface[]>([]);
+  const { noTrip } = useTrips();
 
   const getTripsCurrent = async () => {
     const res = await bookingApi.getTripsCurrent();
-    if (res.status === 200) setTrips(res.data);
+    if (res.status === 200) {
+      setTrips(res.data);
+      if (res.data.length === 0) noTrip && noTrip();
+    }
   };
 
   useEffect(() => {

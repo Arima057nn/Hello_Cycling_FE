@@ -23,8 +23,10 @@ import Modal from "@/components/modal";
 import AnswerModal from "@/components/answerModal";
 import RadioTicket from "@/components/radioTicket";
 import { ScrollView } from "react-native-gesture-handler";
+import { useTrips } from "@/contexts/tripsContext";
 
 const Cycling = () => {
+  const { tripState, onTrips } = useTrips();
   const [loading, setLoading] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [modalContent, setModalContent] = useState<ModalInterface>({
@@ -70,6 +72,7 @@ const Cycling = () => {
           title: "Thành công",
           description: "Chuyến đi đã bắt đầu",
         });
+        if (!tripState) onTrips && onTrips(true);
       } else
         setModalContent({
           isOpen: true,
@@ -96,6 +99,7 @@ const Cycling = () => {
       );
       if (res.status === 200) {
         Alert.alert("Đặt giữ xe thành công");
+        if (!tripState) onTrips && onTrips(true);
       } else Alert.alert("Đặt xe thất bại", res.data.error);
     } else {
       Alert.alert("Vui lòng chọn vé trước khi đặt xe");
