@@ -39,6 +39,7 @@ export default function TabLayout() {
         name="qrcode"
         options={{
           title: "Qrcode",
+          headerShown: false,
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="qr-code" size={size} color={color} />
           ),

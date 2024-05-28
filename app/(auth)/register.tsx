@@ -45,7 +45,7 @@ const Register = () => {
         router.navigate("/(auth)/newUser");
       } else {
         console.log("User credential", userCredential);
-        router.navigate("/");
+        router.back();
       }
     } catch (error) {
       console.log("Invalid code", error);

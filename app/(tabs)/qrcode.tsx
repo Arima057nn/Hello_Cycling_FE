@@ -1,3 +1,4 @@
+import IsLoadingModal from "@/components/isLoadingModal";
 import { cyclingApi } from "@/services/cycling-api";
 import { CameraView, useCameraPermissions } from "expo-camera/next";
 import { useRouter, useNavigation } from "expo-router";
@@ -10,6 +11,7 @@ export default function Qrcode() {
   const [processing, setProcessing] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (permission === null) {
@@ -30,7 +32,9 @@ export default function Qrcode() {
     setProcessing(true);
 
     try {
+      setLoading(true);
       const res = await cyclingApi.findCycling(data);
+      setLoading(false);
       if (res.status !== 200) {
         Alert.alert("Not found", "", [
           {
@@ -92,6 +96,7 @@ export default function Qrcode() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" animated={true} />
+      {loading && <IsLoadingModal />}
       <CameraView
         style={styles.camera}
         barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
