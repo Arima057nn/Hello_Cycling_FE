@@ -45,3 +45,5 @@ export const USER_TICKET_STATUS = {
   ACTIVE: 1,
   KEEPING: 2,
 };
+
+export const FINISH_DISTANCE = 15;

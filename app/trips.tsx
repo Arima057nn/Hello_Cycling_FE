@@ -10,13 +10,14 @@ import { TripInterface } from "@/interfaces/booking";
 import { bookingApi } from "@/services/booking-api";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { BOOKING_STATUS } from "@/constants/Status";
+import { BOOKING_STATUS, FINISH_DISTANCE } from "@/constants/Status";
 import { useTrips } from "@/contexts/tripsContext";
 import IsLoadingModal from "@/components/isLoadingModal";
 import Modal from "@/components/modal";
 import { ModalInterface } from "@/interfaces/modal";
 import { defaultStyles } from "@/constants/Styles";
 import AnswerModal from "@/components/answerModal";
+import { stationApi } from "@/services/station-api";
 
 const Trips = () => {
   const [loading, setLoading] = useState(false);
@@ -43,33 +44,58 @@ const Trips = () => {
   }, []);
 
   const handleFinishTrip = async (trip: TripInterface) => {
-    console.log("trip", trip.cyclingId.code);
-    if (trip.status === BOOKING_STATUS.ACTIVE) {
-      setLoading(true);
-      const res = await bookingApi.createTripDetail(
-        trip._id,
-        "65fbeeed40b7773e46da92c1"
-      );
+    setLoading(true);
+    let station;
+    const res = await stationApi.getCountOfAllCyclingAtStation(
+      `${trip.cyclingId.latitude},${trip.cyclingId.longitude}`
+    );
+    if (res.status === 200 && res.data.length > 0) {
+      station = res.data[0];
+    } else {
       setLoading(false);
-      if (res.status === 200) {
-        setModalContent({
-          isOpen: true,
-          title: "Thành công",
-          description: "Kết thúc chuyến đi thành công",
-        });
-        getTripsCurrent();
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: res.data.error,
+      });
+      return;
+    }
+    console.log("trip", trip.cyclingId.code);
+    if (station.value < FINISH_DISTANCE) {
+      if (trip.status === BOOKING_STATUS.ACTIVE) {
+        const res = await bookingApi.createTripDetail(
+          trip._id,
+          station.station._id
+        );
+        setLoading(false);
+        if (res.status === 200) {
+          setModalContent({
+            isOpen: true,
+            title: "Thành công",
+            description: "Kết thúc chuyến đi thành công",
+          });
+          getTripsCurrent();
+        } else {
+          setModalContent({
+            isOpen: true,
+            title: "Thất bại",
+            description: res.data.error,
+          });
+        }
       } else {
         setModalContent({
           isOpen: true,
           title: "Thất bại",
-          description: res.data.error,
+          description: "Chuyến đi không tồn tại hoặc đã kết thúc",
         });
       }
     } else {
+      setSelectedTrip(null);
+      setLoading(false);
       setModalContent({
         isOpen: true,
         title: "Thất bại",
-        description: "Chuyến đi không tồn tại hoặc đã kết thúc",
+        description: "Hãy di chuyển xe tới trạm để kết thúc chuyến đi",
       });
     }
   };
