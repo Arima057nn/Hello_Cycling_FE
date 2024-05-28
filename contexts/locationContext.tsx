@@ -20,7 +20,9 @@ export const LocationProvider = ({ children }: any) => {
   const [coordinate, setCoordinate] = useState<CoordinateInterface>();
 
   useEffect(() => {
-    startWatchingLocation();
+    console.log("16");
+
+    getLocationPermission();
   }, []);
 
   async function getLocationPermission() {
