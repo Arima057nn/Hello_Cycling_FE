@@ -1,5 +1,12 @@
 import Colors from "@/constants/Colors";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
@@ -39,157 +46,241 @@ export default function Menu() {
     }
   };
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={{
-          height: "auto",
-          maxHeight: 180,
-        }}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={() => pullMe()} />
-        }
-      >
-        <View style={styles.accountUser}>
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <View style={styles.succesIcon}>
-              <Ionicons name="person-circle" size={70} color={Colors.light} />
-            </View>
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={styles.accountName}>{user?.name}</Text>
-            <Text style={styles.accountName}>{user?.balance} điểm</Text>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-              borderBottomWidth: 1,
-              borderBottomColor: Colors.Gray300,
-            }}
-          ></View>
-          <TouchableOpacity>
+    <ImageBackground
+      source={require("@/assets/images/bg.png")}
+      style={styles.image}
+    >
+      <View style={styles.container}>
+        <ScrollView
+          style={{
+            height: "auto",
+            maxHeight: 280,
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={() => pullMe()} />
+          }
+        >
+          <View style={styles.accountUser}>
             <View
               style={{
+                width: "100%",
                 flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 14, fontFamily: "mon" }}>
-                Thông tin chi tiết
-              </Text>
+              <View style={styles.succesIcon}>
+                <Image
+                  style={{ width: 72, height: 72, borderRadius: 200 }}
+                  source={require("@/assets/images/icon.png")}
+                />
+              </View>
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={styles.accountName}>{user?.name}</Text>
+              <Text style={styles.accountName}>{user?.phone}</Text>
+            </View>
+            <View
+              style={{
+                marginVertical: 8,
+                borderBottomWidth: 1,
+                borderBottomColor: Colors.Gray300,
+              }}
+            ></View>
+            <View
+              style={{
+                paddingVertical: 8,
+                flexDirection: "row",
+                justifyContent: "space-around",
+                width: "100%",
+              }}
+            >
+              <View style={styles.point}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    fontFamily: "mon-sb",
+                  }}
+                >
+                  {user?.balance}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: Colors.Gray400,
+                    fontFamily: "mon-sb",
+                  }}
+                >
+                  Ví
+                </Text>
+              </View>
+              <View style={styles.point}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    fontFamily: "mon-sb",
+                  }}
+                >
+                  {user?.point}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: Colors.Gray400,
+                    fontFamily: "mon-sb",
+                  }}
+                >
+                  Tích lũy
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity onPress={() => router.navigate("/profile")}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  marginTop: 6,
+                }}
+              >
+                <Text style={{ fontSize: 14, fontFamily: "mon" }}>
+                  Thông tin chi tiết
+                </Text>
+                <Ionicons name="chevron-forward" size={20} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        <View style={styles.actionContainer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/myTicket")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="ticket-outline" size={20} />
+                <Text
+                  style={{
+                    marginLeft: 20,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: Colors.grey,
+                  }}
+                >
+                  Vé của tôi
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/history")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="timer-outline" size={20} />
+                <Text
+                  style={{
+                    marginLeft: 20,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: Colors.grey,
+                  }}
+                >
+                  Lịch sử chuyến đi
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/transaction")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="card-outline" size={20} />
+                <Text
+                  style={{
+                    marginLeft: 20,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: Colors.grey,
+                  }}
+                >
+                  Lịch sử giao dịch
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.navigate("/(auth)/newUser")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="card-outline" size={20} />
+                <Text
+                  style={{
+                    marginLeft: 20,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: Colors.grey,
+                  }}
+                >
+                  Profile
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/payment")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="card-outline" size={20} />
+                <Text
+                  style={{
+                    marginLeft: 20,
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: Colors.grey,
+                  }}
+                >
+                  Nạp điểm
+                </Text>
+              </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-      <View style={styles.actionContainer}>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.push("/myTicket")}
-        >
-          <View style={styles.actionItem}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="ticket-outline" size={20} />
+        <View style={{ marginTop: 20 }}>
+          <TouchableOpacity activeOpacity={0.5} onPress={handleLogout}>
+            <View style={styles.logoutContainer}>
               <Text
-                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
+                style={{
+                  textAlign: "center",
+                  fontSize: 16,
+                  marginRight: 4,
+                  fontWeight: "500",
+                  color: Colors.grey,
+                }}
               >
-                Vé của tôi
+                Đăng xuất
               </Text>
+              <Ionicons name="log-out-outline" size={20} />
             </View>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.push("/history")}
-        >
-          <View style={styles.actionItem}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="timer-outline" size={20} />
-              <Text
-                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
-              >
-                Lịch sử chuyến đi
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.push("/transaction")}
-        >
-          <View style={styles.actionItem}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="card-outline" size={20} />
-              <Text
-                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
-              >
-                Lịch sử giao dịch
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.navigate("/(auth)/newUser")}
-        >
-          <View style={styles.actionItem}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="card-outline" size={20} />
-              <Text
-                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
-              >
-                Profile
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => router.push("/payment")}
-        >
-          <View style={styles.actionItem}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="card-outline" size={20} />
-              <Text
-                style={{ marginLeft: 20, fontFamily: "mon-sb", fontSize: 14 }}
-              >
-                Nạp điểm
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={{ marginTop: 20 }}>
-        <TouchableOpacity activeOpacity={0.5} onPress={handleLogout}>
-          <View style={styles.logoutContainer}>
-            <Text
-              style={{
-                textAlign: "center",
-                fontFamily: "mon-sb",
-                fontSize: 16,
-                marginRight: 4,
-              }}
-            >
-              Đăng xuất
-            </Text>
-            <Ionicons name="log-out-outline" size={20} />
-          </View>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -197,8 +288,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: Colors.secondary,
     paddingTop: 48,
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
   },
   title: {
     fontSize: 20,
@@ -212,9 +307,10 @@ const styles = StyleSheet.create({
     marginTop: 44,
   },
   accountName: {
-    fontSize: 16,
-    fontFamily: "mon-sb",
+    fontSize: 20,
     marginTop: 28,
+    color: Colors.grey,
+    fontWeight: "bold",
   },
   accountId: {
     fontSize: 18,
@@ -247,11 +343,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.purple,
     width: 80,
     height: 80,
     borderRadius: 200,
     borderWidth: 4,
     borderColor: Colors.light,
+  },
+  point: {
+    borderRadius: 8,
+    width: "40%",
+    height: 64,
+    backgroundColor: Colors.Gray100,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
   },
 });

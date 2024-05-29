@@ -46,4 +46,10 @@ export const USER_TICKET_STATUS = {
   KEEPING: 2,
 };
 
+export const USER_GENDER = {
+  MALE: 0,
+  FEMALE: 1,
+  OTHER: 2,
+};
+
 export const FINISH_DISTANCE = 100;

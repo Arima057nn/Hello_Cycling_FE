@@ -7,13 +7,6 @@ import { TripDetailInterface } from "@/interfaces/booking";
 import { convertDate } from "@/utils/convertDate";
 import { calculateDistanceTrip } from "@/utils/calculateDistanceTrip";
 
-const INITIAL_REGION = {
-  latitude: 21.03,
-  longitude: 105.78,
-  latitudeDelta: 0.02,
-  longitudeDelta: 0.02,
-};
-
 const HistoryDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [tripDetail, setTripDetail] = useState<TripDetailInterface>();

@@ -186,6 +186,18 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="profile"
+              options={{
+                headerShown: true,
+                title: "Thông tin cá nhân",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
+            <Stack.Screen
               name="historyDetail"
               options={{
                 headerShown: false,
