@@ -209,19 +209,21 @@ function RootLayoutNav() {
               }}
             />
           </Stack>
-          {!currentPath.includes("/trips") && tripState && (
-            <View style={styles.absoluteView}>
-              <TouchableOpacity
-                style={styles.btn}
-                activeOpacity={0.6}
-                onPress={() => router.navigate("/trips")}
-              >
-                <Text style={{ fontFamily: "mon-sb", color: Colors.light }}>
-                  On Trips
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {!currentPath.includes("/trips") &&
+            !currentPath.includes("/cycling") &&
+            tripState && (
+              <View style={styles.absoluteView}>
+                <TouchableOpacity
+                  style={styles.btn}
+                  activeOpacity={0.6}
+                  onPress={() => router.navigate("/trips")}
+                >
+                  <Text style={{ fontFamily: "mon-sb", color: Colors.light }}>
+                    On Trips
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </ThemeProvider>

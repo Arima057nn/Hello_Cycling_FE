@@ -23,8 +23,11 @@ import AnswerModal from "@/components/answerModal";
 import RadioTicket from "@/components/radioTicket";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTrips } from "@/contexts/tripsContext";
+import { CYCLING_TYPE } from "@/constants/Status";
+import { useAuth } from "@/contexts/authContext";
 
 const Cycling = () => {
+  const { userLogged } = useAuth();
   const { tripState, onTrips } = useTrips();
   const [loading, setLoading] = useState(false);
   const [isShow, setIsShow] = useState(false);
@@ -225,7 +228,14 @@ const Cycling = () => {
                 </View>
                 <View style={{ flexDirection: "column", flex: 1 }}>
                   <View>
-                    <Text style={styles.price}>10$ / 30min</Text>
+                    <Text style={styles.price}>
+                      Vé lượt -{" "}
+                      {cycling?.cyclingId.category.value ===
+                      CYCLING_TYPE[1].type
+                        ? "10000 "
+                        : "20000 "}
+                      đ / 60phút
+                    </Text>
                   </View>
                   <View
                     style={{
@@ -235,10 +245,38 @@ const Cycling = () => {
                       borderTopColor: Colors.Gray100,
                     }}
                   >
-                    <Text style={styles.price}>+1$ / 15min </Text>
+                    <Text style={styles.price}>
+                      Vé ngày - {""}
+                      {cycling?.cyclingId.category.value ===
+                      CYCLING_TYPE[1].type
+                        ? "50000 "
+                        : "100000 "}
+                      đ / 450phút
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: 2,
+                      borderBottomColor: Colors.Gray100,
+                    }}
+                  >
+                    <Text style={styles.price}>
+                      Vé tháng -{" "}
+                      {cycling?.cyclingId.category.value ===
+                      CYCLING_TYPE[1].type
+                        ? "120000 "
+                        : "240000 "}
+                      đ / 1350 phút
+                    </Text>
                   </View>
                   <View>
-                    <Text style={styles.price}>30$ / 1day</Text>
+                    <Text style={styles.price}>
+                      {cycling?.cyclingId.category.value ===
+                      CYCLING_TYPE[1].type
+                        ? "+ 3000 "
+                        : "+ 6000 "}
+                      đ / 15phút tiếp theo
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -261,6 +299,7 @@ const Cycling = () => {
               onPress={() => setIsShowKeep(true)}
               activeOpacity={0.8}
               style={{
+                marginTop: 36,
                 padding: 16,
                 borderRadius: 12,
                 backgroundColor: Colors.secondary,
@@ -288,7 +327,30 @@ const Cycling = () => {
           }}
         >
           <View style={styles.footerText}>
-            <Text style={styles.footerPrice}>Bạn đã sẵn sàng chưa?</Text>
+            <View
+              style={{
+                backgroundColor: Colors.purple,
+                padding: 10,
+                borderRadius: 8,
+                marginRight: 4,
+              }}
+            >
+              <Ionicons name="wallet-outline" size={24} color={Colors.light} />
+            </View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 12, color: Colors.Gray400 }}>
+                TK chính
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "500",
+                  fontFamily: "mon-sb",
+                }}
+              >
+                {userLogged?.balance}
+              </Text>
+            </View>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -299,7 +361,7 @@ const Cycling = () => {
               padding: 16,
               borderRadius: 12,
               backgroundColor: Colors.secondary,
-              width: 86,
+              width: 200,
             }}
           >
             <Text
@@ -309,7 +371,7 @@ const Cycling = () => {
                 textAlign: "center",
               }}
             >
-              Đặt xe
+              Đặt xe ngay bây giờ
             </Text>
           </TouchableOpacity>
         </View>
@@ -427,7 +489,7 @@ const styles = StyleSheet.create({
   price: {
     fontFamily: "mon",
     color: Colors.grey,
-    fontSize: 16,
+    fontSize: 14,
     padding: 16,
     textAlign: "center",
   },
@@ -445,7 +507,7 @@ const styles = StyleSheet.create({
   title: {
     marginHorizontal: 16,
     fontSize: 16,
-    marginTop: 4,
+    marginVertical: 4,
     fontWeight: "500",
   },
 });
