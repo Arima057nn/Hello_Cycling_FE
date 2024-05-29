@@ -32,6 +32,20 @@ export interface TripHistoryInterface {
   endStation: string;
   total: number;
   tripHistory: TripHistory[];
+  payment: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  uid: string;
+}
+
+export interface TripDetailInterface {
+  _id: string;
+  bookingId: TripInterface;
+  endStation: StationInterface;
+  total: number;
+  tripHistory: TripHistory[];
+  payment: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

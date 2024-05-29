@@ -202,6 +202,12 @@ function RootLayoutNav() {
                 headerTintColor: Colors.dark,
               }}
             />
+            <Stack.Screen
+              name="completeTrip"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           {!currentPath.includes("/trips") && tripState && (
             <View style={styles.absoluteView}>

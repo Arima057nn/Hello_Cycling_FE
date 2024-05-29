@@ -18,6 +18,7 @@ import { ModalInterface } from "@/interfaces/modal";
 import { defaultStyles } from "@/constants/Styles";
 import AnswerModal from "@/components/answerModal";
 import { stationApi } from "@/services/station-api";
+import { router } from "expo-router";
 
 const Trips = () => {
   const [loading, setLoading] = useState(false);
@@ -60,7 +61,7 @@ const Trips = () => {
       });
       return;
     }
-    console.log("trip", trip.cyclingId.code);
+    console.log("distance", station.value);
     if (station.value < FINISH_DISTANCE) {
       if (trip.status === BOOKING_STATUS.ACTIVE) {
         const res = await bookingApi.createTripDetail(
@@ -75,6 +76,12 @@ const Trips = () => {
             description: "Kết thúc chuyến đi thành công",
           });
           getTripsCurrent();
+          router.push({
+            pathname: "/completeTrip",
+            params: {
+              id: res.data._id,
+            },
+          });
         } else {
           setModalContent({
             isOpen: true,
