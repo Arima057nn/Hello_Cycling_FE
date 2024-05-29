@@ -65,8 +65,8 @@ const MyTicket = () => {
       getAllTicket();
       setModalContent({
         isOpen: true,
-        title: res.data.message,
-        description: "",
+        title: "Thành công",
+        description: res.data.message,
       });
     } else {
       setModalContent({
