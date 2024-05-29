@@ -185,6 +185,12 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="historyDetail"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           {!currentPath.includes("/trips") &&
             !currentPath.includes("/cycling") &&

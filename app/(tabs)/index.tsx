@@ -119,7 +119,7 @@ export default function Home() {
         <View>
           <TouchableOpacity
             activeOpacity={0.6}
-            style={{ ...styles.locationBtn, bottom: 70 }}
+            style={{ ...styles.locationBtn, bottom: 200 }}
             onPress={() => {
               if (coordinate?.latitude && coordinate?.longitude) {
                 moveToLocation(coordinate.latitude, coordinate.longitude);

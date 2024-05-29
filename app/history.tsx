@@ -13,6 +13,7 @@ import Animated from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { TripHistoryInterface } from "@/interfaces/booking";
 import { convertDate } from "@/utils/convertDate";
+import { router } from "expo-router";
 const INITIAL_REGION = {
   latitude: 21.03,
   longitude: 105.78,
@@ -47,7 +48,18 @@ const History = () => {
           <View style={styles.actionContainer}>
             {Array.isArray(history) && history.length > 0 ? (
               history.map((item) => (
-                <TouchableOpacity activeOpacity={0.5} key={item._id}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  key={item._id}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/historyDetail",
+                      params: {
+                        id: item._id,
+                      },
+                    })
+                  }
+                >
                   <View style={styles.actionItem}>
                     <View style={styles.locationIcon}>
                       <Ionicons

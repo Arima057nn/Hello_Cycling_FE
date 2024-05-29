@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
@@ -43,18 +43,29 @@ export default function Menu() {
       <ScrollView
         style={{
           height: "auto",
-          // backgroundColor: Colors.green,
-          maxHeight: 136,
+          maxHeight: 180,
         }}
         refreshControl={
           <RefreshControl refreshing={refresh} onRefresh={() => pullMe()} />
         }
       >
         <View style={styles.accountUser}>
-          <View>
-            <Text style={styles.accountName}>
-              {user?.name} {user?.balance}
-            </Text>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <View style={styles.succesIcon}>
+              <Ionicons name="person-circle" size={70} color={Colors.light} />
+            </View>
+          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={styles.accountName}>{user?.name}</Text>
+            <Text style={styles.accountName}>{user?.balance} điểm</Text>
           </View>
           <View
             style={{
@@ -161,7 +172,7 @@ export default function Menu() {
           </View>
         </TouchableOpacity>
       </View>
-      <View>
+      <View style={{ marginTop: 20 }}>
         <TouchableOpacity activeOpacity={0.5} onPress={handleLogout}>
           <View style={styles.logoutContainer}>
             <Text
@@ -186,7 +197,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: Colors.Gray100,
+    backgroundColor: Colors.secondary,
+    paddingTop: 48,
   },
   title: {
     fontSize: 20,
@@ -195,13 +207,14 @@ const styles = StyleSheet.create({
   accountUser: {
     backgroundColor: Colors.light,
     padding: 16,
-    borderRadius: 2,
+    borderRadius: 8,
     marginVertical: 16,
+    marginTop: 44,
   },
   accountName: {
     fontSize: 16,
     fontFamily: "mon-sb",
-    marginTop: 8,
+    marginTop: 28,
   },
   accountId: {
     fontSize: 18,
@@ -210,7 +223,6 @@ const styles = StyleSheet.create({
   actionContainer: {
     backgroundColor: Colors.light,
     paddingHorizontal: 8,
-
     borderRadius: 4,
   },
   actionItem: {
@@ -223,10 +235,23 @@ const styles = StyleSheet.create({
   },
   logoutContainer: {
     backgroundColor: Colors.light,
-    padding: 8,
+    paddingVertical: 16,
     borderRadius: 4,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  succesIcon: {
+    position: "absolute",
+    top: -56,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.purple,
+    width: 80,
+    height: 80,
+    borderRadius: 200,
+    borderWidth: 4,
+    borderColor: Colors.light,
   },
 });
