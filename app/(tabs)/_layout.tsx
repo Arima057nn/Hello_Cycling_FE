@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -11,27 +11,41 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors.secondary,
-        tabBarInactiveTintColor: "#333",
+        tabBarInactiveTintColor: Colors.Gray500,
         tabBarStyle: {
           backgroundColor: Colors.light,
-          height: 60,
+          height: 64,
           borderTopWidth: StyleSheet.hairlineWidth,
-          borderColor: "#c2c2c2",
+          borderColor: Colors.Gray100,
         },
         tabBarLabelStyle: {
-          fontFamily: "mon-sb",
-          fontSize: 12,
-          marginBottom: 6,
+          fontSize: 13,
+          fontWeight: "500",
+          marginBottom: 10,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Map",
+          title: "Bản đồ",
           headerShown: false,
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="map" size={size} color={color} />
+            <FontAwesome5 name="map-marked" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="search"
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.light,
+          },
+          title: "Trạm xe",
+          headerShown: false,
+          tabBarIcon: ({ size, color }) => (
+            <Entypo name="location" size={size} color={color} />
           ),
         }}
       />
@@ -46,11 +60,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="ticket"
+        options={{
+          title: "Vé",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="ticket" size={size} color={color} />
+          ),
+          headerStyle: {
+            backgroundColor: Colors.secondary,
+          },
+          headerTintColor: Colors.lightGrey,
+        }}
+      />
+      <Tabs.Screen
         name="menu"
         options={{
-          title: "Menu",
+          title: "Tôi",
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="menu" size={size} color={color} />
+            <Ionicons name="person-circle" size={size} color={color} />
           ),
           headerStyle: {
             backgroundColor: Colors.secondary,

@@ -16,7 +16,6 @@ import { LocationProvider } from "@/contexts/locationContext";
 import { TripsProvider, useTrips } from "@/contexts/tripsContext";
 import { bookingApi } from "@/services/booking-api";
 import { AuthProvider } from "@/contexts/authContext";
-import { BOOKING_STATUS } from "@/constants/Status";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -85,17 +84,6 @@ function RootLayoutNav() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
-              name="search"
-              options={{
-                headerShown: false,
-                headerBackTitle: "Back",
-                headerStyle: {
-                  backgroundColor: Colors.light,
-                },
-                headerTitle: "Search",
-              }}
-            />
-            <Stack.Screen
               name="welcome"
               options={{
                 headerShown: false,
@@ -130,18 +118,7 @@ function RootLayoutNav() {
                 headerBackTitle: "Back",
               }}
             />
-            <Stack.Screen
-              name="ticket"
-              options={{
-                headerShown: true,
-                title: "Ticket",
-                headerBackTitle: "Back",
-                headerStyle: {
-                  backgroundColor: Colors.secondary,
-                },
-                headerTintColor: Colors.dark,
-              }}
-            />
+
             <Stack.Screen
               name="myTicket"
               options={{

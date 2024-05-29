@@ -17,11 +17,11 @@ export const CYCLING_TYPE = [
   },
   {
     type: 1,
-    name: "Bike",
+    name: "Xe đạp",
   },
   {
     type: 2,
-    name: "Electric Bike",
+    name: "Xe đạp điện",
   },
 ];
 

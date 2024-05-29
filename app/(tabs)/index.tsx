@@ -130,7 +130,7 @@ export default function Home() {
           </TouchableOpacity>
         </View>
       )}
-      <View style={styles.absoluteSearch}>
+      {/* <View style={styles.absoluteSearch}>
         <Link href={"/search"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.searchBtn}>
@@ -143,7 +143,7 @@ export default function Home() {
             </View>
           </TouchableOpacity>
         </Link>
-      </View>
+      </View> */}
     </View>
   );
 }

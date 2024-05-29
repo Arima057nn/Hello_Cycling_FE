@@ -20,8 +20,6 @@ export const LocationProvider = ({ children }: any) => {
   const [coordinate, setCoordinate] = useState<CoordinateInterface>();
 
   useEffect(() => {
-    console.log("16");
-
     getLocationPermission();
   }, []);
 

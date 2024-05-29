@@ -19,6 +19,7 @@ import { defaultStyles } from "@/constants/Styles";
 import AnswerModal from "@/components/answerModal";
 import { stationApi } from "@/services/station-api";
 import { router } from "expo-router";
+import { convertDate } from "@/utils/convertDate";
 
 const Trips = () => {
   const [loading, setLoading] = useState(false);
@@ -212,12 +213,15 @@ const Trips = () => {
               {trip.cyclingId.code} - {trip.ticketId.name}
             </Text>
             {trip.status === BOOKING_STATUS.ACTIVE && (
-              <Text style={{ color: Colors.green }}>Đang di chuyển</Text>
+              <Text style={{ color: Colors.green, paddingVertical: 2 }}>
+                Đang di chuyển
+              </Text>
             )}
 
             {trip.status === BOOKING_STATUS.KEEPING && (
               <Text style={{ color: Colors.secondary }}>Đang giữ xe</Text>
             )}
+            <Text>{convertDate(trip.createdAt)}</Text>
           </View>
           <View>
             {trip.status === BOOKING_STATUS.ACTIVE && (

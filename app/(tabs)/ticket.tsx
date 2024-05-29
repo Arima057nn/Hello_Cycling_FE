@@ -111,7 +111,7 @@ const Ticket = () => {
                 style={[
                   styles.categoryItem,
                   selectedCategory === item.type && {
-                    backgroundColor: Colors.yellow,
+                    backgroundColor: Colors.purpleLight,
                   },
                 ]}
                 onPress={() => handleCategoryPress(item.type)}
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   category: {
     borderWidth: 1,
-    borderColor: Colors.secondary,
+    borderColor: Colors.purpleLight,
 
     borderRadius: 4,
     flexDirection: "row",

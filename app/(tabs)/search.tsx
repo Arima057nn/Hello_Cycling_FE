@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "column",
     justifyContent: "flex-start",
+    paddingTop: 12,
   },
   inputField: {
     flex: 1,
