@@ -223,7 +223,7 @@ const Trips = () => {
             )}
             <Text>{convertDate(trip.createdAt)}</Text>
           </View>
-          <View>
+          <View style={{ flexDirection: "row", gap: 4 }}>
             {trip.status === BOOKING_STATUS.ACTIVE && (
               <View>
                 <TouchableOpacity
@@ -264,6 +264,7 @@ const Trips = () => {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  gap: 4,
                 }}
               >
                 <TouchableOpacity
@@ -312,6 +313,21 @@ const Trips = () => {
                 </AnswerModal>
               </View>
             )}
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/report",
+                  params: {
+                    cyclingId: trip.cyclingId._id,
+                    code: trip.cyclingId.code,
+                  },
+                })
+              }
+              activeOpacity={0.8}
+              style={styles.actionBtn}
+            >
+              <Ionicons name="bug" size={16} style={styles.icon} />
+            </TouchableOpacity>
           </View>
         </View>
       ))}

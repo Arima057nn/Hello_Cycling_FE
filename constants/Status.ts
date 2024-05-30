@@ -52,4 +52,31 @@ export const USER_GENDER = {
   OTHER: 2,
 };
 
+export const REPORT_TYPE = [
+  {
+    id: 0,
+    name: "Khác",
+  },
+  {
+    id: 1,
+    name: "Xe hỏng",
+  },
+  {
+    id: 2,
+    name: "Mã QR",
+  },
+  {
+    id: 3,
+    name: "Bị phá hoại",
+  },
+  {
+    id: 4,
+    name: "Không nạp được điểm",
+  },
+  {
+    id: 5,
+    name: "Lỗi trả xe",
+  },
+];
+
 export const FINISH_DISTANCE = 100;

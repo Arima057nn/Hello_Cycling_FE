@@ -123,7 +123,7 @@ function RootLayoutNav() {
               name="myTicket"
               options={{
                 headerShown: true,
-                title: "My Ticket",
+                title: "Vé của tôi",
                 headerBackTitle: "Back",
                 headerStyle: {
                   backgroundColor: Colors.secondary,
@@ -135,7 +135,7 @@ function RootLayoutNav() {
               name="history"
               options={{
                 headerShown: true,
-                title: "History",
+                title: "Lịch sử chuyến đi",
                 headerBackTitle: "Back",
                 headerStyle: {
                   backgroundColor: Colors.secondary,
@@ -147,7 +147,7 @@ function RootLayoutNav() {
               name="transaction"
               options={{
                 headerShown: true,
-                title: "Transaction",
+                title: "Lịch sử giao dịch",
                 headerBackTitle: "Back",
                 headerStyle: {
                   backgroundColor: Colors.secondary,
@@ -159,7 +159,7 @@ function RootLayoutNav() {
               name="trips"
               options={{
                 headerShown: true,
-                title: "Trips",
+                title: "Chuyến đi của tôi",
                 headerBackTitle: "Back",
                 headerStyle: {
                   backgroundColor: Colors.secondary,
@@ -203,9 +203,23 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="report"
+              options={{
+                headerShown: true,
+                title: "Báo cáo sự cố xe",
+                headerBackTitle: "Back",
+                headerStyle: {
+                  backgroundColor: Colors.secondary,
+                },
+                headerTintColor: Colors.dark,
+              }}
+            />
           </Stack>
           {!currentPath.includes("/trips") &&
             !currentPath.includes("/cycling") &&
+            !currentPath.includes("/search") &&
+            !currentPath.includes("/report") &&
             tripState && (
               <View style={styles.absoluteView}>
                 <TouchableOpacity
