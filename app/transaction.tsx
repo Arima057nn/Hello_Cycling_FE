@@ -24,7 +24,7 @@ const Transaction = () => {
   const getTransations = async () => {
     setIsLoading(true);
     const res = await transactionApi.getAllTransaction();
-    if (res.status === 200) setTransations(res.data);
+    if (res?.status === 200) setTransations(res.data);
     setIsLoading(false);
   };
   return (

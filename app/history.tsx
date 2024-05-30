@@ -27,7 +27,7 @@ const History = () => {
   const getTripDetail = async () => {
     setIsLoading(true);
     const res = await bookingApi.getTripHistory();
-    if (res.status === 200) setHistory(res.data);
+    if (res?.status === 200) setHistory(res.data);
     setIsLoading(false);
   };
   useEffect(() => {
