@@ -97,44 +97,12 @@ export default function Menu() {
               }}
             >
               <View style={styles.point}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "500",
-                    fontFamily: "mon-sb",
-                  }}
-                >
-                  {user?.balance}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: Colors.Gray400,
-                    fontFamily: "mon-sb",
-                  }}
-                >
-                  Ví
-                </Text>
+                <Text style={styles.balance}>{user?.balance}</Text>
+                <Text style={styles.balanceHeader}>Ví</Text>
               </View>
               <View style={styles.point}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "500",
-                    fontFamily: "mon-sb",
-                  }}
-                >
-                  {user?.point}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: Colors.Gray400,
-                    fontFamily: "mon-sb",
-                  }}
-                >
-                  Tích lũy
-                </Text>
+                <Text style={styles.balance}>{user?.point}</Text>
+                <Text style={styles.balanceHeader}>Tích lũy</Text>
               </View>
             </View>
             <TouchableOpacity onPress={() => router.navigate("/profile")}>
@@ -162,16 +130,7 @@ export default function Menu() {
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="ticket-outline" size={20} />
-                <Text
-                  style={{
-                    marginLeft: 20,
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: Colors.grey,
-                  }}
-                >
-                  Vé của tôi
-                </Text>
+                <Text style={styles.actionTitle}>Vé của tôi</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
@@ -183,16 +142,7 @@ export default function Menu() {
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="timer-outline" size={20} />
-                <Text
-                  style={{
-                    marginLeft: 20,
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: Colors.grey,
-                  }}
-                >
-                  Lịch sử chuyến đi
-                </Text>
+                <Text style={styles.actionTitle}>Lịch sử chuyến đi</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
@@ -204,16 +154,7 @@ export default function Menu() {
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="card-outline" size={20} />
-                <Text
-                  style={{
-                    marginLeft: 20,
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: Colors.grey,
-                  }}
-                >
-                  Lịch sử giao dịch
-                </Text>
+                <Text style={styles.actionTitle}>Lịch sử giao dịch</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
@@ -225,16 +166,7 @@ export default function Menu() {
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="card-outline" size={20} />
-                <Text
-                  style={{
-                    marginLeft: 20,
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: Colors.grey,
-                  }}
-                >
-                  Profile
-                </Text>
+                <Text style={styles.actionTitle}>Profile</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
@@ -246,16 +178,7 @@ export default function Menu() {
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="card-outline" size={20} />
-                <Text
-                  style={{
-                    marginLeft: 20,
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: Colors.grey,
-                  }}
-                >
-                  Nạp điểm
-                </Text>
+                <Text style={styles.actionTitle}>Nạp điểm</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
             </View>
@@ -268,7 +191,6 @@ export default function Menu() {
                 style={{
                   textAlign: "center",
                   fontSize: 16,
-                  marginRight: 4,
                   fontWeight: "500",
                   color: Colors.grey,
                 }}
@@ -305,6 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 16,
     marginTop: 44,
+    elevation: 1,
   },
   accountName: {
     fontSize: 20,
@@ -320,6 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light,
     paddingHorizontal: 8,
     borderRadius: 4,
+    elevation: 1,
   },
   actionItem: {
     paddingVertical: 18,
@@ -336,6 +260,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    gap: 4,
+    elevation: 1,
   },
   succesIcon: {
     position: "absolute",
@@ -357,5 +283,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
+  },
+  balance: {
+    fontSize: 16,
+    fontWeight: "500",
+    fontFamily: "mon-sb",
+  },
+  balanceHeader: {
+    fontSize: 12,
+    color: Colors.Gray400,
+    fontFamily: "mon-sb",
+  },
+  actionTitle: {
+    marginLeft: 20,
+    fontSize: 16,
+    fontWeight: "500",
+    color: Colors.grey,
   },
 });

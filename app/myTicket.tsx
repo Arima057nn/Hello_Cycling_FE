@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light,
     borderRadius: 4,
     marginBottom: 16,
+    elevation: 1,
   },
   category: {
     borderWidth: 1,
