@@ -193,9 +193,11 @@ const Cycling = () => {
         <ScrollView style={{ height: 650 }}>
           <View style={styles.infoContainer}>
             <Animated.Image
-              source={{
-                uri: cycling?.stationId.imgae,
-              }}
+              source={
+                cycling
+                  ? { uri: cycling?.stationId?.imgae }
+                  : require("@/assets/images/station.jpg")
+              }
               style={styles.imageStation}
             />
             <View style={styles.stationContainer}>
@@ -230,9 +232,7 @@ const Cycling = () => {
                 }}
               >
                 <Animated.Image
-                  source={{
-                    uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
-                  }}
+                  source={require("@/assets/images/cycling.png")}
                   style={styles.imageCycling}
                 />
               </View>
@@ -506,6 +506,7 @@ const styles = StyleSheet.create({
   imageStation: {
     width: 100,
     height: 100,
+    borderRadius: 8,
   },
 
   stationContainer: {

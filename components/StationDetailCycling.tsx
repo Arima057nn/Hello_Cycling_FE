@@ -140,9 +140,7 @@ const StationDetailCycling = ({ station }: Props) => {
               <View style={styles.cycling} key={cycling.cyclingId._id}>
                 <Image
                   style={styles.cyclingImage}
-                  source={{
-                    uri: "https://www.jrccd.co.jp//storage/img/shopinfo/tni12202021014061.png",
-                  }}
+                  source={require("@/assets/images/cycling.png")}
                 />
                 <View
                   style={{
