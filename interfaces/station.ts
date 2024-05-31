@@ -5,8 +5,8 @@ export interface StationInterface {
   name: string;
   code: string;
   position: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   imgae: string;
   createdAt: string;
   updatedAt: string;

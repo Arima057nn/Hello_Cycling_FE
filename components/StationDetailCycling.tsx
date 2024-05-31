@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import Animated from "react-native-reanimated";
 import Colors from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StationCountInterface } from "@/interfaces/station";
 import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
@@ -10,6 +10,7 @@ import { defaultStyles } from "@/constants/Styles";
 import { router } from "expo-router";
 import { CHANGE_STATUS, CYCLING_TYPE } from "@/constants/Status";
 import { ScrollView } from "react-native-gesture-handler";
+import * as Linking from "expo-linking";
 
 interface Props {
   station: StationCountInterface | null;
@@ -43,6 +44,14 @@ const StationDetailCycling = ({ station }: Props) => {
   );
 
   const memoizedStation = useMemo(() => station, [station]);
+  const openGoogleMaps = (latitude: number, longitude: number) => {
+    const label = "Your Destination";
+    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}&query_place_id=${label}`;
+
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred", err)
+    );
+  };
   return (
     <View style={styles.container}>
       <Animated.Image
@@ -54,9 +63,39 @@ const StationDetailCycling = ({ station }: Props) => {
       <View style={styles.dragArea}>
         <View style={styles.dragHandle}></View>
       </View>
+
       <Animated.View style={styles.infoContainer}>
-        <Text style={styles.code}>St No.{memoizedStation?.station.code}</Text>
-        <Text style={styles.name}>{memoizedStation?.station.name}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text style={styles.code}>
+              St No.{memoizedStation?.station.code}
+            </Text>
+            <Text style={styles.name}>{memoizedStation?.station.name}</Text>
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={styles.locationBtn}
+            onPress={() => {
+              if (station) {
+                openGoogleMaps(
+                  station.station.latitude,
+                  station.station.longitude
+                );
+              }
+            }}
+          >
+            <MaterialCommunityIcons
+              name="google-maps"
+              size={24}
+              color={Colors.grey}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
         >
@@ -266,5 +305,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopRightRadius: 4,
     borderTopLeftRadius: 4,
+  },
+  locationBtn: {
+    backgroundColor: Colors.light,
+    padding: 8,
+    bottom: 8,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: Colors.purple,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.32,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
   },
 });
