@@ -14,21 +14,30 @@ import { Ionicons } from "@expo/vector-icons";
 import { TripHistoryInterface } from "@/interfaces/booking";
 import { convertDate } from "@/utils/convertDate";
 import { router } from "expo-router";
-const INITIAL_REGION = {
-  latitude: 21.03,
-  longitude: 105.78,
-  latitudeDelta: 0.02,
-  longitudeDelta: 0.02,
-};
+import Modal from "@/components/modal";
+import { ModalInterface } from "@/interfaces/modal";
+import { defaultStyles } from "@/constants/Styles";
 
 const History = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState<TripHistoryInterface[]>([]);
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   const getTripDetail = async () => {
     setIsLoading(true);
     const res = await bookingApi.getTripHistory();
-    if (res?.status === 200) setHistory(res.data);
     setIsLoading(false);
+    if (res?.status === 200) setHistory(res.data);
+    else {
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: res.data.error,
+      });
+    }
   };
   useEffect(() => {
     getTripDetail();
@@ -37,6 +46,32 @@ const History = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
       <Text style={styles.title}>Lịch sử chuyến đi</Text>
+      <Modal
+        title={modalContent.title}
+        description={modalContent.description}
+        isOpen={modalContent.isOpen}
+        onRequestClose={() => {
+          setModalContent((prevState) => ({
+            ...prevState,
+            isOpen: false,
+          }));
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={defaultStyles.textOK}>OK</Text>
+        </TouchableOpacity>
+      </Modal>
       <Animated.ScrollView>
         {isLoading ? (
           <ActivityIndicator

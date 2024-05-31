@@ -1,5 +1,8 @@
+import Modal from "@/components/modal";
 import Colors from "@/constants/Colors";
 import { TRANSACTION_STATUS, TRANSACTION_TYPE } from "@/constants/Status";
+import { defaultStyles } from "@/constants/Styles";
+import { ModalInterface } from "@/interfaces/modal";
 import { TransactionInterface } from "@/interfaces/transaction";
 import { transactionApi } from "@/services/transaction-api";
 import { convertDate } from "@/utils/convertDate";
@@ -18,19 +21,57 @@ import Animated from "react-native-reanimated";
 const Transaction = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [transations, setTransations] = useState<TransactionInterface[]>([]);
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   useEffect(() => {
     getTransations();
   }, []);
   const getTransations = async () => {
     setIsLoading(true);
     const res = await transactionApi.getAllTransaction();
-    if (res?.status === 200) setTransations(res.data);
     setIsLoading(false);
+    if (res?.status === 200) setTransations(res.data);
+    else {
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: res.data.error,
+      });
+    }
   };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
       <Text style={styles.title}>Lịch sử giao dịch</Text>
+      <Modal
+        title={modalContent.title}
+        description={modalContent.description}
+        isOpen={modalContent.isOpen}
+        onRequestClose={() => {
+          setModalContent((prevState) => ({
+            ...prevState,
+            isOpen: false,
+          }));
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={defaultStyles.textOK}>OK</Text>
+        </TouchableOpacity>
+      </Modal>
       <Animated.ScrollView>
         {isLoading ? (
           <ActivityIndicator

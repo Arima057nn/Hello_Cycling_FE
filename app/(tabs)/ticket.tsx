@@ -43,8 +43,15 @@ const Ticket = () => {
   const getAllTicket = async () => {
     setIsLoading(true);
     const res = await ticketApi.getTickets();
-    if (res.status === 200) setTickets(res.data);
     setIsLoading(false);
+    if (res.status === 200) setTickets(res.data);
+    else {
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: res.data.error,
+      });
+    }
   };
 
   const filteredTickets = tickets.filter(
