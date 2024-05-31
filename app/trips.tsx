@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { TripInterface } from "@/interfaces/booking";
 import { bookingApi } from "@/services/booking-api";
 import Colors from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { BOOKING_STATUS, FINISH_DISTANCE } from "@/constants/Status";
 import { useTrips } from "@/contexts/tripsContext";
 import IsLoadingModal from "@/components/isLoadingModal";
@@ -224,6 +224,18 @@ const Trips = () => {
             <Text>{convertDate(trip.createdAt)}</Text>
           </View>
           <View style={{ flexDirection: "row", gap: 4 }}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push({
+                  pathname: "/change",
+                  params: { bookingId: trip._id },
+                });
+              }}
+              activeOpacity={0.8}
+              style={styles.actionBtn}
+            >
+              <FontAwesome name="exchange" size={16} style={styles.icon} />
+            </TouchableOpacity>
             {trip.status === BOOKING_STATUS.ACTIVE && (
               <View>
                 <TouchableOpacity

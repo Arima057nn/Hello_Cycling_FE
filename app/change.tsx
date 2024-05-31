@@ -3,18 +3,21 @@ import { CHANGE_STATUS } from "@/constants/Status";
 import { cyclingApi } from "@/services/cycling-api";
 import { stationApi } from "@/services/station-api";
 import { CameraView, useCameraPermissions } from "expo-camera/next";
-import { useRouter, useNavigation } from "expo-router";
+import { useRouter, useNavigation, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, StatusBar, StyleSheet, Text, View } from "react-native";
 
-export default function Qrcode() {
+export default function Change() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [processing, setProcessing] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-
+  const { bookingId } = useLocalSearchParams<{
+    bookingId: string;
+  }>();
+  console.log("bookingId", bookingId);
   useEffect(() => {
     if (permission === null) {
       requestPermission();
@@ -71,7 +74,8 @@ export default function Qrcode() {
           code: data,
           cyclingId: res.data._id,
           stationId: station.data.stationId._id,
-          change: CHANGE_STATUS.FALSE,
+          change: CHANGE_STATUS.TRUE,
+          bookingId,
         },
       });
     } catch (error) {

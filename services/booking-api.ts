@@ -42,4 +42,7 @@ export const bookingApi = {
   getTripsCurrent() {
     return axiosClient.get(`/booking/trips`);
   },
+  changeCycling(bookingId: string, cyclingId: string) {
+    return axiosClient.post("/booking/change", { bookingId, cyclingId });
+  },
 };

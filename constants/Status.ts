@@ -80,3 +80,8 @@ export const REPORT_TYPE = [
 ];
 
 export const FINISH_DISTANCE = 100;
+
+export const CHANGE_STATUS = {
+  FALSE: "0",
+  TRUE: "1",
+};

@@ -23,7 +23,7 @@ import AnswerModal from "@/components/answerModal";
 import RadioTicket from "@/components/radioTicket";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTrips } from "@/contexts/tripsContext";
-import { CYCLING_TYPE } from "@/constants/Status";
+import { CHANGE_STATUS, CYCLING_TYPE } from "@/constants/Status";
 import { useAuth } from "@/contexts/authContext";
 
 const Cycling = () => {
@@ -40,16 +40,19 @@ const Cycling = () => {
   const [cycling, setCycling] = useState<CyclingStationInterface>();
   const [tickets, setTickets] = useState<TicketInterface[]>([]);
   const [checkedticket, setCheckedTicket] = useState("");
-  const { code, cyclingId, stationId } = useLocalSearchParams<{
-    code: string;
-    cyclingId: string;
-    stationId: string;
-  }>();
+  const { code, cyclingId, stationId, change, bookingId } =
+    useLocalSearchParams<{
+      code: string;
+      cyclingId: string;
+      stationId: string;
+      change: string;
+      bookingId: string;
+    }>();
+
   useEffect(() => {
     findCyclingAtStation();
-    selectTicketToUse();
+    if (change === CHANGE_STATUS.FALSE) selectTicketToUse();
   }, []);
-
   const findCyclingAtStation = async () => {
     const res = await stationApi.findCyclingAtStation(cyclingId);
     if (res.status === 200) setCycling(res.data);
@@ -89,7 +92,7 @@ const Cycling = () => {
       setModalContent({
         isOpen: true,
         title: "Lỗi",
-        description: "Vui lòng chọn vé trước khi đặt xe",
+        description: "Bạn chưa chọn vé hoặc xe không tồn tại",
       });
     }
   };
@@ -124,10 +127,38 @@ const Cycling = () => {
       setModalContent({
         isOpen: true,
         title: "Thất bại",
-        description: "Vui lòng chọn vé trước khi đặt xe",
+        description: "Bạn chưa chọn vé hoặc xe không tồn tại",
       });
     }
   };
+
+  const handleChangeCycling = async () => {
+    if (cycling && change === CHANGE_STATUS.TRUE) {
+      setLoading(true);
+      const res = await bookingApi.changeCycling(bookingId, cyclingId);
+      setLoading(false);
+      if (res.status === 200) {
+        setModalContent({
+          isOpen: true,
+          title: "Thành công",
+          description: res.data.message,
+        });
+      } else {
+        setModalContent({
+          isOpen: true,
+          title: "Thất bại",
+          description: res.data.error,
+        });
+      }
+    } else {
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: "Không tìm thấy xe cần đổi",
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" animated={true} />
@@ -282,40 +313,44 @@ const Cycling = () => {
               </View>
             </View>
           </View>
-          <Text style={styles.title}>Chọn vé sử dụng</Text>
-          <RadioTicket
-            options={tickets}
-            onChange={setCheckedTicket}
-            checkedValue={checkedticket}
-          />
-          <View
-            style={{
-              justifyContent: "center",
-              width: "100%",
-              paddingHorizontal: 24,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => setIsShowKeep(true)}
-              activeOpacity={0.8}
-              style={{
-                marginTop: 36,
-                padding: 16,
-                borderRadius: 12,
-                backgroundColor: Colors.secondary,
-              }}
-            >
-              <Text
+          {change === CHANGE_STATUS.FALSE && (
+            <View>
+              <Text style={styles.title}>Chọn vé sử dụng</Text>
+              <RadioTicket
+                options={tickets}
+                onChange={setCheckedTicket}
+                checkedValue={checkedticket}
+              />
+              <View
                 style={{
-                  color: Colors.lightGrey,
-                  fontFamily: "mon-sb",
-                  textAlign: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  paddingHorizontal: 24,
                 }}
               >
-                Đặt vé trước 1 giờ
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  onPress={() => setIsShowKeep(true)}
+                  activeOpacity={0.8}
+                  style={{
+                    marginTop: 36,
+                    padding: 16,
+                    borderRadius: 12,
+                    backgroundColor: Colors.secondary,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: Colors.lightGrey,
+                      fontFamily: "mon-sb",
+                      textAlign: "center",
+                    }}
+                  >
+                    Đặt xe trước 1 giờ
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </Animated.View>
       <Animated.View style={defaultStyles.footer}>
@@ -352,28 +387,54 @@ const Cycling = () => {
               </Text>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              setIsShow(true);
-            }}
-            activeOpacity={0.8}
-            style={{
-              padding: 16,
-              borderRadius: 12,
-              backgroundColor: Colors.secondary,
-              width: 200,
-            }}
-          >
-            <Text
+          {change === CHANGE_STATUS.FALSE && (
+            <TouchableOpacity
+              onPress={() => {
+                setIsShow(true);
+              }}
+              activeOpacity={0.8}
               style={{
-                color: Colors.lightGrey,
-                fontFamily: "mon-sb",
-                textAlign: "center",
+                padding: 16,
+                borderRadius: 12,
+                backgroundColor: Colors.secondary,
+                width: 200,
               }}
             >
-              Đặt xe ngay bây giờ
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: Colors.lightGrey,
+                  fontFamily: "mon-sb",
+                  textAlign: "center",
+                }}
+              >
+                Đặt xe ngay bây giờ
+              </Text>
+            </TouchableOpacity>
+          )}
+          {change === CHANGE_STATUS.TRUE && (
+            <TouchableOpacity
+              onPress={() => {
+                handleChangeCycling();
+              }}
+              activeOpacity={0.8}
+              style={{
+                padding: 16,
+                borderRadius: 12,
+                backgroundColor: Colors.secondary,
+                width: 200,
+              }}
+            >
+              <Text
+                style={{
+                  color: Colors.lightGrey,
+                  fontFamily: "mon-sb",
+                  textAlign: "center",
+                }}
+              >
+                Xác nhận đổi xe
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         <AnswerModal
           title="Đặt xe"

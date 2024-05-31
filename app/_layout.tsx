@@ -220,6 +220,9 @@ function RootLayoutNav() {
             !currentPath.includes("/cycling") &&
             !currentPath.includes("/search") &&
             !currentPath.includes("/report") &&
+            !currentPath.includes("/qrcode") &&
+            !currentPath.includes("/change") &&
+            !currentPath.includes("/payment") &&
             tripState && (
               <View style={styles.absoluteView}>
                 <TouchableOpacity

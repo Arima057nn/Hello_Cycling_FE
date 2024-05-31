@@ -8,7 +8,7 @@ import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
 import { defaultStyles } from "@/constants/Styles";
 import { router } from "expo-router";
-import { CYCLING_TYPE } from "@/constants/Status";
+import { CHANGE_STATUS, CYCLING_TYPE } from "@/constants/Status";
 import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
@@ -166,6 +166,7 @@ const StationDetailCycling = ({ station }: Props) => {
                             code: cycling.cyclingId.code,
                             cyclingId: cycling.cyclingId._id,
                             stationId: station?.station._id,
+                            change: CHANGE_STATUS.FALSE,
                           },
                         });
                       }
