@@ -17,7 +17,7 @@ import { userApi } from "@/services/user-api";
 import { UserLoggedInterface } from "@/interfaces/user";
 
 export default function Menu() {
-  const { userLogged } = useAuth();
+  const { userLogged, onLogin } = useAuth();
   const [user, setUser] = useState<UserLoggedInterface | null | undefined>(
     userLogged
   );
@@ -34,6 +34,7 @@ export default function Menu() {
   const RefreshInfoUser = async () => {
     const res = await userApi.getInfoUser();
     if (res?.status === 200) {
+      onLogin && onLogin(res.data);
       setUser(res?.data);
     }
   };

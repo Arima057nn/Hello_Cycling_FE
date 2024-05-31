@@ -1,19 +1,14 @@
 import { UserLoggedInterface } from "@/interfaces/user";
 import { userApi } from "@/services/user-api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import auth from "@react-native-firebase/auth";
 import { router } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextProps {
-  authState: {
-    authenticated: boolean | null;
-    user: FirebaseAuthTypes.User | null;
-    token: string | null;
-  };
+  token: string | null;
   userLogged: UserLoggedInterface | null;
-  onLogin: (user: FirebaseAuthTypes.User, token: string) => void;
-  onLogout: () => void;
+  onLogin: (userLogged: UserLoggedInterface) => void;
 }
 
 export const AuthContext = createContext<Partial<AuthContextProps>>({});
@@ -23,15 +18,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: any) => {
-  const [authState, setAuthState] = useState<{
-    authenticated: boolean | null;
-    user: FirebaseAuthTypes.User | null;
-    token: string | null;
-  }>({
-    authenticated: null,
-    user: null,
-    token: null,
-  });
+  const [token, setToken] = useState<string | null>(null);
 
   const [userLogged, setUserLogged] = useState<UserLoggedInterface | null>();
   const storeData = async (token: string) => {
@@ -48,34 +35,27 @@ export const AuthProvider = ({ children }: any) => {
         router.replace("/register");
         return;
       }
-      getInfoUser();
       const idToken = await userAuth.getIdToken();
       console.log("idToken", idToken);
+      getInfoUser(idToken);
       storeData(idToken);
-      login(userAuth, idToken);
+      setToken(idToken);
     });
     return unsubscribe; // Unsubscribe when component unmounts
   }, []);
 
-  const login = (user: FirebaseAuthTypes.User, token: string) => {
-    setAuthState({ authenticated: true, user, token });
-  };
-  const logout = () => {
-    setAuthState({ authenticated: false, user: null, token: null });
-    setUserLogged(null);
+  const login = (userLogged: UserLoggedInterface) => {
+    setUserLogged(userLogged);
   };
 
-  const getInfoUser = async () => {
+  const getInfoUser = async (token: string) => {
     const res = await userApi.getInfoUser();
-    if (res?.status === 200) {
-      setUserLogged(res?.data);
-    }
+    if (res?.status === 200) login(res?.data);
   };
   const value = {
     userLogged,
-    authState,
+    token,
     onLogin: login,
-    onLogout: logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
