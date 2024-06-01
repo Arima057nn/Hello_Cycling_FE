@@ -168,6 +168,11 @@ const Trips = () => {
       });
     }
   };
+  const isKeepingPeriodActive = (createdAt: string) => {
+    const createdTime = new Date(createdAt).getTime();
+    const currentTime = new Date().getTime();
+    return createdTime + 15 * 60 * 1000 >= currentTime;
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
@@ -218,24 +223,35 @@ const Trips = () => {
               </Text>
             )}
 
-            {trip.status === BOOKING_STATUS.KEEPING && (
-              <Text style={{ color: Colors.secondary }}>Đang giữ xe</Text>
-            )}
+            {trip.status === BOOKING_STATUS.KEEPING &&
+              (isKeepingPeriodActive(trip.createdAt) ? (
+                <Text style={{ color: Colors.secondary, paddingVertical: 2 }}>
+                  Đang giữ xe
+                </Text>
+              ) : (
+                <Text style={{ color: Colors.red, paddingVertical: 2 }}>
+                  Hết thời gian giữ xe
+                </Text>
+              ))}
             <Text>{convertDate(trip.createdAt)}</Text>
           </View>
           <View style={{ flexDirection: "row", gap: 4 }}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push({
-                  pathname: "/change",
-                  params: { bookingId: trip._id },
-                });
-              }}
-              activeOpacity={0.8}
-              style={styles.actionBtn}
-            >
-              <FontAwesome name="exchange" size={16} style={styles.icon} />
-            </TouchableOpacity>
+            {(trip.status === BOOKING_STATUS.ACTIVE ||
+              (trip.status === BOOKING_STATUS.KEEPING &&
+                isKeepingPeriodActive(trip.createdAt))) && (
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: "/change",
+                    params: { bookingId: trip._id },
+                  });
+                }}
+                activeOpacity={0.8}
+                style={[styles.actionBtn, { backgroundColor: Colors.purple }]}
+              >
+                <FontAwesome name="exchange" size={16} style={styles.icon} />
+              </TouchableOpacity>
+            )}
             {trip.status === BOOKING_STATUS.ACTIVE && (
               <View>
                 <TouchableOpacity
@@ -286,17 +302,22 @@ const Trips = () => {
                 >
                   <Ionicons name="close" size={16} style={styles.icon} />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setKeepingTrip(trip)}
-                  activeOpacity={0.8}
-                  style={styles.actionBtn}
-                >
-                  <Ionicons
-                    name="caret-forward"
-                    size={16}
-                    style={styles.icon}
-                  />
-                </TouchableOpacity>
+                {isKeepingPeriodActive(trip.createdAt) && (
+                  <TouchableOpacity
+                    onPress={() => setKeepingTrip(trip)}
+                    activeOpacity={0.8}
+                    style={[
+                      styles.actionBtn,
+                      { backgroundColor: Colors.green },
+                    ]}
+                  >
+                    <Ionicons
+                      name="caret-forward"
+                      size={16}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                )}
                 <AnswerModal
                   title="Chuyến đi"
                   description="Bắt đầu chuyến đi ngay bây giờ?"
@@ -336,7 +357,7 @@ const Trips = () => {
                 })
               }
               activeOpacity={0.8}
-              style={styles.actionBtn}
+              style={[styles.actionBtn, { backgroundColor: Colors.orange }]}
             >
               <Ionicons name="bug" size={16} style={styles.icon} />
             </TouchableOpacity>
@@ -363,6 +384,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 8,
     flexDirection: "row",
+    elevation: 1,
   },
   title: {
     marginBottom: 24,
