@@ -38,6 +38,12 @@ const Trips = () => {
     if (res.status === 200) {
       setTrips(res.data);
       if (res.data.length === 0) noTrip && noTrip();
+    } else {
+      setModalContent({
+        isOpen: true,
+        title: "Thông báo",
+        description: res.data.error,
+      });
     }
   };
 

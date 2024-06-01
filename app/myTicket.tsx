@@ -52,7 +52,7 @@ const MyTicket = () => {
     else {
       setModalContent({
         isOpen: true,
-        title: "Lỗi",
+        title: "Thất bại",
         description: res.data.error,
       });
     }
@@ -78,7 +78,7 @@ const MyTicket = () => {
     } else {
       setModalContent({
         isOpen: true,
-        title: "Lỗi",
+        title: "Thông báo",
         description: res.data.error,
       });
     }
