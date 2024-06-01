@@ -9,6 +9,7 @@ interface AuthContextProps {
   token: string | null;
   userLogged: UserLoggedInterface | null;
   onLogin: (userLogged: UserLoggedInterface) => void;
+  onLogout: () => void;
 }
 
 export const AuthContext = createContext<Partial<AuthContextProps>>({});
@@ -25,7 +26,15 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await AsyncStorage.setItem("token", token);
     } catch (e) {
-      // saving error
+      console.log("error store token", e);
+    }
+  };
+
+  const removeData = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+    } catch (e) {
+      console.log("error remove token", e);
     }
   };
 
@@ -37,8 +46,8 @@ export const AuthProvider = ({ children }: any) => {
       }
       const idToken = await userAuth.getIdToken();
       console.log("idToken", idToken);
-      getInfoUser(idToken);
       storeData(idToken);
+      getInfoUser();
       setToken(idToken);
     });
     return unsubscribe; // Unsubscribe when component unmounts
@@ -48,14 +57,20 @@ export const AuthProvider = ({ children }: any) => {
     setUserLogged(userLogged);
   };
 
-  const getInfoUser = async (token: string) => {
+  const logout = () => {
+    removeData();
+    setUserLogged(null);
+    setToken(null);
+  };
+  const getInfoUser = async () => {
     const res = await userApi.getInfoUser();
-    if (res?.status === 200) login(res?.data);
+    if (res?.status === 200) setUserLogged(res?.data);
   };
   const value = {
     userLogged,
     token,
     onLogin: login,
+    onLogout: logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

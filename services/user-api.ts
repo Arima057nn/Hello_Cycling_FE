@@ -4,8 +4,11 @@ export const userApi = {
   createName(name: string) {
     return axiosClient.post(`/user/updateProfile`, { name });
   },
-  register() {
-    return axiosClient.post(`/user/register`);
+  register(
+    user_id: string | undefined,
+    phone_number: string | null | undefined
+  ) {
+    return axiosClient.post(`/user/register`, { user_id, phone_number });
   },
   getInfoUser() {
     return axiosClient.get(`/user/info`);

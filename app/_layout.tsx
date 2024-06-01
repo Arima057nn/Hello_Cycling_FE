@@ -223,6 +223,8 @@ function RootLayoutNav() {
             !currentPath.includes("/qrcode") &&
             !currentPath.includes("/change") &&
             !currentPath.includes("/payment") &&
+            !currentPath.includes("/(auth)/register") &&
+            !currentPath.includes("/(auth)/newUser") &&
             tripState && (
               <View style={styles.absoluteView}>
                 <TouchableOpacity

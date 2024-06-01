@@ -32,8 +32,11 @@ const Register = () => {
     }
   };
 
-  const register = async () => {
-    const res = await userApi.register();
+  const register = async (
+    user_id: string | undefined,
+    phone_number: string | null | undefined
+  ) => {
+    const res = await userApi.register(user_id, phone_number);
   };
 
   const confirmCode = async () => {
@@ -41,11 +44,11 @@ const Register = () => {
       const userCredential = await confirm?.confirm(code);
       const user = userCredential?.user;
       if (userCredential?.additionalUserInfo?.isNewUser) {
-        register();
+        register(user?.uid, user?.phoneNumber);
         router.navigate("/(auth)/newUser");
       } else {
         console.log("User credential", userCredential);
-        router.back();
+        router.navigate("/");
       }
     } catch (error) {
       console.log("Invalid code", error);

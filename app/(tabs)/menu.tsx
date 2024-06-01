@@ -17,7 +17,7 @@ import { userApi } from "@/services/user-api";
 import { UserLoggedInterface } from "@/interfaces/user";
 
 export default function Menu() {
-  const { userLogged, onLogin } = useAuth();
+  const { userLogged, onLogin, onLogout } = useAuth();
   const [user, setUser] = useState<UserLoggedInterface | null | undefined>(
     userLogged
   );
@@ -40,6 +40,7 @@ export default function Menu() {
   };
   const handleLogout = async () => {
     try {
+      onLogout && onLogout();
       await auth().signOut();
       router.replace("/register");
     } catch (error) {
