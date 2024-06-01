@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 14,
     color: Colors.lightGrey,
+    textAlign: "center",
   },
   action: {
     width: "100%",

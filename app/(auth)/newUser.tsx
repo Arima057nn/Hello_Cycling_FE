@@ -13,23 +13,78 @@ import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { userApi } from "@/services/user-api";
+import { defaultStyles } from "@/constants/Styles";
+import { ModalInterface } from "@/interfaces/modal";
+import IsLoadingModal from "@/components/isLoadingModal";
+import Modal from "@/components/modal";
 
 const NewUser = () => {
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   const SetNameForUser = async () => {
-    try {
+    setLoading(true);
+    if (name) {
       const res = await userApi.createName(name);
-      Alert.alert("Success", "Name has been set");
-      router.navigate("/");
-    } catch (error) {
-      console.log("Error setting name", error);
-      Alert.alert("Error", "Error setting name");
+      setLoading(false);
+      if (res.status === 200) {
+        setModalContent({
+          isOpen: true,
+          title: "Thành công",
+          description: "Bắt đầu chuyến đi thôi !",
+        });
+      } else {
+        setModalContent({
+          isOpen: true,
+          title: "Lỗi",
+          description: "Hãy cập nhật lại thông tin sau!",
+        });
+      }
+    } else {
+      setLoading(false);
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description: "Thông tin đang trống. Hãy cập nhật lại thông tin sau!",
+      });
     }
   };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
       <SafeAreaView>
+        {loading && <IsLoadingModal />}
+        <Modal
+          title={modalContent.title}
+          description={modalContent.description}
+          isOpen={modalContent.isOpen}
+          onRequestClose={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              setModalContent((prevState) => ({
+                ...prevState,
+                isOpen: false,
+              }));
+              router.navigate("/");
+            }}
+            style={{
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={defaultStyles.textOK}>OK</Text>
+          </TouchableOpacity>
+        </Modal>
         <View
           style={{
             flexDirection: "row",
@@ -47,9 +102,9 @@ const NewUser = () => {
       </SafeAreaView>
       <View style={styles.inputContainer}>
         <View>
-          <Text style={styles.titleAuth}>Your Name</Text>
+          <Text style={styles.titleAuth}>Hãy nhập tên của bạn</Text>
           <TextInput
-            placeholder="Enter your name"
+            placeholder=""
             value={name}
             onChangeText={(text) => setName(text)}
             style={styles.inputAuth}
@@ -62,28 +117,12 @@ const NewUser = () => {
             <Text
               style={{
                 textAlign: "center",
-                fontFamily: "mon-b",
-                fontSize: 16,
-              }}
-            >
-              Start
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.actionContainer}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => router.navigate("/")}
-          >
-            <Text
-              style={{
-                fontFamily: "mon-sb",
+                fontWeight: "bold",
+                fontSize: 18,
                 color: Colors.lightGrey,
-                fontSize: 16,
               }}
             >
-              Skip
+              Bắt đầu
             </Text>
           </TouchableOpacity>
         </View>
@@ -114,7 +153,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   btnAuth: {
-    backgroundColor: Colors.yellow,
+    backgroundColor: Colors.secondary,
     borderRadius: 16,
     paddingVertical: 16,
     marginVertical: 24,
@@ -130,9 +169,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   titleAuth: {
-    color: Colors.lightGrey,
-    fontFamily: "mon-sb",
-    fontSize: 14,
+    color: Colors.grey,
+    fontSize: 16,
+    fontWeight: "500",
   },
   actionContainer: {
     justifyContent: "flex-end",
