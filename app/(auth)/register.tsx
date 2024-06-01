@@ -10,22 +10,33 @@ import {
 import React, { useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { userApi } from "@/services/user-api";
+import IsLoadingModal from "@/components/isLoadingModal";
+import { ModalInterface } from "@/interfaces/modal";
+import { defaultStyles } from "@/constants/Styles";
+import Modal from "@/components/modal";
 
 const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("");
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult>();
-
+  const [loading, setLoading] = useState(false);
+  const [modalContent, setModalContent] = useState<ModalInterface>({
+    isOpen: false,
+    title: "",
+    description: "",
+  });
   const signInWithPhoneNumber = async () => {
     try {
+      setLoading(true);
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
       console.log("confirmation", confirmation);
+      setLoading(false);
       setConfirm(confirmation);
     } catch (error) {
       console.log("Error sending code", error);
@@ -40,9 +51,11 @@ const Register = () => {
   };
 
   const confirmCode = async () => {
+    setLoading(true);
     try {
       const userCredential = await confirm?.confirm(code);
       const user = userCredential?.user;
+      setLoading(false);
       if (userCredential?.additionalUserInfo?.isNewUser) {
         register(user?.uid, user?.phoneNumber);
         router.navigate("/(auth)/newUser");
@@ -51,12 +64,46 @@ const Register = () => {
         router.navigate("/");
       }
     } catch (error) {
+      setLoading(false);
+      setModalContent({
+        isOpen: true,
+        title: "Thất bại",
+        description:
+          "Mã code không chính xác, vui lòng gửi lại OTP để xác nhận!",
+      });
       console.log("Invalid code", error);
     }
   };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
+      {loading && <IsLoadingModal />}
+      <Modal
+        title={modalContent.title}
+        description={modalContent.description}
+        isOpen={modalContent.isOpen}
+        onRequestClose={() => {
+          setModalContent((prevState) => ({
+            ...prevState,
+            isOpen: false,
+          }));
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setModalContent((prevState) => ({
+              ...prevState,
+              isOpen: false,
+            }));
+          }}
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Text style={defaultStyles.textOK}>OK</Text>
+        </TouchableOpacity>
+      </Modal>
       <SafeAreaView>
         <View
           style={{
@@ -76,9 +123,9 @@ const Register = () => {
       <View style={styles.inputContainer}>
         {!confirm ? (
           <View>
-            <Text style={styles.titleAuth}>Phone Number</Text>
+            <Text style={styles.titleAuth}>Nhập số điện thoại</Text>
             <TextInput
-              placeholder="e.g., +1234567890"
+              placeholder="e.g., +8434567890"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               style={styles.inputAuth}
@@ -92,26 +139,43 @@ const Register = () => {
               <Text
                 style={{
                   textAlign: "center",
-                  fontFamily: "mon-b",
-                  fontSize: 16,
+                  fontWeight: "bold",
+                  fontSize: 18,
+                  color: Colors.lightGrey,
                 }}
               >
-                Send Code
+                Gửi OTP xác nhận
               </Text>
             </TouchableOpacity>
           </View>
         ) : (
           <View>
-            <Text style={styles.titleAuth}>
-              Enter the code sent to your phone
-            </Text>
+            <Text style={styles.titleAuth}>Nhập mã OTP để xác nhận</Text>
             <TextInput
-              placeholder="e.g., +1234567890"
               value={code}
               onChangeText={setCode}
               style={styles.inputAuth}
             ></TextInput>
-
+            <View style={styles.actionContainer}>
+              <TouchableOpacity
+                style={styles.forgotPassword}
+                onPress={() => signInWithPhoneNumber()}
+              >
+                <Text
+                  style={[
+                    styles.titleAuth,
+                    {
+                      textDecorationLine: "underline",
+                      color: Colors.blue,
+                      fontSize: 15,
+                    },
+                  ]}
+                >
+                  Gửi lại OTP
+                </Text>
+                <FontAwesome5 name="redo-alt" size={16} color={Colors.blue} />
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               activeOpacity={0.5}
               style={styles.btnAuth}
@@ -120,11 +184,12 @@ const Register = () => {
               <Text
                 style={{
                   textAlign: "center",
-                  fontFamily: "mon-b",
-                  fontSize: 16,
+                  fontWeight: "bold",
+                  fontSize: 18,
+                  color: Colors.lightGrey,
                 }}
               >
-                Confirm Code
+                Xác nhận
               </Text>
             </TouchableOpacity>
           </View>
@@ -133,17 +198,23 @@ const Register = () => {
         {/* ----------------------------------------------------- */}
         <Text
           style={{
-            fontFamily: "mon-b",
             color: Colors.lightGrey,
             textAlign: "center",
-            fontSize: 18,
+            fontWeight: "500",
+            fontSize: 16,
           }}
         >
-          Or
+          Hoặc
         </Text>
         <View style={styles.iconContainer}>
           <View style={styles.iconBtn}>
-            <Ionicons name="logo-facebook" size={30} />
+            <Ionicons name="logo-facebook" size={24} />
+          </View>
+          <View style={styles.iconBtn}>
+            <Ionicons name="logo-google" size={24} />
+          </View>
+          <View style={styles.iconBtn}>
+            <MaterialIcons name="email" size={24} color="black" />
           </View>
         </View>
       </View>
@@ -170,11 +241,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 24,
+    gap: 16,
   },
   iconBtn: {
     padding: 8,
     backgroundColor: Colors.Gray100,
     borderRadius: 18,
+    elevation: 1,
   },
   btnAuth: {
     backgroundColor: Colors.secondary,
@@ -193,14 +266,19 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   titleAuth: {
-    color: Colors.lightGrey,
-    fontFamily: "mon-sb",
-    fontSize: 14,
+    color: Colors.grey,
+    fontSize: 16,
+    fontWeight: "500",
   },
   actionContainer: {
     justifyContent: "center",
     flexDirection: "row",
     marginTop: 24,
   },
-  forgotPassword: {},
+  forgotPassword: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+  },
 });
