@@ -96,7 +96,7 @@ const Transaction = () => {
                     >
                       <Text
                         style={{
-                          fontFamily: "mon-sb",
+                          fontWeight: "500",
                           fontSize: 16,
                         }}
                       >

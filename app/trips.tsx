@@ -177,7 +177,7 @@ const Trips = () => {
   const isKeepingPeriodActive = (createdAt: string) => {
     const createdTime = new Date(createdAt).getTime();
     const currentTime = new Date().getTime();
-    return createdTime + 15 * 60 * 1000 >= currentTime;
+    return createdTime + 60 * 60 * 1000 >= currentTime;
   };
   return (
     <View style={styles.container}>
@@ -370,6 +370,10 @@ const Trips = () => {
           </View>
         </View>
       ))}
+      <Text style={{ color: Colors.red, fontSize: 14, marginTop: 24 }}>
+        Lưu ý: Vui lòng nhấn hủy chuyến đã hết thời gian giữ xe để nhận lại điểm
+        đã cọc giữ xe.
+      </Text>
     </View>
   );
 };

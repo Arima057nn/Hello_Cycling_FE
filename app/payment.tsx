@@ -137,13 +137,16 @@ const Payment = () => {
           </Text>
           <View style={{ paddingHorizontal: 16, gap: 4 }}>
             <Text style={{ color: Colors.Gray600 }}>
-              - Từ 100000 đến 500000 điểm sẽ được tặng thêm 5%
+              - Từ 100000 đến 500000 điểm sẽ được nhận thêm ưu đãi thêm 5%
             </Text>
             <Text style={{ color: Colors.Gray600 }}>
-              - Từ 500000 đến 1000000 điểm sẽ được tặng thêm 10%
+              - Từ 500000 đến 1000000 điểm sẽ được nhận thêm ưu đãi thêm 10%
             </Text>
             <Text style={{ color: Colors.Gray600 }}>
-              - Từ 1000000 điểm trở lên sẽ được tặng thêm 15%
+              - Từ 1000000 điểm trở lên sẽ được nhận thêm ưu đãi thêm 15%
+            </Text>
+            <Text style={{ color: Colors.Gray600 }}>
+              - Nạp lần đầu tiên sẽ được nhận thêm ưu đãi 30%
             </Text>
           </View>
           <Text

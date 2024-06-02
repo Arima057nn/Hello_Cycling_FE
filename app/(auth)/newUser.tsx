@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     fontFamily: "mon",
     marginTop: 8,
     marginBottom: 16,
-    elevation: 1,
   },
   titleAuth: {
     color: Colors.grey,

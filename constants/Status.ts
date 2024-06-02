@@ -85,3 +85,29 @@ export const CHANGE_STATUS = {
   FALSE: "0",
   TRUE: "1",
 };
+
+export const TICKET_PRICE = [
+  {
+    name: "all",
+    price: 0,
+    dayPrice: 0,
+  },
+  {
+    name: "bike",
+    price: 10000,
+    dayPrice: 50000,
+    monthlyPrice: 120000,
+  },
+  {
+    name: "electricBike",
+    price: 20000,
+    dayPrice: 100000,
+    monthlyPrice: 240000,
+  },
+];
+
+export const TIME_USE_TICKET = {
+  minute: 60,
+  minuteDay: 450,
+  minuteMonthly: 1350,
+};

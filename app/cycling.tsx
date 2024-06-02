@@ -23,7 +23,12 @@ import AnswerModal from "@/components/answerModal";
 import RadioTicket from "@/components/radioTicket";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTrips } from "@/contexts/tripsContext";
-import { CHANGE_STATUS, CYCLING_TYPE } from "@/constants/Status";
+import {
+  CHANGE_STATUS,
+  CYCLING_TYPE,
+  TICKET_PRICE,
+  TIME_USE_TICKET,
+} from "@/constants/Status";
 import { useAuth } from "@/contexts/authContext";
 
 const Cycling = () => {
@@ -263,9 +268,9 @@ const Cycling = () => {
                       Vé lượt -{" "}
                       {cycling?.cyclingId.category.value ===
                       CYCLING_TYPE[1].type
-                        ? "10000 "
-                        : "20000 "}
-                      đ / 60phút
+                        ? TICKET_PRICE[1].price
+                        : TICKET_PRICE[2].price}
+                      đ / {TIME_USE_TICKET.minute}phút
                     </Text>
                   </View>
                   <View
@@ -280,9 +285,9 @@ const Cycling = () => {
                       Vé ngày - {""}
                       {cycling?.cyclingId.category.value ===
                       CYCLING_TYPE[1].type
-                        ? "50000 "
-                        : "100000 "}
-                      đ / 450phút
+                        ? TICKET_PRICE[1].dayPrice
+                        : TICKET_PRICE[2].dayPrice}
+                      đ / {TIME_USE_TICKET.minuteDay}phút
                     </Text>
                   </View>
                   <View
@@ -295,9 +300,9 @@ const Cycling = () => {
                       Vé tháng -{" "}
                       {cycling?.cyclingId.category.value ===
                       CYCLING_TYPE[1].type
-                        ? "120000 "
-                        : "240000 "}
-                      đ / 1350 phút
+                        ? TICKET_PRICE[1].monthlyPrice
+                        : TICKET_PRICE[2].monthlyPrice}
+                      đ / {TIME_USE_TICKET.minuteMonthly} phút
                     </Text>
                   </View>
                   <View>
@@ -313,6 +318,7 @@ const Cycling = () => {
               </View>
             </View>
           </View>
+
           {change === CHANGE_STATUS.FALSE && (
             <View>
               <Text style={styles.title}>Chọn vé sử dụng</Text>
@@ -321,6 +327,33 @@ const Cycling = () => {
                 onChange={setCheckedTicket}
                 checkedValue={checkedticket}
               />
+              <Text style={styles.title}>Điều kiện đặt xe trước 1 giờ</Text>
+              <View style={{ paddingHorizontal: 32, gap: 4 }}>
+                <Text style={{ color: Colors.Gray600 }}>
+                  - Vé lượt: Tài khoản trên{" "}
+                  {cycling?.cyclingId.category.value === CYCLING_TYPE[1].type
+                    ? TICKET_PRICE[1].price * 2
+                    : TICKET_PRICE[2].price * 2}{" "}
+                  điểm
+                </Text>
+                <Text style={{ color: Colors.Gray600 }}>
+                  - Vé ngày/tháng: Tài khoản trên{" "}
+                  {cycling?.cyclingId.category.value === CYCLING_TYPE[1].type
+                    ? TICKET_PRICE[1].price
+                    : TICKET_PRICE[2].price}{" "}
+                  điểm
+                </Text>
+              </View>
+              <Text style={[styles.title, { marginTop: 16 }]}>
+                Điều khoản sử dụng
+              </Text>
+              <View style={{ paddingHorizontal: 32, gap: 4 }}>
+                <Text style={{ color: Colors.red }}>
+                  * Hệ thống sẽ tạm trừ vào tài khoản khi đặt xe hoặc đặt giữ xe
+                  và được hoàn lại hoặc tính thêm phí sau khi hoàn thành chuyến
+                  đi tùy vào thời lượng đã sử dụng.
+                </Text>
+              </View>
               <View
                 style={{
                   justifyContent: "center",
