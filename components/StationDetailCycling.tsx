@@ -2,7 +2,11 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import Animated from "react-native-reanimated";
 import Colors from "@/constants/Colors";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { StationCountInterface } from "@/interfaces/station";
 import { stationApi } from "@/services/station-api";
 import { CyclingAtStationInterface } from "@/interfaces/cycling";
@@ -145,37 +149,20 @@ const StationDetailCycling = ({ station }: Props) => {
                 <View
                   style={{
                     flexDirection: "column",
-                    alignItems: "flex-start",
+                    alignItems: "center",
+                    gap: 2,
                   }}
                 >
                   <Text
                     style={{
                       fontFamily: "mon",
-                      color: Colors.grey,
-                      fontSize: 12,
+                      color: Colors.green,
+                      fontSize: 14,
                     }}
                   >
-                    10$/30min
+                    Sẵn sàng
                   </Text>
-                  <Text
-                    style={{
-                      fontFamily: "mon",
-                      color: Colors.grey,
-                      fontSize: 10,
-                      marginVertical: 4,
-                    }}
-                  >
-                    (+1$/15min)
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: "mon",
-                      color: Colors.grey,
-                      fontSize: 12,
-                    }}
-                  >
-                    30$/1day
-                  </Text>
+                  <FontAwesome name="battery" size={24} color={Colors.grey} />
                 </View>
                 <View
                   style={{
