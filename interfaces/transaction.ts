@@ -5,6 +5,7 @@ export interface TransactionInterface {
   type: number;
   payment: number;
   status: number;
+  orderId: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

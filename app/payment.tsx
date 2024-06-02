@@ -133,6 +133,27 @@ const Payment = () => {
               marginBottom: 8,
             }}
           >
+            Ưu đãi
+          </Text>
+          <View style={{ paddingHorizontal: 16, gap: 4 }}>
+            <Text style={{ color: Colors.Gray600 }}>
+              - Từ 100000 đến 500000 điểm sẽ được tặng thêm 5%
+            </Text>
+            <Text style={{ color: Colors.Gray600 }}>
+              - Từ 500000 đến 1000000 điểm sẽ được tặng thêm 10%
+            </Text>
+            <Text style={{ color: Colors.Gray600 }}>
+              - Từ 1000000 điểm trở lên sẽ được tặng thêm 15%
+            </Text>
+          </View>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "500",
+              marginTop: 24,
+              marginBottom: 8,
+            }}
+          >
             Phương thức thanh toán
           </Text>
           <View style={styles.amountContainer}>
