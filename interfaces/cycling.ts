@@ -16,7 +16,6 @@ export interface CyclingInterface {
 }
 
 export interface CyclingAtStationInterface {
-  count: number;
   _id: string;
   stationId: string;
   cyclingId: CyclingInterface;
