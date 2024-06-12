@@ -19,6 +19,7 @@ import IsLoadingModal from "@/components/isLoadingModal";
 import { ModalInterface } from "@/interfaces/modal";
 import { defaultStyles } from "@/constants/Styles";
 import Modal from "@/components/modal";
+import { formatPhoneNumber } from "@/utils/convertPhoneNumber";
 
 const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -33,8 +34,9 @@ const Register = () => {
   });
   const signInWithPhoneNumber = async () => {
     try {
+      const phone = formatPhoneNumber(phoneNumber);
       setLoading(true);
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      const confirmation = await auth().signInWithPhoneNumber(phone);
       console.log("confirmation", confirmation);
       setLoading(false);
       setConfirm(confirmation);
