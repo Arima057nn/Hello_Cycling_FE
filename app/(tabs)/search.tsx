@@ -36,7 +36,7 @@ const Search = () => {
     let res = await stationApi.getCountOfAllCyclingAtStation(
       `${latitude},${longitude}`
     );
-    setStationInfo(res?.data || []);
+    if (res?.status === 200) setStationInfo(res?.data);
   };
 
   const handleSearch = (text: string) => {
@@ -80,7 +80,7 @@ const Search = () => {
         </View>
 
         <Animated.ScrollView>
-          {Array.isArray(filteredStations) &&
+          {Array.isArray(filteredStations) && filteredStations.length > 0 ? (
             filteredStations?.map(
               (station: StationCountAndDistanceInterface) => (
                 <TouchableOpacity
@@ -129,8 +129,16 @@ const Search = () => {
                   </View>
                 </TouchableOpacity>
               )
-            )}
-
+            )
+          ) : (
+            <View style={{ flex: 1, alignItems: "center", marginTop: 20 }}>
+              <Text
+                style={{ color: Colors.dark, fontFamily: "mon", fontSize: 16 }}
+              >
+                Không có trạm xe nào !
+              </Text>
+            </View>
+          )}
           <View style={styles.itemSearch} />
         </Animated.ScrollView>
       </View>
