@@ -16,4 +16,7 @@ export const userApi = {
   updateProfile(name: string) {
     return axiosClient.post(`/user/updateProfile`, { name });
   },
+  updateFCMToken(fcmToken: string) {
+    return axiosClient.post(`/user/fcm`, { fcmToken });
+  },
 };

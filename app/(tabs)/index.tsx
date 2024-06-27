@@ -18,6 +18,8 @@ import StationDetailCycling from "@/components/StationDetailCycling";
 import Colors from "@/constants/Colors";
 import { useLocalSearchParams } from "expo-router";
 import { useLocation } from "@/contexts/locationContext";
+import messaging from "@react-native-firebase/messaging";
+import { userApi } from "@/services/user-api";
 
 const INITIAL_REGION = {
   latitude: 21.03,
@@ -74,6 +76,66 @@ export default function Home() {
       }, 50);
     }
   }, [latitude, longitude]);
+
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  };
+
+  useEffect(() => {
+    requestUserPermission();
+    messaging()
+      .getToken()
+      .then((token) => {
+        updateFCMToken(token);
+        console.log(token);
+      });
+
+    // Check whether an initial notification is available
+
+    messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quit state:",
+            remoteMessage.notification
+          );
+        }
+      });
+
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
+      );
+    });
+
+    // Register background handler
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
+    });
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log("A new FCM message arrived!", remoteMessage);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const updateFCMToken = async (token: string) => {
+    const res = await userApi.updateFCMToken(token);
+    console.log("res", res.data);
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated={true} />
