@@ -371,8 +371,8 @@ const Trips = () => {
         </View>
       ))}
       <Text style={{ color: Colors.red, fontSize: 14, marginTop: 24 }}>
-        Lưu ý: Vui lòng nhấn hủy chuyến đã hết thời gian giữ xe để nhận lại điểm
-        đã cọc giữ xe.
+        Lưu ý: Các chuyến đã hết thời gian giữ xe sẽ tự động bị hủy, trừ điểm
+        phạt giữ xe và hoàn trả lại điểm đã cọc còn lại cho người dùng
       </Text>
     </View>
   );

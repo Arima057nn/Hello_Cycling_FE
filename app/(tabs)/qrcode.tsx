@@ -39,7 +39,7 @@ export default function Qrcode() {
       let station;
       setLoading(false);
       if (res.status !== 200) {
-        Alert.alert("Not found", "", [
+        Alert.alert("Không tìm thấy", "", [
           {
             text: "OK",
             onPress: () => {
@@ -52,7 +52,7 @@ export default function Qrcode() {
       } else {
         station = await stationApi.findCyclingAtStation(res.data._id);
         if (station.status !== 200) {
-          Alert.alert("Not found", "", [
+          Alert.alert("Không tìm thấy", "", [
             {
               text: "OK",
               onPress: () => {

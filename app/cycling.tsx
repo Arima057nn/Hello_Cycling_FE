@@ -327,6 +327,26 @@ const Cycling = () => {
                 onChange={setCheckedTicket}
                 checkedValue={checkedticket}
               />
+              <Text style={styles.title}>Điều kiện thuê xe</Text>
+              <View
+                style={{ paddingHorizontal: 32, gap: 4, paddingBottom: 12 }}
+              >
+                <Text style={{ color: Colors.Gray600 }}>
+                  - Vé lượt: Tài khoản trên{" "}
+                  {cycling?.cyclingId.category.value === CYCLING_TYPE[1].type
+                    ? TICKET_PRICE[1].price * 2
+                    : TICKET_PRICE[2].price * 2}{" "}
+                  điểm
+                </Text>
+                <Text style={{ color: Colors.Gray600 }}>
+                  - Vé ngày/tháng: Nếu thời gian sử dụng còn lại nhỏ hơn 45p thì
+                  tài khoản phải trên{" "}
+                  {cycling?.cyclingId.category.value === CYCLING_TYPE[1].type
+                    ? TICKET_PRICE[1].price
+                    : TICKET_PRICE[2].price}{" "}
+                  điểm
+                </Text>
+              </View>
               <Text style={styles.title}>Điều kiện đặt xe trước 1 giờ</Text>
               <View style={{ paddingHorizontal: 32, gap: 4 }}>
                 <Text style={{ color: Colors.Gray600 }}>

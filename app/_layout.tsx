@@ -204,6 +204,12 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="change"
+              options={{
+                title: "Đổi xe",
+              }}
+            />
+            <Stack.Screen
               name="report"
               options={{
                 headerShown: true,

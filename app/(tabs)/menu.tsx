@@ -12,15 +12,21 @@ import { router } from "expo-router";
 import auth from "@react-native-firebase/auth";
 import { useAuth } from "@/contexts/authContext";
 import { useState } from "react";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 import { userApi } from "@/services/user-api";
 import { UserLoggedInterface } from "@/interfaces/user";
+import AnswerModal from "@/components/answerModal";
+import IsLoadingModal from "@/components/isLoadingModal";
+import { defaultStyles } from "@/constants/Styles";
 
 export default function Menu() {
   const { userLogged, onLogin, onLogout } = useAuth();
   const [user, setUser] = useState<UserLoggedInterface | null | undefined>(
     userLogged
   );
+  const [loading, setLoading] = useState(false);
+  const [isShow, setIsShow] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   const pullMe = () => {
@@ -40,8 +46,10 @@ export default function Menu() {
   };
   const handleLogout = async () => {
     try {
+      setLoading(true);
       onLogout && onLogout();
       await auth().signOut();
+      setLoading(false);
       router.replace("/register");
     } catch (error) {
       console.log("Error signing out", error);
@@ -52,6 +60,7 @@ export default function Menu() {
       source={require("@/assets/images/bg.png")}
       style={styles.image}
     >
+      {loading && <IsLoadingModal />}
       <View style={styles.container}>
         <ScrollView
           style={{
@@ -155,7 +164,7 @@ export default function Menu() {
           >
             <View style={styles.actionItem}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="card-outline" size={20} />
+                <MaterialIcons name="history" size={20} />
                 <Text style={styles.actionTitle}>Lịch sử giao dịch</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} />
@@ -173,9 +182,21 @@ export default function Menu() {
               <Ionicons name="chevron-forward" size={20} />
             </View>
           </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => router.push("/report")}
+          >
+            <View style={styles.actionItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <MaterialIcons name="report-gmailerrorred" size={20} />
+                <Text style={styles.actionTitle}>Báo cáo sự cố</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} />
+            </View>
+          </TouchableOpacity>
         </View>
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity activeOpacity={0.5} onPress={handleLogout}>
+        <View style={{ marginTop: 24 }}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => setIsShow(true)}>
             <View style={styles.logoutContainer}>
               <Text
                 style={{
@@ -190,6 +211,30 @@ export default function Menu() {
               <Ionicons name="log-out-outline" size={20} />
             </View>
           </TouchableOpacity>
+          <AnswerModal
+            title="Đăng xuất"
+            description="Bạn chắc chắn muốn đăng xuất?"
+            isOpen={isShow}
+            onRequestClose={() => setIsShow(false)}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <View style={defaultStyles.containerTextOK}>
+                <TouchableOpacity onPress={() => setIsShow(false)}>
+                  <Text style={{ fontSize: 16 }}>Hủy bỏ</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={defaultStyles.containerTextOK}>
+                <TouchableOpacity onPress={handleLogout}>
+                  <Text style={defaultStyles.textOK}>Đồng ý</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </AnswerModal>
         </View>
       </View>
     </ImageBackground>

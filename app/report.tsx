@@ -100,18 +100,20 @@ const Report = () => {
         </TouchableOpacity>
       </Modal>
       <View>
-        <Text style={styles.title}>Mã số xe</Text>
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={[styles.title, { color: Colors.blue, fontSize: 32 }]}>
-            {code}
-          </Text>
-        </View>
+        {code && <Text style={styles.title}>Mã số xe</Text>}
+        {code && (
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={[styles.title, { color: Colors.blue, fontSize: 32 }]}>
+              {code}
+            </Text>
+          </View>
+        )}
         <Text style={styles.header}>Vấn đề gặp phải</Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {REPORT_TYPE.map((item) => (

@@ -5,6 +5,6 @@ export function calculateDistanceTrip(tripHistory: TripHistory[] | undefined) {
     return 0;
   }
   let length = tripHistory.length;
-  let distance = length / 100;
+  let distance = length / 1000;
   return distance;
 }
